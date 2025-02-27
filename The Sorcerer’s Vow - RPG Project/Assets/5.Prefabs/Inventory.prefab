@@ -359,10 +359,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2252bc716547fcc4ba6f4181d96d61d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 680412427557826212, guid: b4eaf1a69bfc27a47a9c2e31acbcabbe, type: 3}
+  inventoryItemUIPrefab: {fileID: 680412427557826212, guid: b4eaf1a69bfc27a47a9c2e31acbcabbe, type: 3}
   contentPanel: {fileID: 4750273736150159136}
-  itemDescription: {fileID: 2524171970849451757}
+  inventoryItemUIDescription: {fileID: 2524171970849451757}
+  mouseFollower: {fileID: 0}
   image: {fileID: 1560193603, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  image2: {fileID: -1258662953, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   quantity: 1
   title: Sword Test
   description: This sword cuts everything!
