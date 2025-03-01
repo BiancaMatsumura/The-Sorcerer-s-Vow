@@ -17,3 +17,5 @@ MonoBehaviour:
   <Name>k__BackingField: Apple
   <Description>k__BackingField: You can eat it!
   <ItemImage>k__BackingField: {fileID: 50824074, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: aafe6228127e51449877debc3089d65b, type: 2}

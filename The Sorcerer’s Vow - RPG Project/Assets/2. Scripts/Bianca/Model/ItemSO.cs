@@ -21,5 +21,10 @@ public class ItemSO : ScriptableObject
         [field: SerializeField]
         public Sprite ItemImage { get; set; }
 
+        [field: SerializeField]
+        public Mesh ItemMesh { get; set; }
+        
+        [field: SerializeField]
+        public Material ItemMaterial { get; set; }
 }
 

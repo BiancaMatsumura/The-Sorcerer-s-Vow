@@ -17,3 +17,5 @@ MonoBehaviour:
   <Name>k__BackingField: SwordTest
   <Description>k__BackingField: This Sword is Amazing!
   <ItemImage>k__BackingField: {fileID: -940352073, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: 1e526389e0d268e4693a2bf67a1717c9, type: 2}

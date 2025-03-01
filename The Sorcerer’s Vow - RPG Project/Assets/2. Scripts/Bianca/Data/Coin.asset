@@ -17,3 +17,5 @@ MonoBehaviour:
   <Name>k__BackingField: Coin
   <Description>k__BackingField: I wanna it, I got it!
   <ItemImage>k__BackingField: {fileID: -839995448, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: e212de75f30ce21499d23dfa6668762c, type: 2}

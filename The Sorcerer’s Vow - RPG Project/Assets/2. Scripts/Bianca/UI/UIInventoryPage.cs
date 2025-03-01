@@ -25,7 +25,7 @@ public class UIInventoryPage : MonoBehaviour
     private int currentlyDraggedItemIndex = -1;
     private void Awake()
     {
-        Hide();  
+        //Hide();  
         inventoryItemUIDescription.ResetDescription();
     }
 
@@ -69,6 +69,7 @@ public class UIInventoryPage : MonoBehaviour
             return;
         }
         OnSwapItems?.Invoke(currentlyDraggedItemIndex, index);
+        HandleItemSelection(inventoryItemUI);
     }
 
     private void ResetDraggedItem()
@@ -136,5 +137,14 @@ public class UIInventoryPage : MonoBehaviour
         DeselectAllItems();
         listOfUIItems[itemIndex].Select();
 
+    }
+
+    internal void ResetAllItems()
+    {
+        foreach (var item in listOfUIItems)
+        {
+            item.ResetData();
+            item.Deselect();
+        }
     }
 }
