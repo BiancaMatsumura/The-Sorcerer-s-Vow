@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class ItemSO : ScriptableObject
+public abstract class ItemSO : ScriptableObject
 {   
     [field: SerializeField]
         public bool IsStackable { get; set; }
@@ -26,5 +27,21 @@ public class ItemSO : ScriptableObject
         
         [field: SerializeField]
         public Material ItemMaterial { get; set; }
+
+        [field: SerializeField]
+        public List<ItemParameter> DefaultParametersList { get; set; }
 }
+
+    [Serializable]
+    public struct ItemParameter : IEquatable<ItemParameter>
+    {
+        public ItemParameterSO itemParameter;
+        public float value;
+
+        public bool Equals(ItemParameter other)
+        {
+            return other.itemParameter == itemParameter;
+        }
+    }
+
 

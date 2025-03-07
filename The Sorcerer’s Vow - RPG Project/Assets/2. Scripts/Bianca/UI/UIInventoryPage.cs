@@ -16,6 +16,8 @@ public class UIInventoryPage : MonoBehaviour
 
     [SerializeField]
     private MouseFollower mouseFollower;
+    [SerializeField]
+    private ItemActionPanel itemActionPanel;
 
     List<UIInventoryItem> listOfUIItems = new List<UIInventoryItem>();
 
@@ -53,7 +55,12 @@ public class UIInventoryPage : MonoBehaviour
 
     private void HandleShowItemActions(UIInventoryItem inventoryItemUI)
     {
-        
+        int index =listOfUIItems.IndexOf(inventoryItemUI);
+        if (index == -1)
+        {
+            return;
+        }
+        OnItemActionRequested?.Invoke(index);
     }
 
     private void HandleEndDrag(UIInventoryItem inventoryItemUI)
@@ -114,6 +121,17 @@ public class UIInventoryPage : MonoBehaviour
     {
         inventoryItemUIDescription.ResetDescription();
         DeselectAllItems();
+        
+    }
+
+    public void AddAction(string actionName, Action performAction)
+    {
+        itemActionPanel.AddButon(actionName,performAction);
+    }
+    public void ShowItemAction(int itemIndex)
+    {
+        itemActionPanel.Toggle(true);
+        itemActionPanel.transform.position = listOfUIItems[itemIndex].transform.position;
     }
 
     private void DeselectAllItems()
@@ -122,10 +140,12 @@ public class UIInventoryPage : MonoBehaviour
         {
             item.Deselect();
         }
+        itemActionPanel.Toggle(false);
     }
 
     public void Hide()
     {
+        itemActionPanel.Toggle(false);
         gameObject.SetActive(false);
         ResetDraggedItem();
         DeselectAllItems();
