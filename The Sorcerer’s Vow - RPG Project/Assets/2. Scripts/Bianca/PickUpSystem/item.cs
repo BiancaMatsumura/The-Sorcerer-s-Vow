@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Inventory.Model;
 
 public class Item3D : MonoBehaviour
 {

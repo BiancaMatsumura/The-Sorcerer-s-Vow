@@ -114,10 +114,10 @@ public class UIInventoryPage : MonoBehaviour
     {
         gameObject.SetActive(true);
         
-        ReselectSelection();
+        ResetSelection();
     }
 
-    public void ReselectSelection()
+    public void ResetSelection()
     {
         inventoryItemUIDescription.ResetDescription();
         DeselectAllItems();

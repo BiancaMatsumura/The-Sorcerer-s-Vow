@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[CreateAssetMenu]
+namespace Inventory.Model
+{
+    [CreateAssetMenu]
 public class EdibleItemSO : ItemSO, IDestroyableItem, IItemAction
 {
     [SerializeField]
@@ -42,4 +44,6 @@ public class ModifierData
     public CharacterStatusModifierSO statsModifier;
     public float val;
 }
+}
+
 

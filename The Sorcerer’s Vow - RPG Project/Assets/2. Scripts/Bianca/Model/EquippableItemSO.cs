@@ -1,24 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
+namespace Inventory.Model
 {
-    public string ActionName => "Equip";
-
-    [field: SerializeField]
-    public AudioClip actionSFX {get; private set;}
-
-    public bool PerformAction(GameObject character, List <ItemParameter> itemState = null )
+    [CreateAssetMenu]
+    public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
     {
-        AgentWeapon weaponSystem = character.GetComponent<AgentWeapon>();
-        if (weaponSystem != null)
+        public string ActionName => "Equip";
+
+        [field: SerializeField]
+        public AudioClip actionSFX { get; private set; }
+
+        public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
         {
-            weaponSystem.SetWeapon(this, itemState == null ? 
-            DefaultParametersList : itemState);
-            return true;
+            AgentWeapon weaponSystem = character.GetComponent<AgentWeapon>();
+            if (weaponSystem != null)
+            {
+                weaponSystem.SetWeapon(this, itemState == null ? 
+                    DefaultParametersList : itemState);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }
+
 

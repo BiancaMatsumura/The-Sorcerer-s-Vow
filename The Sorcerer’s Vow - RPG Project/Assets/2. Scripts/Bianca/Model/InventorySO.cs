@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu]
+
+namespace Inventory.Model
+{
+    [CreateAssetMenu]
 public class InventorySO : ScriptableObject
 {
     [SerializeField]
@@ -184,3 +187,5 @@ public class InventorySO : ScriptableObject
             };
     }
     
+}
+

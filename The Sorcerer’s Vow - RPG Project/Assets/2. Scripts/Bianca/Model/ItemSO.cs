@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Inventory.Model;
 
-public abstract class ItemSO : ScriptableObject
+namespace Inventory.Model
+{
+    public abstract class ItemSO : ScriptableObject
 {   
     [field: SerializeField]
         public bool IsStackable { get; set; }
@@ -43,5 +46,6 @@ public abstract class ItemSO : ScriptableObject
             return other.itemParameter == itemParameter;
         }
     }
+}
 
 

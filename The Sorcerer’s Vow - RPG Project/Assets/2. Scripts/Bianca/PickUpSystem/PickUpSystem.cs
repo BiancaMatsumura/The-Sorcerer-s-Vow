@@ -1,4 +1,5 @@
 using UnityEngine;
+using Inventory.Model;
 
 public class PickUpSystem : MonoBehaviour
 {
