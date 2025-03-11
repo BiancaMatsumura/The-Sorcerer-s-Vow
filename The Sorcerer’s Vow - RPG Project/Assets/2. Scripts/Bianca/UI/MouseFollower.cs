@@ -17,7 +17,7 @@ public class MouseFollower : MonoBehaviour
         Debug.LogError("Nenhum Canvas encontrado na cena! Certifique-se de que há um Canvas presente.");
     }
 
-    item = GetComponentInChildren<UIInventoryItem>();
+    
 }
 
 

@@ -5,34 +5,48 @@ using Inventory.Model;
 
 namespace Inventory.Model
 {
+    public enum ItemCategory
+{
+    Default,
+    Weapon,
+    Armor,
+    Consumable,
+    Material
+}
     public abstract class ItemSO : ScriptableObject
-{   
+{     
     [field: SerializeField]
-        public bool IsStackable { get; set; }
+    public string Name { get; set; }
 
-        public int ID => GetInstanceID();
+    [field: SerializeField]
+    [field: TextArea]
+    public string Description { get; set; }
 
-        [field: SerializeField]
-        public int MaxStackSize { get; set; } = 1;
+    [SerializeField]
+    private ItemCategory category;
 
-        [field: SerializeField]
-        public string Name { get; set; }
+    public ItemCategory Category => category;
 
-        [field: SerializeField]
-        [field: TextArea]
-        public string Description { get; set; }
+    [field: SerializeField]
+    public bool IsStackable { get; set; }
 
-        [field: SerializeField]
-        public Sprite ItemImage { get; set; }
+    [field: SerializeField]
+    public int MaxStackSize { get; set; } = 1;
 
-        [field: SerializeField]
-        public Mesh ItemMesh { get; set; }
+    public int ID => GetInstanceID();
+
+    [field: SerializeField]
+    public Sprite ItemImage { get; set; }
+
+    [field: SerializeField]
+    public Mesh ItemMesh { get; set; }
         
-        [field: SerializeField]
-        public Material ItemMaterial { get; set; }
+    [field: SerializeField]
+    public Material ItemMaterial { get; set; }
 
-        [field: SerializeField]
-        public List<ItemParameter> DefaultParametersList { get; set; }
+    [field: SerializeField]
+    public List<ItemParameter> DefaultParametersList { get; set; }
+
 }
 
     [Serializable]

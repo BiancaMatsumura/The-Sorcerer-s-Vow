@@ -43,7 +43,15 @@ public class InventoryController : MonoBehaviour
         inventoryUI.ResetAllItems();
         foreach (var item in inventoryState)
         {
-            inventoryUI.UpdateData(item.Key , item.Value.item.ItemImage , item.Value.quantity);
+            if (item.Value.IsEmpty)
+                continue;
+                
+            inventoryUI.UpdateData(
+                item.Key, 
+                item.Value.item.ItemImage, 
+                item.Value.quantity, 
+                item.Value.item.Category
+            );
         }
     }
 
@@ -135,6 +143,10 @@ public class InventoryController : MonoBehaviour
     private void HandleSwapItems(int itemIndex_1, int itemIndex_2)
     {
         inventoryData.SwapItems(itemIndex_1, itemIndex_2);
+        
+        // Após o swap, atualize a UI para refletir a mudança de categoria
+        Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+        UpdateInventoryUI(currentState);
     }
 
     private void HandleDescriptionRequest(int itemIndex)
@@ -173,15 +185,19 @@ public class InventoryController : MonoBehaviour
                 inventoryUI.Show();
                 foreach (var item in inventoryData.GetCurrentInventoryState())
                 {
-                    inventoryUI.UpdateData(item.Key, item.Value.item.ItemImage, item.Value.quantity);
+                    // Certifique-se de usar a versão que passa a categoria
+                    inventoryUI.UpdateData(
+                        item.Key, 
+                        item.Value.item.ItemImage, 
+                        item.Value.quantity,
+                        item.Value.item.Category // Importante passar a categoria aqui
+                    );
                 }
-                
             }
             else
             {
                 inventoryUI.Hide();
             }
-
         }
     }
 }

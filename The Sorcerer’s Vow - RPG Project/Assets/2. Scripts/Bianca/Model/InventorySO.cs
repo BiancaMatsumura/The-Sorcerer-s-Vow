@@ -45,27 +45,25 @@ public class InventorySO : ScriptableObject
             return quantity;
         }
 
-        private int AddItemToFirstFreeSlot(ItemSO item, int quantity
-            , List<ItemParameter> itemState = null)
+       private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState = null)
+    {
+        InventoryItem newItem = new InventoryItem
         {
-            InventoryItem newItem = new InventoryItem
-            {
-                item = item,
-                quantity = quantity,
-                itemState = 
-                new List<ItemParameter>(itemState == null ? item.DefaultParametersList : itemState)
-            };
+            item = item,
+            quantity = quantity,
+            itemState = new List<ItemParameter>(itemState == null ? item.DefaultParametersList : itemState)
+        };
 
-            for (int i = 0; i < inventoryItems.Count; i++)
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if (inventoryItems[i].IsEmpty)
             {
-                if (inventoryItems[i].IsEmpty)
-                {
-                    inventoryItems[i] = newItem;
-                    return quantity;
-                }
+                inventoryItems[i] = newItem;
+                return quantity;
             }
-            return 0;
         }
+        return 0;
+    }
 
         private bool IsInventoryFull()
             => inventoryItems.Where(item => item.IsEmpty).Any() == false;

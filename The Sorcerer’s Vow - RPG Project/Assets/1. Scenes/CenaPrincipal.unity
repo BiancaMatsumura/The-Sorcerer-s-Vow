@@ -849,7 +849,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767045989}
   m_Enabled: 1
-  m_Alpha: 0.5
+  m_Alpha: 0.13
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -915,7 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1472407472}
-  item: {fileID: 0}
+  item: {fileID: 767045992}
 --- !u!114 &814109056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1683,6 +1683,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!224 &1586118441 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4858698475064181306, guid: 522de3d434c82c54e88c179663418da6, type: 3}
+  m_PrefabInstance: {fileID: 8557225631296622129}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1641290219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1993,7 +1998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <InventoryItem>k__BackingField: {fileID: 11400000, guid: ef89107bc222d674aa45a07120e45135, type: 2}
-  <Quantity>k__BackingField: 5
+  <Quantity>k__BackingField: 1
   audioSource: {fileID: 1631831}
   duration: 0.3
   meshFilter: {fileID: 1887463356}
@@ -2170,8 +2175,20 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 980980710313265934, guid: 39068852d721e1f47be22ec10b30ceb2, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 980980710313265934, guid: 39068852d721e1f47be22ec10b30ceb2, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 980980710313265934, guid: 39068852d721e1f47be22ec10b30ceb2, type: 3}
       propertyPath: m_fontSizeBase
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 980980710313265934, guid: 39068852d721e1f47be22ec10b30ceb2, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6249902630463860893, guid: 39068852d721e1f47be22ec10b30ceb2, type: 3}
       propertyPath: m_Pivot.x
@@ -2803,6 +2820,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 814109055}
     - target: {fileID: 9115852911699669921, guid: 522de3d434c82c54e88c179663418da6, type: 3}
+      propertyPath: tabsContainer
+      value: 
+      objectReference: {fileID: 1586118441}
+    - target: {fileID: 9115852911699669921, guid: 522de3d434c82c54e88c179663418da6, type: 3}
       propertyPath: itemActionPanel
       value: 
       objectReference: {fileID: 385379179}
@@ -2810,6 +2831,10 @@ PrefabInstance:
       propertyPath: itemDescription
       value: 
       objectReference: {fileID: 1010536503}
+    - target: {fileID: 9115852911699669921, guid: 522de3d434c82c54e88c179663418da6, type: 3}
+      propertyPath: tabButtonPrefab
+      value: 
+      objectReference: {fileID: 383281308880837044, guid: 0322d5ff398a8404d9f06cef81eccfc2, type: 3}
     - target: {fileID: 9115852911699669921, guid: 522de3d434c82c54e88c179663418da6, type: 3}
       propertyPath: inventoryItemUIDescription
       value: 
@@ -2839,7 +2864,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6604536263581729801, guid: 522de3d434c82c54e88c179663418da6, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 522de3d434c82c54e88c179663418da6, type: 3}

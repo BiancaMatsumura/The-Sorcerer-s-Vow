@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55a02c21effea040963aac000576c47, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  <IsStackable>k__BackingField: 0
-  <MaxStackSize>k__BackingField: 1
   <Name>k__BackingField: Sword
   <Description>k__BackingField: Cuts Everthing!
+  category: 1
+  <IsStackable>k__BackingField: 0
+  <MaxStackSize>k__BackingField: 1
   <ItemImage>k__BackingField: {fileID: 1560193603, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   <ItemMaterial>k__BackingField: {fileID: 2100000, guid: 1e526389e0d268e4693a2bf67a1717c9, type: 2}
