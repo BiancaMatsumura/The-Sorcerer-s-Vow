@@ -1,13 +1,17 @@
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
    public float speed = 5f; 
     private Rigidbody rb; 
 
+    private 
+
     void Start()
     {
         rb = GetComponent<Rigidbody>(); 
+        
     }
 
     void FixedUpdate()
@@ -19,5 +23,8 @@ public class PlayerController : MonoBehaviour
         Vector3 newPosition = rb.position + move * Time.fixedDeltaTime;
 
         rb.MovePosition(newPosition); // Move o player suavemente
+
+      
+
     }
 }
