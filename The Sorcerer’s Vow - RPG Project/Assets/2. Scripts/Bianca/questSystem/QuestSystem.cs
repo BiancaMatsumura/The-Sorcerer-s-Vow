@@ -1,61 +1,80 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class QuestSystem : MonoBehaviour
 {
-    public string [] nameQuests;
-    public string [] questDependence;
-    public bool [] checkQuest; 
+    public List<QuestData> quests;
 
+
+    void Start()
+    {
+        ResetQuests(); // Reseta todas as quests quando o jogo começa
+    }
 
     public bool CheckQuests()
     {
-        for (int i = 0; i < checkQuest.Length; i++)
+        foreach (var quest in quests)
         {
-            if(checkQuest[i] == false)
-            {
+            if (!quest.isCompleted)
                 return false;
-            }
         }
         return true;
     }
 
-    public string [] EmptyQuest()
+    public List<string> EmptyQuest()
     {
-        int countEmpty = 0;
-
-        for (int i = 0; i < checkQuest.Length; i++)
+        List<string> empty = new List<string>();
+        foreach (var quest in quests)
         {
-            if(checkQuest[i] == false)
-            {
-                countEmpty++;
-            }
+            if (!quest.isCompleted)
+                empty.Add(quest.questName);
         }
-
-        string[] Empty = new string [countEmpty];
-
-        int j=0;
-        for (int i = 0; i < checkQuest.Length; i++)
-        {
-            if(checkQuest[i] == false)
-            {
-                Empty[j] = nameQuests[i];
-                j++;
-            }
-        }
-        return Empty;
+        return empty;
     }
 
-    public bool CheckQuest(string nameQuest)
+    public bool CheckQuest(string questName)
     {
-        for (int i = 0; i < nameQuests.Length; i++)
+        foreach (var quest in quests)
         {
-            if(nameQuests[i] == nameQuest)
+            if (quest.questName == questName)
             {
-                checkQuest[i] = true;
-                return true;
+                if (CanCompleteQuest(quest))
+                {
+                    quest.isCompleted = true;
+                    return true;
+                }
+                else
+                {
+                    Debug.LogWarning($"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!");
+                    return false;
+                }
             }
         }
         return false;
     }
 
+    public bool CanCompleteQuest(QuestData quest)
+    {
+        // Se a quest não tem dependências, ela pode ser concluída
+        if (quest.questDependencies == null || quest.questDependencies.Count == 0)
+            return true;
+
+        // Verifica se todas as quests dependentes já foram concluídas
+        foreach (var dependency in quest.questDependencies)
+        {
+            if (!dependency.isCompleted)
+                return false; // Se uma das dependências não estiver concluída, bloqueia
+        }
+
+        return true; // Se todas as dependências foram cumpridas, libera
+    }
+
+
+    public void ResetQuests()
+    {
+        foreach (var quest in quests)
+        {
+            quest.isCompleted = false; // Reseta o progresso de todas as quests
+        }
+    }
 }

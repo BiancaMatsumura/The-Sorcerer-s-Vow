@@ -8,6 +8,7 @@ public class PickUpSystem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         Item3D item = other.GetComponent<Item3D>();
         if (item != null)
         {
@@ -17,5 +18,6 @@ public class PickUpSystem : MonoBehaviour
             else
                 item.Quantity = remainder;
         }
+        
     }
 }

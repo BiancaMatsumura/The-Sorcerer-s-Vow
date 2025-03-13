@@ -52,4 +52,5 @@ public class Item3D : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
 }
