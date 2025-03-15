@@ -12,6 +12,11 @@ public class PickUpSystem : MonoBehaviour
         Item3D item = other.GetComponent<Item3D>();
         if (item != null)
         {
+            if (!item.CanPickup())
+            {
+                return; // Exit without picking up
+            }
+
             int remainder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
             if (remainder == 0)
                 item.DestroyItem();

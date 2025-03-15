@@ -1,14 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class QuestSystem : MonoBehaviour
 {
     public List<QuestData> quests;
 
-
+    [SerializeField] public TextMeshProUGUI textOutput;
     void Start()
     {
         ResetQuests(); // Reseta todas as quests quando o jogo começa
+        textOutput.text = " ";
     }
 
     public bool CheckQuests()
@@ -45,7 +47,7 @@ public class QuestSystem : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!");
+                    textOutput.text = $"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!";
                     return false;
                 }
             }

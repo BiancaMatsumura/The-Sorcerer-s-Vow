@@ -1,9 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class Quest : MonoBehaviour
 {
     public QuestData questData;
     private QuestSystem questSystem;
+
+    [SerializeField] public TextMeshProUGUI textOutput;
 
     void Awake()
     {
@@ -16,11 +19,11 @@ public class Quest : MonoBehaviour
         {
             if (questSystem.CheckQuest(questData.questName))
             {
-                Debug.Log($"Quest '{questData.questName}' completada com sucesso!");
+                textOutput.text = $"Quest '{questData.questName}' completada com sucesso!";
             }
             else
             {
-                Debug.Log($"Não foi possível completar a Quest '{questData.questName}'!");
+                textOutput.text = $"Não foi possível completar a Quest '{questData.questName}'!";
             }
         }
     }
