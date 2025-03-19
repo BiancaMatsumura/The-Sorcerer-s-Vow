@@ -1,18 +1,53 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class QuestSystem : MonoBehaviour
 {
     public List<QuestData> quests;
-
     [SerializeField] public TextMeshProUGUI textOutput;
+    public event Action OnAllQuestsCompleted;
+
     void Start()
     {
-        ResetQuests(); // Reseta todas as quests quando o jogo começa
-        textOutput.text = " ";
+        ResetQuests();
+      
+        var questsFaltando = EmptyQuest();
+        textOutput.text = questsFaltando.Count > 0
+            ? $"Quest List: {string.Join(", ", questsFaltando)}"
+            : "Todas as quests foram concluídas!";
+
+        // Inscreve no evento de cada quest para atualizar a UI quando for completada
+        foreach (var quest in quests)
+        {
+            quest.OnQuestCompleted += UpdateUI;
+        }
     }
 
+    void OnDestroy()
+    {
+        // Desinscrever todos os eventos para evitar múltiplas inscrições
+        foreach (var quest in quests)
+        {
+            quest.OnQuestCompleted -= UpdateUI;
+        }
+    }
+
+    public void UpdateUI()
+    {
+        var questsFaltando = EmptyQuest();
+        var newText = questsFaltando.Count > 0
+            ? $"Quest List: {string.Join(", ", questsFaltando)}"
+            : "Todas as quests foram concluídas. Level Finalizado!";
+
+        // Atualiza a UI somente se o texto mudou
+        if (textOutput.text != newText)
+        {
+            textOutput.text = newText;
+        }
+    }
+    
     public bool CheckQuests()
     {
         foreach (var quest in quests)
@@ -20,6 +55,7 @@ public class QuestSystem : MonoBehaviour
             if (!quest.isCompleted)
                 return false;
         }
+        OnAllQuestsCompleted?.Invoke();
         return true;
     }
 
@@ -42,8 +78,8 @@ public class QuestSystem : MonoBehaviour
             {
                 if (CanCompleteQuest(quest))
                 {
-                    quest.isCompleted = true;
-                    return true;
+                    quest.CompleteQuest();
+                    return true; // Retorna verdadeiro para permitir o delay no Quest.cs
                 }
                 else
                 {
@@ -57,26 +93,34 @@ public class QuestSystem : MonoBehaviour
 
     public bool CanCompleteQuest(QuestData quest)
     {
-        // Se a quest não tem dependências, ela pode ser concluída
         if (quest.questDependencies == null || quest.questDependencies.Count == 0)
             return true;
 
-        // Verifica se todas as quests dependentes já foram concluídas
         foreach (var dependency in quest.questDependencies)
         {
             if (!dependency.isCompleted)
-                return false; // Se uma das dependências não estiver concluída, bloqueia
+                return false;
         }
-
-        return true; // Se todas as dependências foram cumpridas, libera
+        return true;
     }
-
 
     public void ResetQuests()
     {
         foreach (var quest in quests)
         {
-            quest.isCompleted = false; // Reseta o progresso de todas as quests
+            quest.isCompleted = false;
         }
     }
+
+    public void NotifyItemCollected(QuestData quest)
+    {
+        // Verificar se a quest está associada a este item
+        if (quest != null)
+        {
+            // Atualize a UI ou a lógica de dependência de quest conforme necessário
+            quest.isCompleted = true; // Ou qualquer outra lógica de atualização de quest
+            UpdateUI();  // Atualiza a UI do QuestSystem
+        }
+    }
+
 }

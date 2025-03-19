@@ -50,30 +50,41 @@ public class Item3D : MonoBehaviour
     }
 
     public void DestroyItem()
+{
+    if (!CanPickup())
     {
-        if (!CanPickup())
-        {
-            return; // Don't proceed with pickup
-        }
-
-        GetComponent<Collider>().enabled = false;
-        StartCoroutine(AnimateItemPickup());
+        return; // Não coleta o item se não for permitido
     }
 
-    private IEnumerator AnimateItemPickup()
+    // Referencia o componente Quest no mesmo GameObject
+    Quest questComponent = GetComponent<Quest>();
+    if (questComponent != null)
     {
-        audioSource.Play();
-        Vector3 startScale = transform.localScale;
-        Vector3 endScale = Vector3.zero;
-        float currentTime = 0;
-        while (currentTime < duration)
-        {
-            currentTime += Time.deltaTime;
-            transform.localScale =
-                Vector3.Lerp(startScale, endScale, currentTime / duration);
-            yield return null;
-        }
-        Destroy(gameObject);
+        // Chama o método CompleteQuest diretamente no componente Quest
+        questComponent.CheckQuest();
     }
+
+    // Desativa o colisor para evitar que o item seja coletado novamente
+    GetComponent<Collider>().enabled = false;
+    StartCoroutine(AnimateItemPickup());
+}
+
+private IEnumerator AnimateItemPickup()
+{
+    audioSource.Play();
+    Vector3 startScale = transform.localScale;
+    Vector3 endScale = Vector3.zero;
+    float currentTime = 0;
+    while (currentTime < duration)
+    {
+        currentTime += Time.deltaTime;
+        transform.localScale = Vector3.Lerp(startScale, endScale, currentTime / duration);
+        yield return null;
+    }
+
+    // Agora, o item é destruído após a animação
+    Destroy(gameObject);
+}
+
 
 }

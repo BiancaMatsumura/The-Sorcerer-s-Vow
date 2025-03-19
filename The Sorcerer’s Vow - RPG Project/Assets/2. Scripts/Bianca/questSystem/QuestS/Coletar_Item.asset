@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b68bc04503ab7f40adf0a1627df63f3, type: 3}
   m_Name: Coletar_Item
   m_EditorClassIdentifier: 
-  questName: Cloetar Item
+  questName: Coletar_Item
   questDependencies:
   - {fileID: 11400000, guid: fa704a938e2c48349b8a920b5aaee4a5, type: 2}
-  isCompleted: 0
+  isCompleted: 1

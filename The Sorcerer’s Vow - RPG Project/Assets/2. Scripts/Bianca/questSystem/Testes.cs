@@ -10,7 +10,9 @@ public class Testes : MonoBehaviour
     void Awake()
     {
         if (questSystem == null)
-        questSystem = Object.FindAnyObjectByType<QuestSystem>();
+            questSystem = Object.FindAnyObjectByType<QuestSystem>();
+
+        questSystem.OnAllQuestsCompleted += LevelComplete;
     }
 
     public void BtCheckQuest()
@@ -28,9 +30,14 @@ public class Testes : MonoBehaviour
         else
         {
             var questsFaltando = questSystem.EmptyQuest();
-            textOutput.text = questsFaltando.Any()
+            textOutput.text = questsFaltando.Count > 0
                 ? $"Level não Finalizado! Faltam: {string.Join(", ", questsFaltando)}"
                 : "Level não Finalizado!";
         }
+    }
+
+    private void LevelComplete()
+    {
+        textOutput.text = "Todas as Quests foram completadas! Level Finalizado!";
     }
 }

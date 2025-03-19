@@ -10,7 +10,7 @@ public class MouseFollower : MonoBehaviour
 
     private void Awake()
 {
-    canvas = Object.FindFirstObjectByType<Canvas>();
+    canvas = GameObject.Find("CanvasUI")?.GetComponent<Canvas>();
 
     if (canvas == null)
     {
