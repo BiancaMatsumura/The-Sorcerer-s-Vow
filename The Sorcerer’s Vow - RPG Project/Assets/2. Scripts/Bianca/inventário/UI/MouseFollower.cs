@@ -27,16 +27,22 @@ public class MouseFollower : MonoBehaviour
     }
     void Update()
     {
+        if (canvas == null)
+        {
+            Debug.LogWarning("Canvas foi destruído!");
+            return;
+        }
+
         Vector2 position;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             (RectTransform)canvas.transform,
             Input.mousePosition,
             canvas.worldCamera,
             out position
-                );
+        );
+        
         transform.position = canvas.transform.TransformPoint(position);
     }
-    
     public void Toggle(bool val)
     {
         Debug.Log($"Item toggled {val}");
