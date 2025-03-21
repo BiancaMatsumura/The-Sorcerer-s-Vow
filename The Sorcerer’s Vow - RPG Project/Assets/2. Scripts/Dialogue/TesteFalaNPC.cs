@@ -6,21 +6,19 @@ public class TesteFalaNPC : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController player;
-        if (other.TryGetComponent<PlayerController>(out player))
+        if (other.CompareTag("Player"))
         {
             Debug.Log("Player está próximo!");
-            DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData); // Notifica o DialogueManager
+            DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerController player;
-        if (other.TryGetComponent<PlayerController>(out player))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Player se afastou!");
-            DialogueGameEvents.Instace.PlayerExitedDialogueRange(); // Notifica o DialogueManager
+            Debug.Log("Player se afastou!"); 
+            DialogueGameEvents.Instace.PlayerExitedDialogueRange();
         }
     }
 }

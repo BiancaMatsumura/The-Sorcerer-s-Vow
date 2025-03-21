@@ -17,3 +17,5 @@ MonoBehaviour:
     Content: "Ol\xE1!\nEsse \xE9 o teste de dialogo, ser\xE1 que deu certo? "
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
     Content: "Acho que funcionou sim, pois voc\xEA est\xE1 vendo essa mensagem."
+  - ActorData: {fileID: 11400000, guid: ab2f3970078e8004ea17ec91f7f58d55, type: 2}
+    Content: Certo, obrigrado!
