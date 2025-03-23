@@ -8,6 +8,8 @@ public class Quest : MonoBehaviour
 
     [SerializeField] public TextMeshProUGUI textOutput;
 
+    [SerializeField] DialogueDataSO dialogData;
+
     void Awake()
     {
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
@@ -53,8 +55,33 @@ public class Quest : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            CheckQuest();
+
+            if(dialogData != null)
+            {
+                textOutput.text = "Aperte E para falar.\nBotão Esquero do mouse para pular a animação.\n Aperte Q para o próximo Diálogo";
+                DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
+                DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
+                
+            }
+            else
+            {
+                CheckQuest();
+            }
+            
+            
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            textOutput.text = "Se aproxime novamente!"; 
+            Invoke(nameof(UpdateQuestList), 2f);
+            DialogueGameEvents.Instace.PlayerExitedDialogueRange();
+           
+            //DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
+        }
+
     }
 
     private void OnDestroy()

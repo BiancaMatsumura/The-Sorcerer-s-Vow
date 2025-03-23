@@ -15,12 +15,12 @@ public class QuestSystem : MonoBehaviour
       
         var questsFaltando = EmptyQuest();
         textOutput.text = questsFaltando.Count > 0
-            ? $"Quest List: {string.Join(", ", questsFaltando)}"
+            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
             : "Todas as quests foram concluídas!";
 
         // Inscreve no evento de cada quest para atualizar a UI quando for completada
         foreach (var quest in quests)
-        {
+        { 
             quest.OnQuestCompleted += UpdateUI;
         }
     }
@@ -38,7 +38,7 @@ public class QuestSystem : MonoBehaviour
     {
         var questsFaltando = EmptyQuest();
         var newText = questsFaltando.Count > 0
-            ? $"Quest List: {string.Join(", ", questsFaltando)}"
+            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
             : "Todas as quests foram concluídas. Level Finalizado!";
 
         // Atualiza a UI somente se o texto mudou

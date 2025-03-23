@@ -8,7 +8,7 @@ public class TesteFalaNPC : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player está próximo!");
+            Debug.Log("Player estï¿½ prï¿½ximo!");
             DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
         }
     }
