@@ -28,6 +28,8 @@ public class Item3D : MonoBehaviour
 
     private QuestSystem questSystem;
 
+    public Quest quesCheck;
+
     private void Start()
     {
         if (InventoryItem != null && meshFilter != null)
@@ -50,24 +52,31 @@ public class Item3D : MonoBehaviour
     }
 
     public void DestroyItem()
-{
-    if (!CanPickup())
     {
-        return; // Não coleta o item se não for permitido
-    }
+        if (!CanPickup())
+        {
+            return; // Não coleta o item se não for permitido
+        }
 
-    // Referencia o componente Quest no mesmo GameObject
-    Quest questComponent = GetComponent<Quest>();
-    if (questComponent != null)
-    {
-        // Chama o método CompleteQuest diretamente no componente Quest
-        questComponent.CheckQuest();
-    }
+        // Referencia o componente Quest no mesmo GameObject
+        Quest questComponent = GetComponent<Quest>();
+        if (questComponent != null)
+        {
+            // Chama o método CompleteQuest diretamente no componente Quest
+            questComponent.CheckQuest();
+        }
 
-    // Desativa o colisor para evitar que o item seja coletado novamente
-    GetComponent<Collider>().enabled = false;
-    StartCoroutine(AnimateItemPickup());
-}
+        // Desativa o colisor para evitar que o item seja coletado novamente
+        GetComponent<Collider>().enabled = false;
+
+        if(quesCheck != null)
+        {
+            quesCheck.CheckQuest();
+        }
+        
+
+        StartCoroutine(AnimateItemPickup());
+    }
 
 private IEnumerator AnimateItemPickup()
 {
