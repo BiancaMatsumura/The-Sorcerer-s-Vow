@@ -9,7 +9,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
     {
         public int slot = 0;
         public PlayerDataDTO playerData;
-
+        
         public SaveFileDTO(int slot, PlayerCharacter playerCharacter)
         {
             this.slot = slot;

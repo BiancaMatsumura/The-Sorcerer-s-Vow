@@ -19,6 +19,11 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
         
         private void Start()
         {
+            RefreshScreen();
+        }
+
+        public void RefreshScreen()
+        {
             SaveLoadProgressManager.LoadAllSaveDataFromFile();
             slot0 = SaveLoadProgressManager.GetSlotDataFromSaveFile(0);
             slot1 = SaveLoadProgressManager.GetSlotDataFromSaveFile(1);

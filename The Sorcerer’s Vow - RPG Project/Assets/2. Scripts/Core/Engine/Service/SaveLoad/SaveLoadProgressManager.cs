@@ -35,6 +35,8 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             }
 
             StoreSaveListToFile();
+            
+            Debug.Log("Save successful.");
         }
 
         private static void StoreSaveListToFile()

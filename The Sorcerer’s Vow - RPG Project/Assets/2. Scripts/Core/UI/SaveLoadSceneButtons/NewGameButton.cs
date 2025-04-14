@@ -10,6 +10,8 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
     public class NewGameButton : MonoBehaviour
     {
         [SerializeField] private int slot = 0;
+        [SerializeField] private LoadSavePanel loadSavePanel;
+        [SerializeField] private SaveButtonTest saveButtonTest;
         private Image panel;
         private TMPro.TMP_Text text;
 
@@ -54,10 +56,13 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
             playerCharacter = playerObject.AddComponent<PlayerCharacter>();
 
             playerCharacter.Level = 1;
-            playerCharacter.Name = "Player " + (slot + 1);
+            playerCharacter.Name = "Partida " + (slot + 1);
             playerCharacter.Speed = 30;
 
             SaveLoadProgressManager.Save(slot, playerCharacter);
+            loadSavePanel.RefreshScreen();
+            
+            saveButtonTest.SetPlayerCharacter(playerCharacter);
         }
     }
 }
