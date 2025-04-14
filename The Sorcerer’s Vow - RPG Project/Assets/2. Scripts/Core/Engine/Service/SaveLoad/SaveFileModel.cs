@@ -6,7 +6,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
     [System.Serializable]
     public class SaveFileModel
     {
-        public List<PlayerCharacter> Saves;
+        public List<SaveFileDTO> Saves;
         public static SaveFileModel Instance = new SaveFileModel();
     }
 }

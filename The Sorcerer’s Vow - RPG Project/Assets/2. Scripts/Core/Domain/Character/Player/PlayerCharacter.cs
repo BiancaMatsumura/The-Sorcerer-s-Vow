@@ -1,9 +1,10 @@
-﻿using _2._Scripts.Core.Domain.Character.Base;
+﻿using System;
+using _2._Scripts.Core.Domain.Character.Base;
 using UnityEngine;
 
 namespace _2._Scripts.Core.Domain.Character.Player
 {
-    [System.Serializable]
+    [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
         public override void Start()
@@ -15,7 +16,7 @@ namespace _2._Scripts.Core.Domain.Character.Player
         public override void Update()
         {
             base.Update();
-            Debug.Log("PlayerCharacter Update");
+            // Debug.Log("PlayerCharacter Update");
         }
     }
 }
