@@ -9,92 +9,91 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
     {
         private static readonly string FileName = "save-data.json";
 
-        private static List<PlayerCharacter> _saveLoadPlayerCharacters = new List<PlayerCharacter>();
+        private static SaveFileDTO slot0;
+        private static SaveFileDTO slot1;
+        private static SaveFileDTO slot2;
 
         public static int CurrentSave = 0;
 
         public static void Save(int slot, PlayerCharacter playerCharacter)
         {
-            if (_saveLoadPlayerCharacters.Count == 0)
+
+            if (slot == 0)
             {
-                _saveLoadPlayerCharacters.Add(playerCharacter);
+                slot0 = new SaveFileDTO(0, playerCharacter);
+            } else if (slot == 1)
+            {
+                slot1 = new SaveFileDTO(1, playerCharacter);;
+            } else if (slot == 2)
+            {
+                slot2 = new SaveFileDTO(2, playerCharacter);;
             }
             else
             {
-                _saveLoadPlayerCharacters[slot] = playerCharacter;
+                Debug.LogError("Invalid slot index provided for the save.");
+                throw new System.Exception("Invalid slot index provided for the save.");
             }
 
             StoreSaveListToFile();
-        }
-
-        public static void Save(PlayerCharacter playerCharacter)
-        {
-            _saveLoadPlayerCharacters.Add(playerCharacter);
-            StoreSaveListToFile();
-        }
-
-
-        public static List<PlayerCharacter> SwitchSlots(int from, int to)
-        {
-            if (from < 0 || from >= _saveLoadPlayerCharacters.Count || to < 0 || to >= _saveLoadPlayerCharacters.Count)
-            {
-                Debug.LogError("Invalid slot indexes provided for the switch.");
-                return _saveLoadPlayerCharacters;
-            }
-            
-            (_saveLoadPlayerCharacters[from], _saveLoadPlayerCharacters[to]) = (_saveLoadPlayerCharacters[to], _saveLoadPlayerCharacters[from]);
-            
-            StoreSaveListToFile();
-            return _saveLoadPlayerCharacters;
-        }
-
-
-        public static List<PlayerCharacter> ListAllSaves()
-        {
-            return _saveLoadPlayerCharacters;
-        }
-
-        public static PlayerCharacter LoadSave(int slot)
-        {
-            CurrentSave = slot;
-            return _saveLoadPlayerCharacters[slot];
         }
 
         private static void StoreSaveListToFile()
         {
-            SaveFileModel.Instance.Saves = _saveLoadPlayerCharacters;
+            var saves = new List<SaveFileDTO>();
+            saves.Add(slot0);
+            saves.Add(slot1);
+            saves.Add(slot2);
+            
+            SaveFileModel.Instance.Saves = saves;
             string initialSaveJson = JsonUtility.ToJson(SaveFileModel.Instance);
+            
+            Debug.Log(initialSaveJson);
+            
             using (FileStream file = new FileStream(FileName, FileMode.Create))
             {
                 byte[] dataBytes = System.Text.Encoding.ASCII.GetBytes(initialSaveJson);
                 file.Write(dataBytes, 0, dataBytes.Length);
             }
         }
-
-        private static void LoadSaveListFromFile()
+        
+        public static void LoadAllSaveDataFromFile()
         {
-            if (!System.IO.File.Exists(FileName))
+            if (!File.Exists(FileName))
             {
-                _saveLoadPlayerCharacters = new List<PlayerCharacter>();
                 StoreSaveListToFile();
             }
-
             try
             {
                 using FileStream file = new FileStream(FileName, FileMode.Open);
                 byte[] dataBytes = new byte[file.Length];
                 file.Read(dataBytes, 0, dataBytes.Length);
-
+        
                 string encryptedData = System.Text.Encoding.ASCII.GetString(dataBytes);
-
+        
                 SaveFileModel.Instance = JsonUtility.FromJson<SaveFileModel>(encryptedData);
-                _saveLoadPlayerCharacters = SaveFileModel.Instance.Saves;
+                
+                slot0 = SaveFileModel.Instance.Saves[0];
+                slot1 = SaveFileModel.Instance.Saves[1];
+                slot2 = SaveFileModel.Instance.Saves[2];
             }
             catch (System.Exception e)
             {
                 Debug.LogError(e);
-                _saveLoadPlayerCharacters = new List<PlayerCharacter>();
-                StoreSaveListToFile();
+            }
+        }
+        
+        public static SaveFileDTO GetSlotDataFromSaveFile(int slot)
+        {
+            switch (slot)
+            {
+                case 0:
+                    return slot0;
+                case 1:
+                    return slot1;
+                case 2:
+                    return slot2;
+                default:
+                    return null;
             }
         }
     }

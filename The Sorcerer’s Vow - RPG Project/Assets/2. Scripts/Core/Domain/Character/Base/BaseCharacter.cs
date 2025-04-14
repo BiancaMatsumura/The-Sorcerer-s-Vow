@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace _2._Scripts.Core.Domain.Character.Base
 {
+    [Serializable]
     public class BaseCharacter : MonoBehaviour
     {
-        public string Name { get; set; }
-        public int Level { get; set;  }
-        public int Speed { get; set;  }
+        public string Name;
+        public int Level;
+        public int Speed;
 
         public virtual void Start()
         {
@@ -16,7 +17,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
 
         public virtual void Update()
         {
-            Debug.Log("BaseCharacter Update");
+            // Debug.Log("BaseCharacter Update");
         }
     }
 }
