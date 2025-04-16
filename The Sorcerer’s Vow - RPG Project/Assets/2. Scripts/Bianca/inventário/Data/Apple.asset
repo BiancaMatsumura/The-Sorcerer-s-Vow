@@ -23,6 +23,7 @@ MonoBehaviour:
   <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   <ItemMaterial>k__BackingField: {fileID: 2100000, guid: e212de75f30ce21499d23dfa6668762c, type: 2}
   <DefaultParametersList>k__BackingField: []
+  <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 054f3b878723cb943a1001173b1d0ce7, type: 2}
     val: 5

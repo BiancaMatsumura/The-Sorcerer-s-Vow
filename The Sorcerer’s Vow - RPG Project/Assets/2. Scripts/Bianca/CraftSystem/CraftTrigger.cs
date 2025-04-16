@@ -1,18 +1,21 @@
 using UnityEngine;
+using Inventory.Model;
+using System.Collections.Generic;
 
-public class CraftTrigger : MonoBehaviour
+public class CraftingTrigger : MonoBehaviour
 {
+    [SerializeField] private Frutos frutoAtual;
+    [SerializeField] private List<CraftingRecipeSO> recipes;
+
     [SerializeField]
     private GameObject interactObject;
-    [SerializeField]
-    private GameObject CraftingUI;
 
     [SerializeField] 
     private KeyCode interactionKey = KeyCode.E;
 
+    [SerializeField] private AudioSource audioPadrao;
     private Transform mainCamera;
     private bool isIn = false;
-    private bool isActive = false;
 
     void Start()
     {
@@ -24,31 +27,26 @@ public class CraftTrigger : MonoBehaviour
         if (interactObject.activeSelf)
         {
             interactObject.transform.LookAt(mainCamera);
-            
             interactObject.transform.Rotate(0f, 180f, 0f);
         }
 
         if (Input.GetKeyDown(interactionKey) && isIn)
         {
-            if(!isActive)
-            {
-                ShowCraftingUI();
-            }
-            else
-            {
-                HideCraftingUI();
-            }
+            TryCraft();
         }
+
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
+            Debug.Log("Jogador entrou no trigger!");
             isIn = true;
             interactObject.SetActive(true);
         }
     }
+
 
     void OnTriggerExit(Collider other)
     {
@@ -59,23 +57,45 @@ public class CraftTrigger : MonoBehaviour
         }
     }
 
-    private void ShowCraftingUI()
+    private void TryCraft()
     {
-        CraftingUI.SetActive(true);
-        isActive = true;
-        CameraController.isCraftingUIOpen = true;
-        Cursor.lockState = CursorLockMode.None; 
-        Cursor.visible = true;
-        Time.timeScale = 0f;
-    }
+         Debug.Log("Tentando craftar...");
+        var player = GameObject.FindGameObjectWithTag("Player"); // Aqui buscamos o jogador.
+        var weaponSystem = player.GetComponent<AgentWeapon>();
+        if (weaponSystem == null || weaponSystem.CurrentIngredient == null) return;
 
-    private void HideCraftingUI()
-    {
-        CraftingUI.SetActive(false);
-        isActive = false;
-        CameraController.isCraftingUIOpen = false;
-        Cursor.lockState = CursorLockMode.Locked; 
-        Cursor.visible = false;
-        Time.timeScale = 1f;
+        var equippedItem = weaponSystem.CurrentIngredient;
+
+        Debug.Log($"Item equipado: {equippedItem.Name} (ID: {equippedItem.ID})");
+
+        foreach (var recipe in recipes)
+        {
+            if (recipe.fruto != frutoAtual)
+                continue;
+
+            if (recipe.ingredients.Count != 1)
+                continue;
+
+            var requiredItem = recipe.ingredients[0].item;
+
+            Debug.Log($"Verificando receita com item: {requiredItem.Name} (ID: {requiredItem.ID})");
+
+            if (recipe.resultItem.WorldPrefab != null)
+            {
+                var instance = Instantiate(recipe.resultItem.WorldPrefab, transform.position + Vector3.up, Quaternion.identity);
+                var item3DComponent = instance.GetComponent<Item3D>();
+                item3DComponent.audioSource = audioPadrao;
+
+                // Remove o item do slot de ingrediente
+                weaponSystem.UnequipIngredient();
+
+                Debug.Log($"Criado: {recipe.resultItem.Name}");
+            }
+            else
+            {
+                Debug.LogWarning("Prefab do item de resultado não definido!");
+            }
+        }
+
     }
 }

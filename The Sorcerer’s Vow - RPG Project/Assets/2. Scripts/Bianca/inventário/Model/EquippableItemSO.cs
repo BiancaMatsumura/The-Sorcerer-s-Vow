@@ -4,25 +4,30 @@ using UnityEngine;
 namespace Inventory.Model
 {
     [CreateAssetMenu]
-    public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
+public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
+{
+    public string ActionName => "Equip";
+
+    [field: SerializeField] public AudioClip actionSFX { get; private set; }
+    [field: SerializeField] public ItemCategory slotType { get; private set; } = ItemCategory.Armas;
+
+    public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
     {
-        public string ActionName => "Equip";
-
-        [field: SerializeField]
-        public AudioClip actionSFX { get; private set; }
-
-        public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
+        AgentWeapon weaponSystem = character.GetComponent<AgentWeapon>();
+        if (weaponSystem != null)
         {
-            AgentWeapon weaponSystem = character.GetComponent<AgentWeapon>();
-            if (weaponSystem != null)
-            {
-                weaponSystem.SetWeapon(this, itemState == null ? 
-                    DefaultParametersList : itemState);
-                return true;
-            }
-            return false;
+            if (slotType == ItemCategory.Armas)
+                weaponSystem.SetWeapon(this, itemState ?? DefaultParametersList);
+            else
+                weaponSystem.SetIngredient(this, itemState ?? DefaultParametersList);
+
+            return true;
         }
+
+        return false;
     }
+}
+
 }
 
 

@@ -15,4 +15,5 @@ public class CraftingRecipeSO : ScriptableObject
     public List<RecipeItem> ingredients;
     public ItemSO resultItem;
     public int resultQuantity = 1;
+    public Frutos fruto;
 }

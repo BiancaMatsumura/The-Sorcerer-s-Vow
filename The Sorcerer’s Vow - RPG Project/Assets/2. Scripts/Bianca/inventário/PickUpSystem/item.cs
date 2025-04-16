@@ -11,7 +11,7 @@ public class Item3D : MonoBehaviour
     public int Quantity { get; set; } = 1;
 
     [SerializeField]
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     [SerializeField]
     private float duration = 0.3f;

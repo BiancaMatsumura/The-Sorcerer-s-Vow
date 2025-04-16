@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b55a02c21effea040963aac000576c47, type: 3}
-  m_Name: Sword
+  m_Name: "Ess\xEAncia01"
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Sword
-  <Description>k__BackingField: Cuts Everthing!
-  category: 1
+  <Name>k__BackingField: "Ess\xEAncia 01"
+  <Description>k__BackingField: "Ess\xEAncia Teste"
+  category: 4
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: 1560193603, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 1876485368, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   <ItemMaterial>k__BackingField: {fileID: 2100000, guid: 1e526389e0d268e4693a2bf67a1717c9, type: 2}
-  <DefaultParametersList>k__BackingField:
-  - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
-    value: 100
-  <WorldPrefab>k__BackingField: {fileID: 968049810416140241, guid: 40e956c6b28d7b84da33f530693cf31b, type: 3}
+  <DefaultParametersList>k__BackingField: []
+  <WorldPrefab>k__BackingField: {fileID: 968049810416140241, guid: fd05fe761bd7ed940aa4609d67d7ef21, type: 3}
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
-  <slotType>k__BackingField: 1
+  <slotType>k__BackingField: 4

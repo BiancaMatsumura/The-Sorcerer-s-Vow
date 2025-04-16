@@ -7,24 +7,37 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private InventorySO inventory;
 
     public bool CanCraft(CraftingRecipeSO recipe)
+{
+    var inventoryState = inventory.GetCurrentInventoryState();
+    var agentWeapon = Object.FindFirstObjectByType<AgentWeapon>();
+
+
+    foreach (var ingredient in recipe.ingredients)
     {
-        var inventoryState = inventory.GetCurrentInventoryState();
+        int totalFound = 0;
 
-        foreach (var ingredient in recipe.ingredients)
+        // Verifica se está equipado como ingrediente
+        if (ingredient.item is EquippableItemSO equipItem &&
+            agentWeapon.CurrentIngredient != null &&
+            agentWeapon.CurrentIngredient.ID == ingredient.item.ID)
         {
-            int totalFound = 0;
-            foreach (var item in inventoryState.Values)
-            {
-                if (item.item.ID == ingredient.item.ID)
-                    totalFound += item.quantity;
-            }
-
-            if (totalFound < ingredient.quantity)
-                return false;
+            totalFound += 1;
         }
 
-        return true;
+        // Conta também os do inventário
+        foreach (var item in inventoryState.Values)
+        {
+            if (item.item.ID == ingredient.item.ID)
+                totalFound += item.quantity;
+        }
+
+        if (totalFound < ingredient.quantity)
+            return false;
     }
+
+    return true;
+}
+
 
     public void Craft(CraftingRecipeSO recipe)
     {

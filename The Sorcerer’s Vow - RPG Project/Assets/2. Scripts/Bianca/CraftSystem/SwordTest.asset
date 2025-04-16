@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf2459c93f5f81f428c3c7e6a72da207, type: 3}
-  m_Name: AppleTest
+  m_Name: SwordTest
   m_EditorClassIdentifier: 
   ingredients:
-  - item: {fileID: 11400000, guid: ef89107bc222d674aa45a07120e45135, type: 2}
-    quantity: 2
-  resultItem: {fileID: 11400000, guid: ef89107bc222d674aa45a07120e45135, type: 2}
-  resultQuantity: 3
+  - item: {fileID: 11400000, guid: 74f4bf80d27e06d428fdcf12ed0351af, type: 2}
+    quantity: 1
+  resultItem: {fileID: 11400000, guid: 316dc1bfe0489b64289afaf2daef018a, type: 2}
+  resultQuantity: 1
+  fruto: 0

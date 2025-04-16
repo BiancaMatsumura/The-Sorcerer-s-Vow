@@ -7,12 +7,22 @@ namespace Inventory.Model
 {
     public enum ItemCategory
 {
-    Default,
-    Weapon,
-    Armor,
-    Consumable,
-    Material
+    Geral,
+    Armas,
+    Armaduras,
+    Consumíveis,
+    Essências
 }
+
+public enum Frutos
+{
+    Comum,
+    Incomum,
+    Raro,
+    Épico,
+    Lendário
+}
+
     public abstract class ItemSO : ScriptableObject
 {     
     [field: SerializeField]
@@ -46,6 +56,9 @@ namespace Inventory.Model
 
     [field: SerializeField]
     public List<ItemParameter> DefaultParametersList { get; set; }
+    [field: SerializeField]
+    public GameObject WorldPrefab { get; private set; }
+
 
 }
 
