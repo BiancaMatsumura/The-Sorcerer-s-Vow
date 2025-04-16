@@ -10,17 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b55a02c21effea040963aac000576c47, type: 3}
-  m_Name: "Ess\xEAncia01"
+  m_Name: "Ess\xEAnciaGelo"
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: "Ess\xEAncia 01"
-  <Description>k__BackingField: "Ess\xEAncia Teste"
+  <Name>k__BackingField: "Ess\xEAncia Gelo"
+  <Description>k__BackingField: "Ess\xEAncia de Gelo"
+  <WorldPrefab>k__BackingField: {fileID: 0}
   category: 4
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: 1876485368, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
-  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: 1e526389e0d268e4693a2bf67a1717c9, type: 2}
+  <ItemImage>k__BackingField: {fileID: 1782921573, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <DefaultParametersList>k__BackingField: []
-  <WorldPrefab>k__BackingField: {fileID: 968049810416140241, guid: fd05fe761bd7ed940aa4609d67d7ef21, type: 3}
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 4
