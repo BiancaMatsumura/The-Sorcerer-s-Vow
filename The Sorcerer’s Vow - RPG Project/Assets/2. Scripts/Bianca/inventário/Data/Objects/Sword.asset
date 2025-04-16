@@ -23,4 +23,6 @@ MonoBehaviour:
   <DefaultParametersList>k__BackingField:
   - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
     value: 100
+  <WorldPrefab>k__BackingField: {fileID: 968049810416140241, guid: 40e956c6b28d7b84da33f530693cf31b, type: 3}
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
+  <slotType>k__BackingField: 1

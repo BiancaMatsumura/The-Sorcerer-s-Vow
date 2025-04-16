@@ -10,19 +10,11 @@ public class Item3D : MonoBehaviour
     [field: SerializeField]
     public int Quantity { get; set; } = 1;
 
-    [SerializeField]
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     [SerializeField]
     private float duration = 0.3f;
-
-    [SerializeField]
-    private MeshFilter meshFilter; // Novo para definir o modelo 3D
-
-    [SerializeField]
-    private MeshRenderer meshRenderer; // Para renderizar o modelo
-
-    // Add a reference to a quest that this item might be associated with
+    
     [SerializeField]
     private QuestData linkedQuest;
 
@@ -32,11 +24,7 @@ public class Item3D : MonoBehaviour
 
     private void Start()
     {
-        if (InventoryItem != null && meshFilter != null)
-        {
-            meshFilter.mesh = InventoryItem.ItemMesh; // Usando um Mesh ao invés de Sprite
-            meshRenderer.material = InventoryItem.ItemMaterial; // Definindo o material do item
-        }
+       
         // Find the quest system
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
     }
@@ -78,22 +66,22 @@ public class Item3D : MonoBehaviour
         StartCoroutine(AnimateItemPickup());
     }
 
-private IEnumerator AnimateItemPickup()
-{
-    audioSource.Play();
-    Vector3 startScale = transform.localScale;
-    Vector3 endScale = Vector3.zero;
-    float currentTime = 0;
-    while (currentTime < duration)
+    private IEnumerator AnimateItemPickup()
     {
-        currentTime += Time.deltaTime;
-        transform.localScale = Vector3.Lerp(startScale, endScale, currentTime / duration);
-        yield return null;
-    }
+        audioSource.Play();
+        Vector3 startScale = transform.localScale;
+        Vector3 endScale = Vector3.zero;
+        float currentTime = 0;
+        while (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(startScale, endScale, currentTime / duration);
+            yield return null;
+        }
 
-    // Agora, o item é destruído após a animação
-    Destroy(gameObject);
-}
+        // Agora, o item é destruído após a animação
+        Destroy(gameObject);
+    }
 
 
 }

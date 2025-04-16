@@ -1,41 +1,50 @@
 using Inventory.Model;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AgentWeapon : MonoBehaviour
 {
-    [SerializeField]
     private EquippableItemSO weapon;
+    private EquippableItemSO equippedIngredient;
 
     [SerializeField]
     private InventorySO inventoryData;
 
     [SerializeField]
-    private List<ItemParameter> parametersToModify, itemCurrentState;
+    private List<ItemParameter> parametersToModify, itemCurrentState, ingredientCurrentState;
+
+    public EquippableItemSO CurrentWeapon => weapon;
+    public EquippableItemSO CurrentIngredient => equippedIngredient;
 
     public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
     {
         if (weapon != null)
-        {
             inventoryData.AddItem(weapon, 1, itemCurrentState);
-        }
-        
 
-        this.weapon = weaponItemSO;
-        this.itemCurrentState = new List<ItemParameter>(itemState);
-        ModifyParameters();
+        weapon = weaponItemSO;
+        itemCurrentState = new List<ItemParameter>(itemState);
+        ModifyParameters(itemCurrentState);
     }
 
-    private void ModifyParameters()
+    public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
+    {
+        if (equippedIngredient != null)
+            inventoryData.AddItem(equippedIngredient, 1, ingredientCurrentState);
+
+        equippedIngredient = ingredientItemSO;
+        ingredientCurrentState = new List<ItemParameter>(itemState);
+        ModifyParameters(ingredientCurrentState);
+    }
+
+    private void ModifyParameters(List<ItemParameter> parameters)
     {
         foreach (var parameter in parametersToModify)
         {
-            if (itemCurrentState.Contains(parameter))
+            if (parameters.Contains(parameter))
             {
-                int index = itemCurrentState.IndexOf(parameter);
-                float newValue = itemCurrentState[index].value + parameter.value;
-                itemCurrentState[index] = new ItemParameter
+                int index = parameters.IndexOf(parameter);
+                float newValue = parameters[index].value + parameter.value;
+                parameters[index] = new ItemParameter
                 {
                     itemParameter = parameter.itemParameter,
                     value = newValue
@@ -43,4 +52,10 @@ public class AgentWeapon : MonoBehaviour
             }
         }
     }
+    public void UnequipIngredient()
+    {
+        equippedIngredient = null;
+        ingredientCurrentState = null;
+    }
+
 }

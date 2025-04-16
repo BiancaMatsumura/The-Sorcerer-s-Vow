@@ -37,7 +37,7 @@ public class UIInventoryPage : MonoBehaviour
     private Color unselectedTabColor = new Color(0.7f, 0.7f, 0.7f, 1f);
 
     private Dictionary<ItemCategory, Button> categoryTabs = new Dictionary<ItemCategory, Button>();
-    private ItemCategory currentCategory = ItemCategory.Default;
+    private ItemCategory currentCategory = ItemCategory.Geral;
     
     private List<UIInventoryItem> listOfUIItems = new List<UIInventoryItem>();
     private Dictionary<ItemCategory, List<UIInventoryItem>> categorizedItems = new Dictionary<ItemCategory, List<UIInventoryItem>>();
@@ -79,7 +79,7 @@ public class UIInventoryPage : MonoBehaviour
         }
         
         // Start with the Default category selected
-        SelectCategory(ItemCategory.Default);
+        SelectCategory(ItemCategory.Geral);
     }
     
     private void InitializeCategoryTabs()
@@ -144,7 +144,7 @@ public class UIInventoryPage : MonoBehaviour
         // NÃO usaremos SetActive(false) para itens que não estão na categoria atual
         // Em vez disso, vamos ajustar a visibilidade sem desativar o GameObject completamente
         
-        if (currentCategory == ItemCategory.Default)
+        if (currentCategory == ItemCategory.Geral)
         {
             // No modo default, mostrar todos os slots (ocupados ou não)
             foreach (UIInventoryItem item in listOfUIItems)
@@ -190,7 +190,7 @@ public class UIInventoryPage : MonoBehaviour
             // Store the category of this item for filtering
             if (itemImage != null && itemQuantity > 0)
             {
-                Debug.Log($"Slot {itemIndex}: Atribuindo categoria {category}");
+                
                 slotCategories[itemIndex] = category;
                 
                 // Certifique-se de que a lista categorizada existe
@@ -228,7 +228,7 @@ public class UIInventoryPage : MonoBehaviour
     public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity)
     {
         // For items with unknown category, default to Default category
-        UpdateData(itemIndex, itemImage, itemQuantity, ItemCategory.Default);
+        UpdateData(itemIndex, itemImage, itemQuantity, ItemCategory.Geral);
     }
 
     private void HandleShowItemActions(UIInventoryItem inventoryItemUI)
@@ -258,7 +258,7 @@ public class UIInventoryPage : MonoBehaviour
     
     // Verificamos se o item arrastado e o item alvo pertencem à categoria atual
     // ou se estamos na categoria Default
-    bool canSwap = currentCategory == ItemCategory.Default;
+    bool canSwap = currentCategory == ItemCategory.Geral;
     
     if (!canSwap)
     {
@@ -300,7 +300,7 @@ public class UIInventoryPage : MonoBehaviour
             return;
         
         // Verificamos se o item pertence à categoria atual
-        bool canDrag = currentCategory == ItemCategory.Default;
+        bool canDrag = currentCategory == ItemCategory.Geral;
         
         if (!canDrag)
         {
@@ -393,6 +393,6 @@ public class UIInventoryPage : MonoBehaviour
     }
     
     // Reset para categoria padrão
-    SelectCategory(ItemCategory.Default);
+    SelectCategory(ItemCategory.Geral);
 }
 }

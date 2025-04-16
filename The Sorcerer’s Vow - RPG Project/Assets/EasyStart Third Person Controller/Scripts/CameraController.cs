@@ -32,6 +32,7 @@ public class CameraController : MonoBehaviour
     Transform player;
 
     public static bool isInventoryOpen = false;
+    public static bool isCraftingUIOpen = false;
 
 
     void Start()
@@ -52,6 +53,7 @@ public class CameraController : MonoBehaviour
     void Update()
 {
     if (isInventoryOpen) return; // Impede o movimento da câmera se o inventário estiver aberto
+    if (isCraftingUIOpen) return;
 
     // Segue normalmente com o código de movimentação da câmera
     transform.position = player.position + new Vector3(0, offsetDistanceY, 0);
