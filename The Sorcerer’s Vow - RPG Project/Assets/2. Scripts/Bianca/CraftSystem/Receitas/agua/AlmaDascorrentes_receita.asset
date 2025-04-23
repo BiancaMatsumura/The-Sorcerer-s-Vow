@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf2459c93f5f81f428c3c7e6a72da207, type: 3}
-  m_Name: Teste01
+  m_Name: AlmaDascorrentes_receita
   m_EditorClassIdentifier: 
-  fruto: 0
+  fruto: 2
   ingredients:
   - item: {fileID: 11400000, guid: 74f4bf80d27e06d428fdcf12ed0351af, type: 2}
     quantity: 1
-  resultItem: {fileID: 11400000, guid: 47fd2a8b746cd86489e622118df472eb, type: 2}
+  resultItem: {fileID: 11400000, guid: 37e4c4e379f6a744ca537fc651f087bc, type: 2}
   resultQuantity: 1

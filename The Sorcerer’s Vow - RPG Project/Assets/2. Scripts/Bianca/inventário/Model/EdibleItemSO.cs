@@ -6,44 +6,64 @@ using UnityEngine.Rendering;
 namespace Inventory.Model
 {
     [CreateAssetMenu]
-public class EdibleItemSO : ItemSO, IDestroyableItem, IItemAction
-{
-    [SerializeField]
-    private List<ModifierData> modifiersData = new List<ModifierData>();
-    public string ActionName => "Consume";
-
-    [field: SerializeField]
-    public AudioClip actionSFX {get; private set;}
-
-    public bool PerformAction(GameObject character,List<ItemParameter> itemState=null)
+    public class EdibleItemSO : ItemSO, IDestroyableItem, IItemAction
     {
-        foreach (ModifierData data in modifiersData)
+        [SerializeField]
+        private List<ModifierData> modifiersData = new List<ModifierData>();
+        public string ActionName => "Consume";
+
+        [field: SerializeField]
+        public AudioClip actionSFX { get; private set; }
+
+        public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
         {
-            data.statsModifier.AffectCharacter(character,data.val);
+            foreach (ModifierData data in modifiersData)
+            {
+                if (data.statsModifier is CharacterStatVelocityModifierSO velocityModifier)
+                {
+                    var temp = ScriptableObject.Instantiate(velocityModifier);
+                    temp.durationInSeconds = data.duration;
+                    temp.AffectCharacter(character, data.val);
+                }
+                else if (data.statsModifier is CharacterStatDamageReductionModifierSO damageModifier)
+                {
+                    var temp = ScriptableObject.Instantiate(damageModifier);
+                    temp.durationInSeconds = data.duration;
+                    temp.AffectCharacter(character, data.val);
+                }
+                else
+                {
+                    data.statsModifier.AffectCharacter(character, data.val);
+                }
+            }
+
+            return true;
         }
-        return true;
+
+
     }
-}
 
-public interface IDestroyableItem
-{
+    public interface IDestroyableItem
+    {
 
-}
+    }
 
-public interface IItemAction
-{
-    public string ActionName {get;}
-    public AudioClip actionSFX {get;}
-    bool PerformAction(GameObject character, List<ItemParameter> itemState);
+    public interface IItemAction
+    {
+        public string ActionName { get; }
+        public AudioClip actionSFX { get; }
+        bool PerformAction(GameObject character, List<ItemParameter> itemState);
 
-}
+    }
 
-[Serializable]
-public class ModifierData
-{
-    public CharacterStatusModifierSO statsModifier;
-    public float val;
-}
+    [Serializable]
+    public class ModifierData
+    {
+        public CharacterStatusModifierSO statsModifier;
+        public float val;
+        public float duration; // nova propriedade
+    }
+
 }
 
 

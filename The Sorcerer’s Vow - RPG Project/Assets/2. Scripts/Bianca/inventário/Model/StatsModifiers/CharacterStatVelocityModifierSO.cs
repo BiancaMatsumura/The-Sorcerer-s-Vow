@@ -1,15 +1,17 @@
 using _2._Scripts.Core.Domain.Character.Player;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CharacterStatusModifiers/Health Modifier")]
-public class CharacterStatHealthModifierSO : CharacterStatusModifierSO
+[CreateAssetMenu(menuName = "CharacterStatusModifiers/Velocity Modifier")]
+public class CharacterStatVelocityModifierSO : CharacterStatusModifierSO
 {
+    public float durationInSeconds = 5f; // configure no Inspector
+
     public override void AffectCharacter(GameObject character, float val)
     {
         PlayerCharacter player = character.GetComponent<PlayerCharacter>();
         if (player != null)
         {
-            player.AddHealth((int)val);
+            player.ChangeVelocityTemporarily((int)val, durationInSeconds);
         }
         else
         {
