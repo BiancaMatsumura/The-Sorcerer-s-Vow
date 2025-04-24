@@ -14,55 +14,20 @@ public class Item3D : MonoBehaviour
 
     [SerializeField]
     private float duration = 0.3f;
-    
+
     [SerializeField]
     private QuestData linkedQuest;
 
-    private QuestSystem questSystem;
-
     public Quest quesCheck;
-
-    private void Start()
-    {
-       
-        // Find the quest system
-        questSystem = Object.FindAnyObjectByType<QuestSystem>();
-    }
-
-    public bool CanPickup()
-    {
-        // If there's no linked quest or no quest system, allow pickup
-        if (linkedQuest == null || questSystem == null)
-            return true;
-            
-        // Check if the quest dependencies allow this item to be picked up
-        return questSystem.CanCompleteQuest(linkedQuest);
-    }
 
     public void DestroyItem()
     {
         if (!CanPickup())
         {
-            return; // Não coleta o item se não for permitido
+            return;
         }
 
-        // Referencia o componente Quest no mesmo GameObject
-        Quest questComponent = GetComponent<Quest>();
-        if (questComponent != null)
-        {
-            // Chama o método CompleteQuest diretamente no componente Quest
-            questComponent.CheckQuest();
-        }
-
-        // Desativa o colisor para evitar que o item seja coletado novamente
         GetComponent<Collider>().enabled = false;
-
-        if(quesCheck != null)
-        {
-            quesCheck.CheckQuest();
-        }
-        
-
         StartCoroutine(AnimateItemPickup());
     }
 
@@ -72,6 +37,7 @@ public class Item3D : MonoBehaviour
         Vector3 startScale = transform.localScale;
         Vector3 endScale = Vector3.zero;
         float currentTime = 0;
+
         while (currentTime < duration)
         {
             currentTime += Time.deltaTime;
@@ -79,9 +45,25 @@ public class Item3D : MonoBehaviour
             yield return null;
         }
 
-        // Agora, o item é destruído após a animação
+        quesCheck.CheckQuest();
+
+        yield return new WaitForSeconds(2.2f);
+
+        var questSystem = Object.FindAnyObjectByType<QuestSystem>();
+        if (questSystem != null && linkedQuest != null)
+        {
+            questSystem.NotifyItemCollected(linkedQuest);
+        }
+
         Destroy(gameObject);
     }
 
+    public bool CanPickup()
+    {
+        var questSystem = Object.FindAnyObjectByType<QuestSystem>();
+        if (linkedQuest == null || questSystem == null)
+            return true;
 
+        return questSystem.CanCompleteQuest(linkedQuest);
+    }
 }

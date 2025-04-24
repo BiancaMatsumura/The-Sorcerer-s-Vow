@@ -12,22 +12,21 @@ public class QuestSystem : MonoBehaviour
     void Start()
     {
         ResetQuests();
-      
+
         var questsFaltando = EmptyQuest();
         textOutput.text = questsFaltando.Count > 0
             ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
             : "Todas as quests foram concluídas!";
 
-        // Inscreve no evento de cada quest para atualizar a UI quando for completada
         foreach (var quest in quests)
-        { 
+        {
+            quest.OnQuestCompleted -= UpdateUI; // Evitar duplicação
             quest.OnQuestCompleted += UpdateUI;
         }
     }
 
     void OnDestroy()
     {
-        // Desinscrever todos os eventos para evitar múltiplas inscrições
         foreach (var quest in quests)
         {
             quest.OnQuestCompleted -= UpdateUI;
@@ -41,13 +40,18 @@ public class QuestSystem : MonoBehaviour
             ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
             : "Todas as quests foram concluídas. Level Finalizado!";
 
-        // Atualiza a UI somente se o texto mudou
-        if (textOutput.text != newText)
+        if (textOutput != null && textOutput.text != newText)
         {
             textOutput.text = newText;
         }
+        
+        // Verificar se todas as quests foram concluídas
+        if (questsFaltando.Count == 0)
+        {
+            OnAllQuestsCompleted?.Invoke();
+        }
     }
-    
+
     public bool CheckQuests()
     {
         foreach (var quest in quests)
@@ -76,18 +80,32 @@ public class QuestSystem : MonoBehaviour
         {
             if (quest.questName == questName)
             {
+                Debug.Log($"Verificando quest '{questName}', status atual: {(quest.isCompleted ? "Completa" : "Incompleta")}");
+                
                 if (CanCompleteQuest(quest))
                 {
-                    quest.CompleteQuest();
-                    return true; // Retorna verdadeiro para permitir o delay no Quest.cs
+                    if (!quest.isCompleted)
+                    {
+                        quest.CompleteQuest();
+                        Debug.Log($"Quest '{questName}' foi marcada como completa!");
+                        UpdateUI();
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.Log($"Quest '{questName}' já está completa.");
+                        return false; // A quest já está completa
+                    }
                 }
                 else
                 {
+                    Debug.Log($"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!");
                     textOutput.text = $"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!";
                     return false;
                 }
             }
         }
+        Debug.LogWarning($"Quest '{questName}' não encontrada no sistema!");
         return false;
     }
 
@@ -99,7 +117,10 @@ public class QuestSystem : MonoBehaviour
         foreach (var dependency in quest.questDependencies)
         {
             if (!dependency.isCompleted)
+            {
+                Debug.Log($"Dependência '{dependency.questName}' não está completa para a quest '{quest.questName}'");
                 return false;
+            }
         }
         return true;
     }
@@ -114,13 +135,10 @@ public class QuestSystem : MonoBehaviour
 
     public void NotifyItemCollected(QuestData quest)
     {
-        // Verificar se a quest está associada a este item
-        if (quest != null)
+        if (quest != null && CanCompleteQuest(quest) && !quest.isCompleted)
         {
-            // Atualize a UI ou a lógica de dependência de quest conforme necessário
-            quest.isCompleted = true; // Ou qualquer outra lógica de atualização de quest
-            UpdateUI();  // Atualiza a UI do QuestSystem
+            quest.CompleteQuest();
+            UpdateUI();
         }
     }
-
 }
