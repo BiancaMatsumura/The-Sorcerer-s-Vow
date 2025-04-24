@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
+
 
 /// <summary>
-/// Gerencia o sistema de diálogo do jogo, exibindo o texto, controlando o fluxo das sentenças
+/// Gerencia o sistema de diï¿½logo do jogo, exibindo o texto, controlando o fluxo das sentenï¿½as
 /// e interagindo com a entrada do jogador.
 /// </summary>
 public class DialogueManager : MonoBehaviour
 {
+    
     [Header("Components")]
     [SerializeField] private Image charImage;
     [SerializeField] private TMP_Text nameText;
@@ -34,41 +36,41 @@ public class DialogueManager : MonoBehaviour
         DialogueGameEvents.Instace.OnPlayerExitedDialogueRange += HandlePlayerExitedRange;
     }
 
-    // Chamado quando o jogador entra na área de trigger do NPC.
+    // Chamado quando o jogador entra na ï¿½rea de trigger do NPC.
     private void HandlePlayerEnteredRange(DialogueDataSO dialogueData)
     {
         currentDialogue = dialogueData;
         playerInRange = true;
     }
 
-    // Chamado quando o jogador sai da área de trigger do NPC.
+    // Chamado quando o jogador sai da ï¿½rea de trigger do NPC.
     private void HandlePlayerExitedRange()
     {
-        playerInRange = false; // Define que o jogador não está mais dentro do alcance.
-        currentDialogue = null; // Limpa o diálogo atual.
-        StopAllCoroutines(); // Para todas as corrotinas em execução.
-        HideDialogue(); // Esconde os elementos visuais do diálogo.
+        playerInRange = false; // Define que o jogador nï¿½o estï¿½ mais dentro do alcance.
+        currentDialogue = null; // Limpa o diï¿½logo atual.
+        StopAllCoroutines(); // Para todas as corrotinas em execuï¿½ï¿½o.
+        HideDialogue(); // Esconde os elementos visuais do diï¿½logo.
     }
 
-    // Inicia o diálogo quando o evento OnStartDialog é disparado.
+    // Inicia o diï¿½logo quando o evento OnStartDialog ï¿½ disparado.
     private void HandheldStartDiolog(DialogueDataSO dialogueData)
     {
         //charImage.enabled = false;
-        currentSentenceIndex = 0; // Reseta o índice da sentença.
+        currentSentenceIndex = 0; // Reseta o ï¿½ndice da sentenï¿½a.
         nameText.SetText(""); // Limpa o texto do nome.
-        dialogBar.Enable(); // Habilita a barra de diálogo.
+        dialogBar.Enable(); // Habilita a barra de diï¿½logo.
 
         StartCoroutine(StartDialog(dialogueData)); // Inicia a corrotina StartDialog.
     }
 
-    // Corrotina para controlar o fluxo do diálogo.
+    // Corrotina para controlar o fluxo do diï¿½logo.
     private IEnumerator StartDialog(DialogueDataSO dialogueData)
     {
-        ShowNextSentence(); // Exibe a próxima sentença.
-        yield return null; // Espera até a próxima frame.
+        ShowNextSentence(); // Exibe a prï¿½xima sentenï¿½a.
+        yield return null; // Espera atï¿½ a prï¿½xima frame.
     }
 
-    // Exibe a próxima sentença do diálogo.
+    // Exibe a prï¿½xima sentenï¿½a do diï¿½logo.
     private void ShowNextSentence()
     {
         if (currentDialogue == null)
@@ -79,44 +81,44 @@ public class DialogueManager : MonoBehaviour
         if (currentSentenceIndex < currentDialogue.Sentences.Count && state == StateDialogue.disabled)
         {
             state = StateDialogue.typing; // Define o estado como digitando.
-            var sentence = currentDialogue.Sentences[currentSentenceIndex]; // Pega a sentença atual.
+            var sentence = currentDialogue.Sentences[currentSentenceIndex]; // Pega a sentenï¿½a atual.
             nameText.SetText(sentence.ActorData.CharacterName); // Define o nome do personagem.
             StartCoroutine(ShowTextAndAdvance(sentence.Content)); // Inicia a corrotina ShowTextAndAdvance.
         }
         else
         {
-            FinishDialogue(); // Se não houver mais sentenças, finaliza o diálogo.
+            FinishDialogue(); // Se nï¿½o houver mais sentenï¿½as, finaliza o diï¿½logo.
         }
     }
 
-    // Corrotina para exibir o texto da sentença com animação.
+    // Corrotina para exibir o texto da sentenï¿½a com animaï¿½ï¿½o.
     private IEnumerator ShowTextAndAdvance(string content)
     {
         state = StateDialogue.typing; // Define o estado como digitando.
-        yield return dialogueText.ShowText(content); // Exibe o texto com animação e espera até que termine.
+        yield return dialogueText.ShowText(content); // Exibe o texto com animaï¿½ï¿½o e espera atï¿½ que termine.
         state = StateDialogue.waiting; // Define o estado como esperando.
     }
 
-    // Finaliza o diálogo.
+    // Finaliza o diï¿½logo.
     private void FinishDialogue()
     {
         state = StateDialogue.disabled; // Define o estado como desabilitado.
         nameText.SetText(""); // Limpa o texto do nome.
-        dialogueText.HideText(); // Esconde o texto do diálogo.
-        dialogBar.Disable(); // Desabilita a barra de diálogo.
+        dialogueText.HideText(); // Esconde o texto do diï¿½logo.
+        dialogBar.Disable(); // Desabilita a barra de diï¿½logo.
         DialogueGameEvents.Instace.FinishDialog(); // Dispara o evento OnFinishDialog.
     }
 
-    // Esconde os elementos visuais do diálogo.
+    // Esconde os elementos visuais do diï¿½logo.
     private void HideDialogue()
     {
         state = StateDialogue.disabled;
         nameText.SetText(""); // Limpa o texto do nome.
-        dialogueText.HideText(); // Esconde o texto do diálogo.
-        dialogBar.Disable(); // Desabilita a barra de diálogo.
+        dialogueText.HideText(); // Esconde o texto do diï¿½logo.
+        dialogBar.Disable(); // Desabilita a barra de diï¿½logo.
     }
 
-    // Remove a inscrição dos eventos quando o objeto é destruído.
+    // Remove a inscriï¿½ï¿½o dos eventos quando o objeto ï¿½ destruï¿½do.
     private void OnDestroy()
     {
         DialogueGameEvents.Instace.OnStartDialog -= HandheldStartDiolog;
@@ -126,21 +128,21 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        // Verifica se o jogador está dentro do alcance, se a tecla de interação foi pressionada, se há um diálogo e se o diálogo está desabilitado.
+        // Verifica se o jogador estï¿½ dentro do alcance, se a tecla de interaï¿½ï¿½o foi pressionada, se hï¿½ um diï¿½logo e se o diï¿½logo estï¿½ desabilitado.
         if (playerInRange && Input.GetKeyDown(interactionKey) && currentDialogue != null && state == StateDialogue.disabled)
         {
             HandheldStartDiolog(currentDialogue);
         }
 
-        // Verifica se a tecla de avanço foi pressionada, se o estado é esperando e se há um diálogo.
+        // Verifica se a tecla de avanï¿½o foi pressionada, se o estado ï¿½ esperando e se hï¿½ um diï¿½logo.
         if (Input.GetKeyDown(nextSentenceKey) && state == StateDialogue.waiting && currentDialogue != null)
         {
             state = StateDialogue.disabled;
-            currentSentenceIndex++; // Avança para a próxima sentença.
-            ShowNextSentence(); // Exibe a próxima sentença.
+            currentSentenceIndex++; // Avanï¿½a para a prï¿½xima sentenï¿½a.
+            ShowNextSentence(); // Exibe a prï¿½xima sentenï¿½a.
         }
 
-        // Se a tecla espaço for pressionada e o estado for digitando, pula a animação
+        // Se a tecla espaï¿½o for pressionada e o estado for digitando, pula a animaï¿½ï¿½o
         if (Input.GetKeyDown(skipAnimationDialogue) && state == StateDialogue.typing)
         {
             dialogueText.SkipAnimation();
@@ -148,7 +150,7 @@ public class DialogueManager : MonoBehaviour
     }
 }
 
-// Enum para representar os diferentes estados do diálogo.
+// Enum para representar os diferentes estados do diï¿½logo.
 public enum StateDialogue
 {
     disabled,
