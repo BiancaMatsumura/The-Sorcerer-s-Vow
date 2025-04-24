@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using _2._Scripts.Core.Domain.Character.Base;
 using UnityEngine;
@@ -42,6 +42,7 @@ namespace _2._Scripts.Core.Domain.Character.Player
             ChangeVelocity(previousSpeed);
         }
 
+        
         
     }
 }
