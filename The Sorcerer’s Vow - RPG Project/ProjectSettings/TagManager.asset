@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - PauseUI
+  - Ground
+  - playerbattle
   layers:
   - Default
   - TransparentFX
