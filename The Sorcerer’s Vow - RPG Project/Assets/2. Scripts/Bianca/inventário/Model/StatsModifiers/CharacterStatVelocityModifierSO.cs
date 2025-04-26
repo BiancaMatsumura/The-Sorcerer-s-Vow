@@ -11,7 +11,9 @@ public class CharacterStatVelocityModifierSO : CharacterStatusModifierSO
         PlayerCharacter player = character.GetComponent<PlayerCharacter>();
         if (player != null)
         {
-            player.ChangeVelocityTemporarily((int)val, durationInSeconds);
+            int atualSpeed = player.Speed;
+            int newSpeed =  atualSpeed + (int)val;
+            player.ChangeVelocityTemporarily(newSpeed, durationInSeconds);
         }
         else
         {

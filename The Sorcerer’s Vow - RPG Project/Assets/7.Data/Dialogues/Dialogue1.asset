@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sentences:
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-    Content: "Ol\xE1!\n"
-  - ActorData: {fileID: 11400000, guid: ab2f3970078e8004ea17ec91f7f58d55, type: 2}
-    Content: oi
+    Content: "Ol\xE1, meu filho!\nSeja bem-vindo as Antigas Terras da Babil\xF4nia!"
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-    Content: blz
+    Content: "Como Padre eu te convoco para fazer um Voto de Cruzada, para n\xF3s
+      n\xE3o h\xE1 escolha, temos que salvar a Terra Santa."
+  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+    Content: "Mas para isso voc\xEA precisa se mostrar digno, aqui na redondeza h\xE1
+      uma Ess\xEAncia M\xE1gica, traga a para mim!"

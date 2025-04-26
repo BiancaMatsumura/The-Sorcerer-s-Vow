@@ -45,7 +45,10 @@ public class Item3D : MonoBehaviour
             yield return null;
         }
 
-        quesCheck.CheckQuest();
+        if(quesCheck != null)
+        {
+            quesCheck.CheckQuest();
+        }
 
         yield return new WaitForSeconds(2.2f);
 
