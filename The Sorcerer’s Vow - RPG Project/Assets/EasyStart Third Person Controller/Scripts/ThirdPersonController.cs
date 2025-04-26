@@ -21,9 +21,11 @@ public class ThirdPersonController : MonoBehaviour
     bool inputSprint;
 
     Animator animator;
-    CharacterController cc;
+    public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
+
+    public BoxCollider collider;
 
     void Start()
     {
@@ -65,6 +67,17 @@ public class ThirdPersonController : MonoBehaviour
         }
 
         HeadHittingDetect();
+
+        if (animator.IsInTransition(0))
+        {
+            animator.SetBool("Kick", false);
+        }
+
+        if (Input.GetMouseButtonDown(0) && !isJumping && !isCrouching)
+        {
+            BattleSistem(1);
+        }
+
     }
 
     private void FixedUpdate()
@@ -130,5 +143,26 @@ public class ThirdPersonController : MonoBehaviour
             jumpElapsedTime = 0;
             isJumping = false;
         }
+    }
+    void BattleSistem(int var) 
+    {
+        switch(var)
+        {
+            case 1:
+                animator.SetBool("Kick", true);
+               
+                break;
+
+
+        }
+    }
+
+    void ActiveColider() 
+    {
+        collider.enabled = true;
+    }
+    void DesactiveColider()
+    {
+        collider.enabled = false;
     }
 }

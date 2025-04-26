@@ -1139,7 +1139,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5760493320708922015}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 6e3affa165da85a4bb8cb21e05fa93d2, type: 3}
   m_Controller: {fileID: 9100000, guid: 3223b6e4fdf93404983b1409a314d063, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -1286,11 +1286,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbd62af2a25df34c9a8e8a7bcb2c370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 5
   sprintAdittion: 3.5
   jumpForce: 18
   jumpTime: 0.85
   gravity: 9.8
+  playerCharacter: {fileID: 0}
+  collider: {fileID: 0}
 --- !u!114 &5760591942523908572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,4 +1377,6 @@ MonoBehaviour:
   Strength: 30
   maxHealth: 100
   currentHealth: 0
+  AttackPower: 0
+  DefensePower: 0
   sliderLife: {fileID: 8331184199234589672}
