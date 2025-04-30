@@ -14,6 +14,8 @@ public class Quest : MonoBehaviour
     [SerializeField] public List<QuestDialoguePair> questPairs;
     [SerializeField] public TextMeshProUGUI textOutput;
 
+    Animator animator;
+
     private QuestSystem questSystem;
     private int currentQuestIndex = 0;
     private bool isTransitioning = false;
@@ -21,8 +23,7 @@ public class Quest : MonoBehaviour
     void Awake()
     {
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
-
-        // Inscreve no evento da primeira quest
+        animator = GetComponent<Animator>();
         SubscribeToCurrentQuest();
     }
 
@@ -134,11 +135,18 @@ public class Quest : MonoBehaviour
             if (dialogData != null)
             {
                 textOutput.text = "Aperte E para falar.\nBotão Esquerdo do mouse para pular a animação.\nAperte Q para o próximo Diálogo";
-                
+
                 // Remover inscrição anterior antes de inscrever novamente
                 DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
                 DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
+
+                if(animator != null)
+                {
+                    animator.SetBool("isTalking", true);
+                }
                 
+
+                DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation; // Inscrever para parar a animação
                 DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
             }
             else
@@ -146,6 +154,15 @@ public class Quest : MonoBehaviour
                 CheckQuest();
             }
         }
+    }
+
+    private void StopTalkingAnimation()
+    {
+        // Parar a animação de "isTalking" quando o diálogo terminar
+        animator.SetBool("isTalking", false);
+
+        // Cancelar inscrição para evitar múltiplas chamadas
+        DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
     }
 
     private void OnTriggerExit(Collider other)
