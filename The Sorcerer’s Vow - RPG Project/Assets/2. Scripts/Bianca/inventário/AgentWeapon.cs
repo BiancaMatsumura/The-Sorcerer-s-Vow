@@ -6,7 +6,7 @@ public class AgentWeapon : MonoBehaviour
 {
     private EquippableItemSO weapon;
     private EquippableItemSO equippedIngredient;
-
+   
     [SerializeField]
     private InventorySO inventoryData;
 
@@ -15,9 +15,16 @@ public class AgentWeapon : MonoBehaviour
 
     public EquippableItemSO CurrentWeapon => weapon;
     public EquippableItemSO CurrentIngredient => equippedIngredient;
+    public Transform handTransform;
+    Animator anim; 
+    public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState, GameObject Prefab)
+    {   
 
-    public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
-    {
+        anim = GetComponent<Animator>();
+        anim.SetBool("Sword", true);
+        anim.Play("swordStart");//ainda é necessario uma logica pra indentificar qual é a arma e sua animação
+        Instantiate(Prefab, handTransform);
+        
         if (weapon != null)
             inventoryData.AddItem(weapon, 1, itemCurrentState);
 
@@ -57,5 +64,9 @@ public class AgentWeapon : MonoBehaviour
         equippedIngredient = null;
         ingredientCurrentState = null;
     }
-
+    public void UnequipWeapon()
+    {
+        weapon = null;
+        itemCurrentState = null;
+    }
 }
