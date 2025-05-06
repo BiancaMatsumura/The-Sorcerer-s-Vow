@@ -10,6 +10,7 @@ public class ThirdPersonController : MonoBehaviour
 
     float jumpElapsedTime = 0;
 
+    bool isStasis = false;
     bool isJumping = false;
     bool isSprinting = false;
     bool isCrouching = false;
@@ -19,13 +20,13 @@ public class ThirdPersonController : MonoBehaviour
     bool inputJump;
     bool inputCrouch;
     bool inputSprint;
-
+    public GameObject BOLADEFOGO;
     Animator animator;
     public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
 
-    public BoxCollider collider;
+    public BoxCollider[] collider;
 
     void Start()
     {
@@ -44,20 +45,20 @@ public class ThirdPersonController : MonoBehaviour
         inputJump = Input.GetAxis("Jump") == 1f;
         inputSprint = Input.GetAxis("Fire3") == 1f;
         inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
+        if (!isStasis) { 
+            if (inputCrouch)
+                isCrouching = !isCrouching;
 
-        if (inputCrouch)
-            isCrouching = !isCrouching;
+            if (cc.isGrounded && animator != null)
+            {
+                animator.SetBool("crouch", isCrouching);
 
-        if (cc.isGrounded && animator != null)
-        {
-            animator.SetBool("crouch", isCrouching);
-
-            float minimumSpeed = 0.9f;
-            animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
-            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
-            animator.SetBool("sprint", isSprinting);
+                float minimumSpeed = 0.9f;
+                animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
+                isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
+                animator.SetBool("sprint", isSprinting);
+            }
         }
-
         if (animator != null)
             animator.SetBool("air", !cc.isGrounded);
 
@@ -69,15 +70,24 @@ public class ThirdPersonController : MonoBehaviour
         HeadHittingDetect();
 
         if (animator.IsInTransition(0))
-        {
+        {   //qnd estiver em transição impede que a animação se repita
+            isStasis = false;
             animator.SetBool("Kick", false);
+            animator.SetBool("Punch", false);
         }
 
         if (Input.GetMouseButtonDown(0) && !isJumping && !isCrouching)
         {
             BattleSistem(1);
         }
-
+        if (Input.GetMouseButtonDown(1) && !isJumping && !isCrouching)
+        {
+            BattleSistem(2);
+        }
+        if (Input.GetKey(KeyCode.F) && !isCrouching)
+        {
+            BattleSistem(3);
+        }
     }
 
     private void FixedUpdate()
@@ -144,25 +154,47 @@ public class ThirdPersonController : MonoBehaviour
             isJumping = false;
         }
     }
-    void BattleSistem(int var) 
+    void BattleSistem(int var)
     {
-        switch(var)
+        //batle sistem 
+        switch (var)
         {
             case 1:
                 animator.SetBool("Kick", true);
-               
+                isStasis = true;
                 break;
-
-
+            case 2:
+                animator.SetBool("Punch", true);
+                isStasis = true;
+                break;
+            case 3:
+                animator.Play("Power");
+      
+                break; 
         }
     }
 
-    void ActiveColider() 
+    void ActiveCollider()
     {
-        collider.enabled = true;
+        int qnt = collider.Length;
+        for (int i = 0; i < qnt; i++)
+        {
+            collider[i].enabled = true;
+        }
     }
-    void DesactiveColider()
+
+    void DesactiveCollider()
     {
-        collider.enabled = false;
+        int qnt = collider.Length;
+        for (int i = qnt - 1; i >= 0; i--)
+        {
+            collider[i].enabled = false;
+        }
+
+    
+    }
+    void FireACtive() 
+    {
+        Instantiate(BOLADEFOGO, transform.position, transform.rotation);
     }
 }
