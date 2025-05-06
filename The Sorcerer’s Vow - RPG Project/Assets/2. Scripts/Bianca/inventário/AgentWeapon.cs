@@ -6,7 +6,7 @@ public class AgentWeapon : MonoBehaviour
 {
     private EquippableItemSO weapon;
     private EquippableItemSO equippedIngredient;
-   
+
     [SerializeField]
     private InventorySO inventoryData;
 
@@ -16,22 +16,44 @@ public class AgentWeapon : MonoBehaviour
     public EquippableItemSO CurrentWeapon => weapon;
     public EquippableItemSO CurrentIngredient => equippedIngredient;
     public Transform handTransform;
-    Animator anim; 
-    public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState, GameObject Prefab)
-    {   
+    Animator anim;
+
+    private GameObject equippedWeaponObject;
+
+    public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
+    {
 
         anim = GetComponent<Animator>();
-        anim.SetBool("Sword", true);
-        anim.Play("swordStart");//ainda È necessario uma logica pra indentificar qual È a arma e sua animaÁ„o
-        Instantiate(Prefab, handTransform);
+
+        anim.SetInteger("Weapon", weaponItemSO.animIndex);
+        anim.Play(weaponItemSO.animName);
         
+        // Remove a arma visual anterior (se existir)
+        if (equippedWeaponObject != null)
+        {
+            Destroy(equippedWeaponObject);
+        }
+
+        // Instancia o novo prefab na m√£o
+        if (weaponItemSO.WorldPrefab != null)
+        {
+            equippedWeaponObject = Instantiate(weaponItemSO.WorldPrefab, handTransform);
+        }
+        else
+        {
+            Debug.LogWarning($"WorldPrefab est√° vazio para o item {weaponItemSO.name}");
+        }
+
+        // Retorna a arma antiga ao invent√°rio
         if (weapon != null)
             inventoryData.AddItem(weapon, 1, itemCurrentState);
 
+        // Atualiza o estado interno
         weapon = weaponItemSO;
         itemCurrentState = new List<ItemParameter>(itemState);
         ModifyParameters(itemCurrentState);
     }
+
 
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
     {
