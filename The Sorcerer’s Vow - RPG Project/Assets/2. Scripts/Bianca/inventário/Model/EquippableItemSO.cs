@@ -11,6 +11,9 @@ public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
     [field: SerializeField] public AudioClip actionSFX { get; private set; }
     [field: SerializeField] public ItemCategory slotType { get; private set; } = ItemCategory.Armas;
 
+    public string animName;
+    public int animIndex;
+
     public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
     {
         AgentWeapon weaponSystem = character.GetComponent<AgentWeapon>();
@@ -18,6 +21,7 @@ public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
         {
             if (slotType == ItemCategory.Armas)
                 weaponSystem.SetWeapon(this, itemState ?? DefaultParametersList);
+
             else
                 weaponSystem.SetIngredient(this, itemState ?? DefaultParametersList);
 

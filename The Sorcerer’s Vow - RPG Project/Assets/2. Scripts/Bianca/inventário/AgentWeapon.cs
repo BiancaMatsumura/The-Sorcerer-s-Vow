@@ -15,16 +15,45 @@ public class AgentWeapon : MonoBehaviour
 
     public EquippableItemSO CurrentWeapon => weapon;
     public EquippableItemSO CurrentIngredient => equippedIngredient;
+    public Transform handTransform;
+    Animator anim;
+
+    private GameObject equippedWeaponObject;
 
     public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
     {
+
+        anim = GetComponent<Animator>();
+
+        anim.SetInteger("Weapon", weaponItemSO.animIndex);
+        anim.Play(weaponItemSO.animName);
+        
+        // Remove a arma visual anterior (se existir)
+        if (equippedWeaponObject != null)
+        {
+            Destroy(equippedWeaponObject);
+        }
+
+        // Instancia o novo prefab na mão
+        if (weaponItemSO.WorldPrefab != null)
+        {
+            equippedWeaponObject = Instantiate(weaponItemSO.WorldPrefab, handTransform);
+        }
+        else
+        {
+            Debug.LogWarning($"WorldPrefab está vazio para o item {weaponItemSO.name}");
+        }
+
+        // Retorna a arma antiga ao inventário
         if (weapon != null)
             inventoryData.AddItem(weapon, 1, itemCurrentState);
 
+        // Atualiza o estado interno
         weapon = weaponItemSO;
         itemCurrentState = new List<ItemParameter>(itemState);
         ModifyParameters(itemCurrentState);
     }
+
 
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
     {
@@ -57,5 +86,9 @@ public class AgentWeapon : MonoBehaviour
         equippedIngredient = null;
         ingredientCurrentState = null;
     }
-
+    public void UnequipWeapon()
+    {
+        weapon = null;
+        itemCurrentState = null;
+    }
 }
