@@ -208,4 +208,18 @@ public class InventoryController : MonoBehaviour
             }
         }
     }
+    public void ForceUpdateDescription(ItemSO item, List<ItemParameter> itemState)
+    {
+        Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+        foreach (var kvp in currentState)
+        {
+            if (kvp.Value.item == item)
+            {
+                inventoryData.SetItemState(kvp.Key, itemState); // Crie esse método para atualizar o estado no inventário
+                HandleDescriptionRequest(kvp.Key); // Atualiza visual
+                break;
+            }
+        }
+    }
+
 }

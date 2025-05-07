@@ -7,9 +7,9 @@ using UnityEngine;
 namespace Inventory.Model
 {
     [CreateAssetMenu]
-public class InventorySO : ScriptableObject
-{
-    [SerializeField]
+    public class InventorySO : ScriptableObject
+    {
+        [SerializeField]
         private List<InventoryItem> inventoryItems;
 
         [field: SerializeField]
@@ -25,12 +25,23 @@ public class InventorySO : ScriptableObject
                 inventoryItems.Add(InventoryItem.GetEmptyItem());
             }
         }
+        public void SetItemState(int index, List<ItemParameter> newState)
+        {
+            if (index >= 0 && index < inventoryItems.Count)
+            {
+                var item = inventoryItems[index];
+                item.itemState = new List<ItemParameter>(newState);
+                inventoryItems[index] = item;
+                OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
+            }
+        }
+
 
         public int AddItem(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
-            if(item.IsStackable == false)
+            if (item.IsStackable == false)
             {
-                while(quantity > 0 && IsInventoryFull() == false)
+                while (quantity > 0 && IsInventoryFull() == false)
                 {
                     quantity -= AddItemToFirstFreeSlot(item, 1, itemState);
                 }
@@ -42,25 +53,25 @@ public class InventorySO : ScriptableObject
             return quantity;
         }
 
-       private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState = null)
-    {
-        InventoryItem newItem = new InventoryItem
+        private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
-            item = item,
-            quantity = quantity,
-            itemState = new List<ItemParameter>(itemState == null ? item.DefaultParametersList : itemState)
-        };
-
-        for (int i = 0; i < inventoryItems.Count; i++)
-        {
-            if (inventoryItems[i].IsEmpty)
+            InventoryItem newItem = new InventoryItem
             {
-                inventoryItems[i] = newItem;
-                return quantity;
+                item = item,
+                quantity = quantity,
+                itemState = new List<ItemParameter>(itemState == null ? item.DefaultParametersList : itemState)
+            };
+
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                if (inventoryItems[i].IsEmpty)
+                {
+                    inventoryItems[i] = newItem;
+                    return quantity;
+                }
             }
+            return 0;
         }
-        return 0;
-    }
 
         private bool IsInventoryFull()
             => inventoryItems.Where(item => item.IsEmpty).Any() == false;
@@ -71,7 +82,7 @@ public class InventorySO : ScriptableObject
             {
                 if (inventoryItems[i].IsEmpty)
                     continue;
-                if(inventoryItems[i].item.ID == item.ID)
+                if (inventoryItems[i].item.ID == item.ID)
                 {
                     int amountPossibleToTake =
                         inventoryItems[i].item.MaxStackSize - inventoryItems[i].quantity;
@@ -91,7 +102,7 @@ public class InventorySO : ScriptableObject
                     }
                 }
             }
-            while(quantity > 0 && IsInventoryFull() == false)
+            while (quantity > 0 && IsInventoryFull() == false)
             {
                 int newQuantity = Mathf.Clamp(quantity, 0, item.MaxStackSize);
                 quantity -= newQuantity;
@@ -181,6 +192,6 @@ public class InventorySO : ScriptableObject
                 itemState = new List<ItemParameter>()
             };
     }
-    
+
 }
 

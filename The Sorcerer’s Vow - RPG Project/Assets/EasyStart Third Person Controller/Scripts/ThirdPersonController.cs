@@ -26,6 +26,7 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField]
     private PlayerCharacter playerCharacter;
 
+
     public BoxCollider[] collider;
 
     void Start()
@@ -33,6 +34,7 @@ public class ThirdPersonController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         playerCharacter = GetComponent<PlayerCharacter>();
+
 
         if (animator == null)
             Debug.LogWarning("Hey buddy, you don't have the Animator component in your player. Without it, the animations won't work.");
@@ -79,10 +81,12 @@ public class ThirdPersonController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isJumping && !isCrouching)
         {
             BattleSistem(1);
+            
         }
         if (Input.GetMouseButtonDown(1) && !isJumping && !isCrouching)
         {
             BattleSistem(2);
+            
         }
         if (Input.GetKey(KeyCode.F) && !isCrouching)
         {

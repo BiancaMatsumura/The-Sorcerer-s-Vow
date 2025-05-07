@@ -709,7 +709,14 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+    'mixamorig:LeftHandThumb2'\n\tTransform 'mixamorig:LeftHandIndex1'\n\tTransform
+    'mixamorig:LeftHandPinky2'\n\tTransform 'mixamorig:RightHandRing2'\n\tTransform
+    'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:LeftHandThumb3'\n\tTransform
+    'mixamorig:RightArm'\n\tand more ...\n\tFrom animation clip 'Talk2'\n\tFrom animation
+    clip 'LongTalk'\n\tFrom animation clip 'CalmTalk'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -11438,6 +11445,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &253535397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8441445879598509717, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+  m_PrefabInstance: {fileID: 767139899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &253535400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253535397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &257786509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14301,6 +14325,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2348809438909167691, guid: c84e9a84b05217d4899c25dca7169f1b, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 1788791192}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32331,6 +32359,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2480759633830138957, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: parametersToModify.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593653635507999306, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73089905de05acf4a8b323d28a8f8178, type: 2}
     - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: collider
       value: 
@@ -32389,16 +32425,44 @@ PrefabInstance:
       objectReference: {fileID: 1070653375}
     - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: initialItems.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: initialItems.Array.data[1].item
       value: 
       objectReference: {fileID: 11400000, guid: 5f003d78aa4df0e49b8900303595fb6a, type: 2}
     - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[2].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 316dc1bfe0489b64289afaf2daef018a, type: 2}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[3].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 13160cf3eecc7694ead0eb4d51087458, type: 2}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: initialItems.Array.data[1].quantity
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[2].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[3].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[3].itemState.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[3].itemState.Array.data[0].value
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5760591942523908572, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: initialItems.Array.data[3].itemState.Array.data[0].itemParameter
+      value: 
+      objectReference: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
     - target: {fileID: 6496463313002043174, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -32407,6 +32471,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8441445879598509717, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: m_Name
+      value: "ColliderM\xE3o"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32414,6 +32482,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3846921107485036174, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       insertIndex: -1
       addedObject: {fileID: 681719754}
+    - targetCorrespondingSourceObject: {fileID: 8441445879598509717, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 253535400}
   m_SourcePrefab: {fileID: 100100000, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
 --- !u!1 &769786189
 GameObject:
@@ -71663,6 +71734,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2348809438909167691, guid: c84e9a84b05217d4899c25dca7169f1b, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 1788791192}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -74403,6 +74478,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4952467050408558629, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
   m_PrefabInstance: {fileID: 767139899}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1788791192 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2480759633830138957, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+  m_PrefabInstance: {fileID: 767139899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6770e9c3b22b64ca50415503f920ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1789733992
 PrefabInstance:
   m_ObjectHideFlags: 0

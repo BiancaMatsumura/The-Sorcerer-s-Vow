@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a97d3ccd234ab542ab0fd352f0d13bb, type: 3}
-  m_Name: DurabilityParameter
+  m_Name: Dano
   m_EditorClassIdentifier: 
-  <ParameterName>k__BackingField: Durability
+  <ParameterName>k__BackingField: Dano
