@@ -12,13 +12,7 @@ public class EnimyTeste : MonoBehaviour
         maxhealh = life;
         bar.size = 1f;
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("playerbattle"))
-        {
-            TakeDamage(10);
-        }
-    }
+    
 
     public void TakeDamage(float tanto) 
     {   

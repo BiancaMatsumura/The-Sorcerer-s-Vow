@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b68bc04503ab7f40adf0a1627df63f3, type: 3}
-  m_Name: Falar_NPC
+  m_Name: Coletar_Item_Side
   m_EditorClassIdentifier: 
-  questName: Falar com NPC
-  questDependencies: []
+  questName: Coletar_Item2
+  questDependencies:
+  - {fileID: 11400000, guid: fa704a938e2c48349b8a920b5aaee4a5, type: 2}
   isCompleted: 0
+  isDiscovered: 1
+  questType: 1

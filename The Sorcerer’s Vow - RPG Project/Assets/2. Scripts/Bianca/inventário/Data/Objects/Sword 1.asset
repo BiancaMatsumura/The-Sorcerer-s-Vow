@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b55a02c21effea040963aac000576c47, type: 3}
-  m_Name: Sword
+  m_Name: Sword 1
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Sword
   <Description>k__BackingField: Cuts Everthing!
@@ -23,7 +23,7 @@ MonoBehaviour:
   - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
     value: 100
   - itemParameter: {fileID: 11400000, guid: e2ec2f0c575ec5f42b3a3219c866b282, type: 2}
-    value: 10
+    value: 1
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 1
   animName: swordStart

@@ -16,10 +16,10 @@ public class InventoryController : MonoBehaviour
     public List<InventoryItem> initialItems = new List<InventoryItem>();
 
     [SerializeField]
-        private AudioClip dropClip;
+    private AudioClip dropClip;
 
-        [SerializeField]
-        private AudioSource audioSource;
+    [SerializeField]
+    private AudioSource audioSource;
     private void Start()
     {
         PrepareUI();
@@ -32,8 +32,8 @@ public class InventoryController : MonoBehaviour
         inventoryData.OnInventoryUpdated += UpdateInventoryUI;
         foreach (InventoryItem item in initialItems)
         {
-            if(item.IsEmpty)
-            continue;
+            if (item.IsEmpty)
+                continue;
             inventoryData.AddItem(item);
         }
     }
@@ -45,11 +45,11 @@ public class InventoryController : MonoBehaviour
         {
             if (item.Value.IsEmpty)
                 continue;
-                
+
             inventoryUI.UpdateData(
-                item.Key, 
-                item.Value.item.ItemImage, 
-                item.Value.quantity, 
+                item.Key,
+                item.Value.item.ItemImage,
+                item.Value.quantity,
                 item.Value.item.Category
             );
         }
@@ -65,85 +65,85 @@ public class InventoryController : MonoBehaviour
     }
 
     private void HandleItemActionRequest(int itemIndex)
+    {
+        InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
+        if (inventoryItem.IsEmpty)
+            return;
+
+        IItemAction itemAction = inventoryItem.item as IItemAction;
+        if (itemAction != null)
         {
-            InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
-            if (inventoryItem.IsEmpty)
-                return;
 
-            IItemAction itemAction = inventoryItem.item as IItemAction;
-            if(itemAction != null)
-            {
-                
-                inventoryUI.ShowItemAction(itemIndex);
-                inventoryUI.AddAction(itemAction.ActionName, () => PerformAction(itemIndex));
-            }
-
-            IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
-            if (destroyableItem != null)
-            {
-                inventoryUI.AddAction("Drop", () => DropItem(itemIndex, inventoryItem.quantity));
-            }
-
+            inventoryUI.ShowItemAction(itemIndex);
+            inventoryUI.AddAction(itemAction.ActionName, () => PerformAction(itemIndex));
         }
+
+        IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
+        if (destroyableItem != null)
+        {
+            inventoryUI.AddAction("Drop", () => DropItem(itemIndex, inventoryItem.quantity));
+        }
+
+    }
 
     private void DropItem(int itemIndex, int quantity)
     {
         inventoryData.RemoveItem(itemIndex, quantity);
-        inventoryUI.ResetSelection();    
+        inventoryUI.ResetSelection();
         audioSource.PlayOneShot(dropClip);
     }
 
     public void PerformAction(int itemIndex)
-{
-    InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
-    if (inventoryItem.IsEmpty)
-        return;
-
-    // Verificar se é um item de ação
-    IItemAction itemAction = inventoryItem.item as IItemAction;
-    if (itemAction != null)
     {
-        // Executar a ação (equipar a arma)
-        bool actionSuccess = itemAction.PerformAction(gameObject, inventoryItem.itemState);
-        audioSource.PlayOneShot(itemAction.actionSFX);
-        
-        // Só remover o item se for destruível E a ação for bem-sucedida
-        if (actionSuccess)
+        InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
+        if (inventoryItem.IsEmpty)
+            return;
+
+        // Verificar se é um item de ação
+        IItemAction itemAction = inventoryItem.item as IItemAction;
+        if (itemAction != null)
         {
+            // Executar a ação (equipar a arma)
+            bool actionSuccess = itemAction.PerformAction(gameObject, inventoryItem.itemState);
+            audioSource.PlayOneShot(itemAction.actionSFX);
+
+            // Só remover o item se for destruível E a ação for bem-sucedida
+            if (actionSuccess)
+            {
+                IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
+                if (destroyableItem != null)
+                {
+                    inventoryData.RemoveItem(itemIndex, 1);
+                }
+            }
+
+            if (inventoryData.GetItemAt(itemIndex).IsEmpty)
+                inventoryUI.ResetSelection();
+        }
+        else
+        {
+            // Se não for um item de ação, mas for destruível, remova-o
             IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
             if (destroyableItem != null)
             {
                 inventoryData.RemoveItem(itemIndex, 1);
             }
         }
-        
-        if (inventoryData.GetItemAt(itemIndex).IsEmpty)
-            inventoryUI.ResetSelection();
     }
-    else
-    {
-        // Se não for um item de ação, mas for destruível, remova-o
-        IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
-        if (destroyableItem != null)
-        {
-            inventoryData.RemoveItem(itemIndex, 1);
-        }
-    }
-}
 
     private void HandleDragging(int itemIndex)
     {
         InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
-        if(inventoryItem.IsEmpty)
-        return;
-        inventoryUI.CreateDraggedItem(inventoryItem.item.ItemImage , inventoryItem.quantity);
+        if (inventoryItem.IsEmpty)
+            return;
+        inventoryUI.CreateDraggedItem(inventoryItem.item.ItemImage, inventoryItem.quantity);
 
     }
 
     private void HandleSwapItems(int itemIndex_1, int itemIndex_2)
     {
         inventoryData.SwapItems(itemIndex_1, itemIndex_2);
-        
+
         // Após o swap, atualize a UI para refletir a mudança de categoria
         Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
         UpdateInventoryUI(currentState);
@@ -163,49 +163,63 @@ public class InventoryController : MonoBehaviour
     }
 
     private string PrepareDescription(InventoryItem inventoryItem)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(inventoryItem.item.Description);
-            sb.AppendLine();
-            for (int i = 0; i < inventoryItem.itemState.Count; i++)
-            {
-                sb.Append($"{inventoryItem.itemState[i].itemParameter.ParameterName} " +
-                    $": {inventoryItem.itemState[i].value} / " +
-                    $"{inventoryItem.item.DefaultParametersList[i].value}");
-                sb.AppendLine();
-            }
-            return sb.ToString();
-        }
-    public void Update()
-{
-    if (Input.GetKeyDown(KeyCode.Tab))
     {
-        if (!inventoryUI.isActiveAndEnabled)
+        StringBuilder sb = new StringBuilder();
+        sb.Append(inventoryItem.item.Description);
+        sb.AppendLine();
+        for (int i = 0; i < inventoryItem.itemState.Count; i++)
         {
-            inventoryUI.Show();
-            Time.timeScale = 0; // Pausa o jogo
-            Cursor.lockState = CursorLockMode.None; // Libera o cursor
-            Cursor.visible = true;
-            CameraController.isInventoryOpen = true; // Desativa o controle da câmera
-
-            foreach (var item in inventoryData.GetCurrentInventoryState())
-            {
-                inventoryUI.UpdateData(
-                    item.Key,
-                    item.Value.item.ItemImage,
-                    item.Value.quantity,
-                    item.Value.item.Category
-                );
-            }
+            sb.Append($"{inventoryItem.itemState[i].itemParameter.ParameterName} " +
+                $": {inventoryItem.itemState[i].value} / " +
+                $"{inventoryItem.item.DefaultParametersList[i].value}");
+            sb.AppendLine();
         }
-        else
+        return sb.ToString();
+    }
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            inventoryUI.Hide();
-            Time.timeScale = 1; // Retoma o jogo
-            Cursor.lockState = CursorLockMode.Locked; // Trava o cursor novamente
-            Cursor.visible = false;
-            CameraController.isInventoryOpen = false; // Reativa o controle da câmera
+            if (!inventoryUI.isActiveAndEnabled)
+            {
+                inventoryUI.Show();
+                Time.timeScale = 0; // Pausa o jogo
+                Cursor.lockState = CursorLockMode.None; // Libera o cursor
+                Cursor.visible = true;
+                CameraController.isInventoryOpen = true; // Desativa o controle da câmera
+
+                foreach (var item in inventoryData.GetCurrentInventoryState())
+                {
+                    inventoryUI.UpdateData(
+                        item.Key,
+                        item.Value.item.ItemImage,
+                        item.Value.quantity,
+                        item.Value.item.Category
+                    );
+                }
+            }
+            else
+            {
+                inventoryUI.Hide();
+                Time.timeScale = 1; // Retoma o jogo
+                Cursor.lockState = CursorLockMode.Locked; // Trava o cursor novamente
+                Cursor.visible = false;
+                CameraController.isInventoryOpen = false; // Reativa o controle da câmera
+            }
         }
     }
-}
+    public void ForceUpdateDescription(ItemSO item, List<ItemParameter> itemState)
+    {
+        Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+        foreach (var kvp in currentState)
+        {
+            if (kvp.Value.item == item)
+            {
+                inventoryData.SetItemState(kvp.Key, itemState); // Crie esse método para atualizar o estado no inventário
+                HandleDescriptionRequest(kvp.Key); // Atualiza visual
+                break;
+            }
+        }
+    }
+
 }

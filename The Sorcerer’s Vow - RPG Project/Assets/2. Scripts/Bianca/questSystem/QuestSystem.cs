@@ -2,6 +2,15 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using System;
+using System.Linq;
+
+public enum QuestType
+{
+    Main,
+    Side,
+    Secret
+}
+
 
 public class QuestSystem : MonoBehaviour
 {
@@ -13,14 +22,11 @@ public class QuestSystem : MonoBehaviour
     {
         ResetQuests();
 
-        var questsFaltando = EmptyQuest();
-        textOutput.text = questsFaltando.Count > 0
-            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
-            : "Todas as quests foram concluídas!";
+        UpdateUI();
 
         foreach (var quest in quests)
         {
-            quest.OnQuestCompleted -= UpdateUI; // Evitar duplicação
+            quest.OnQuestCompleted -= UpdateUI;
             quest.OnQuestCompleted += UpdateUI;
         }
     }
@@ -35,21 +41,32 @@ public class QuestSystem : MonoBehaviour
 
     public void UpdateUI()
     {
-        var questsFaltando = EmptyQuest();
-        var newText = questsFaltando.Count > 0
-            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
-            : "Todas as quests foram concluídas. Level Finalizado!";
+        string main = FormatQuestList(QuestType.Main);
+        string side = FormatQuestList(QuestType.Side);
+        string secret = FormatQuestList(QuestType.Secret);
+
+        string newText = $"<b>Main Quests:</b>\n{main}\n\n<b>Side Quests:</b>\n{side}\n\n<b>Secret Quests:</b>\n{secret}";
 
         if (textOutput != null && textOutput.text != newText)
         {
             textOutput.text = newText;
         }
-        
-        // Verificar se todas as quests foram concluídas
-        if (questsFaltando.Count == 0)
+
+        if (EmptyQuest().Count == 0)
         {
             OnAllQuestsCompleted?.Invoke();
         }
+    }
+
+
+    private string FormatQuestList(QuestType type)
+    {
+        var questsByType = quests
+            .Where(q => q.questType == type && !q.isCompleted && q.isDiscovered)
+            .Select(q => q.questName)
+            .ToList();
+
+        return questsByType.Count > 0 ? string.Join("\n", questsByType) : "Nenhuma";
     }
 
     public bool CheckQuests()
@@ -59,6 +76,7 @@ public class QuestSystem : MonoBehaviour
             if (!quest.isCompleted)
                 return false;
         }
+
         OnAllQuestsCompleted?.Invoke();
         return true;
     }
@@ -80,32 +98,25 @@ public class QuestSystem : MonoBehaviour
         {
             if (quest.questName == questName)
             {
-                Debug.Log($"Verificando quest '{questName}', status atual: {(quest.isCompleted ? "Completa" : "Incompleta")}");
-                
                 if (CanCompleteQuest(quest))
                 {
                     if (!quest.isCompleted)
                     {
                         quest.CompleteQuest();
-                        Debug.Log($"Quest '{questName}' foi marcada como completa!");
                         UpdateUI();
                         return true;
                     }
-                    else
-                    {
-                        Debug.Log($"Quest '{questName}' já está completa.");
-                        return false; // A quest já está completa
-                    }
+                    return false;
                 }
                 else
                 {
-                    Debug.Log($"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!");
-                    textOutput.text = $"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!";
+                    textOutput.text = $"A Quest '{questName}' possui dependências pendentes!";
                     return false;
                 }
             }
         }
-        Debug.LogWarning($"Quest '{questName}' não encontrada no sistema!");
+
+        Debug.LogWarning($"Quest '{questName}' não encontrada!");
         return false;
     }
 
@@ -117,11 +128,9 @@ public class QuestSystem : MonoBehaviour
         foreach (var dependency in quest.questDependencies)
         {
             if (!dependency.isCompleted)
-            {
-                Debug.Log($"Dependência '{dependency.questName}' não está completa para a quest '{quest.questName}'");
                 return false;
-            }
         }
+
         return true;
     }
 
@@ -140,5 +149,30 @@ public class QuestSystem : MonoBehaviour
             quest.CompleteQuest();
             UpdateUI();
         }
+    }
+
+
+    public void ActivateQuest(QuestData quest)
+    {
+        if (quest != null && !quests.Contains(quest))
+        {
+            quests.Add(quest);
+        }
+
+        
+        quest.isDiscovered = true;
+
+        quest.OnQuestCompleted -= UpdateUI;
+        quest.OnQuestCompleted += UpdateUI;
+        UpdateUI();
+
+        Debug.Log($"Quest '{quest.questName}' ativada e agora visível!");
+    }
+
+
+
+    public List<QuestData> GetQuestsByType(QuestType type)
+    {
+        return quests.FindAll(q => q.questType == type);
     }
 }

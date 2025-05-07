@@ -15,3 +15,5 @@ MonoBehaviour:
   Sentences:
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
     Content: "Parab\xE9ns!\nVoc\xEA coletou a sua primeira Ess\xEAncia!"
+  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+    Content: "Agora siga-me para a sua pr\xF3xima miss\xE3o!"

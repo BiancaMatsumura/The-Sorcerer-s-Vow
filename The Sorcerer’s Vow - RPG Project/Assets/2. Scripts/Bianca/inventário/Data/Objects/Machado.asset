@@ -19,7 +19,11 @@ MonoBehaviour:
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
   <ItemImage>k__BackingField: {fileID: 1337737013, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
-  <DefaultParametersList>k__BackingField: []
+  <DefaultParametersList>k__BackingField:
+  - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
+    value: 100
+  - itemParameter: {fileID: 11400000, guid: e2ec2f0c575ec5f42b3a3219c866b282, type: 2}
+    value: 5
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 1
   animName: axeStart
