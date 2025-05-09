@@ -1,0 +1,231 @@
+/* ====================================================== */
+/*         Dialogue Graph Editor Stylesheet             */
+/* ====================================================== */
+
+/* --- Estilo Geral do Nó --- */
+Node {
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(45, 45, 45);
+    background-color: rgb(70, 70, 70);
+    min-width: 180px;
+    max-width: 350px;
+    /* box-shadow removido */
+    overflow: hidden; /* Essencial para cortar filhos nos cantos */
+}
+
+/* --- Título do Nó --- */
+Node > #title {
+    background-color: rgb(55, 55, 55);
+    color: rgb(225, 225, 225);
+    font-size: 13px;
+    unity-font-style: bold;
+    padding: 6px 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(40, 40, 40);
+    min-height: 20px;
+    flex-direction: row;
+    align-items: center;
+}
+/* Label padrão dentro do título */
+Node > #title > Label#title-label {
+    color: rgb(225, 225, 225);
+    min-width: 80px;
+    padding: 0;
+    flex-grow: 1;
+    margin-right: 5px;
+}
+/* Container de botões no título */
+Node > #title > #title-button-container {
+    margin-left: auto;
+    padding-right: 5px;
+    flex-shrink: 0;
+}
+
+/* --- Estilo para o TextField de Renomeação no Título --- */
+Node > #title > TextField.title-textfield {
+    background-color: rgb(80, 80, 80);
+    color: rgb(235, 235, 235);
+    font-size: 13px;
+    unity-font-style: bold;
+    border-width: 1px;
+    border-color: rgb(150, 150, 150);
+    border-radius: 3px;
+    margin: 0;
+    padding: 3px 8px;
+    flex-grow: 1;
+    height: auto;
+    min-height: 18px;
+    margin-right: 5px;
+}
+
+/* Input area dentro do TextField do título */
+Node > #title > TextField.title-textfield > TextInput {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: transparent;
+}
+
+
+/* --- Conteúdo Principal do Nó --- */
+Node > #contents {
+    background-color: rgb(75, 75, 75);
+    padding: 10px;
+    border-radius: 0;
+}
+
+/* --- Containers de Input/Output --- */
+Node > #input, Node > #output {
+    background-color: rgb(75, 75, 75);
+    padding: 4px 0;
+    min-height: 30px;
+    border-radius: 0;
+}
+
+/* --- ESTILOS DAS PORTAS (CONECTORES E LABELS) --- */
+Port {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    margin: 0px;
+}
+Port > .unity-label {
+    font-size: 11px;
+    color: rgb(210, 210, 210);
+    white-space: nowrap;
+    padding: 0;
+    margin: 0;
+}
+Port[direction="0"] > .unity-label { margin-left: 6px; }
+Port[direction="1"] > .unity-label { margin-right: 6px; }
+
+
+/* --- Estilos Específicos por Tipo de Nó --- */
+
+/* Nó de Sentença */
+.sentence-node > #title { background-color: rgb(50, 60, 75); }
+.sentence-node > #contents,
+.sentence-node > #input,
+.sentence-node > #output { background-color: rgb(70, 80, 95); }
+
+/* Nó de Escolha */
+.choice-node > #title { background-color: rgb(75, 65, 50); }
+.choice-node > #contents,
+.choice-node > #input,
+.choice-node > #output { background-color: rgb(95, 85, 70); }
+
+/* Linhas das escolhas */
+.choice-node #choices-container > .choice-row {
+    /* >>> CORREÇÃO APLICADA AQUI <<< */
+    /* border-top: 1px solid rgba(80, 70, 55, 0.7); */ /* REMOVIDO shorthand */
+    border-top-width: 1px;                           /* ADICIONADO */
+    border-top-style: solid;                         /* ADICIONADO */
+    border-top-color: rgba(80, 70, 55, 0.7);         /* ADICIONADO */
+    /* <<< FIM DA CORREÇÃO >>> */
+    padding: 7px 0 4px 5px;
+    margin-top: 0;
+}
+
+/* Nó de Condição */
+.condition-node > #title { background-color: rgb(50, 75, 55); }
+.condition-node > #contents,
+.condition-node > #input,
+.condition-node > #output { background-color: rgb(70, 95, 75); }
+
+
+/* --- Estilo do Nó de Entrada --- */
+.entry-node {
+    border-color: rgb(255, 200, 80);
+    border-width: 3px;
+}
+.entry-node > #title {
+    background-color: rgb(110, 90, 40);
+    color: white;
+}
+ .entry-node > #title > Label#title-label,
+ .entry-node > #title > TextField.title-textfield {
+     color: white;
+ }
+
+
+/* --- Estilo dos Controles UI Dentro dos Nós --- */
+
+/* Linha Label + Campo */
+Node #contents > VisualElement {
+     flex-direction: row;
+     align-items: flex-start;
+     margin-bottom: 4px;
+}
+/* Label na linha */
+Node #contents > VisualElement > Label {
+    min-width: 50px; margin-right: 5px;
+    font-size: 11px; color: rgb(190, 190, 190);
+    padding-top: 3px;
+}
+
+
+/* Campos de Texto */
+Node TextField { margin: 0; flex-grow: 1; }
+Node .unity-base-text-field__input {
+    background-color: rgb(60, 60, 60); color: rgb(220, 220, 220);
+    border-color: rgb(45, 45, 45); border-width: 1px; border-radius: 3px;
+    padding: 4px 6px; min-height: 22px;
+}
+Node .unity-base-text-field__input--multiline {
+    padding: 6px; min-height: 40px; white-space: normal;
+}
+
+/* Campos de Objeto (ScriptableObject) */
+Node ObjectField { margin: 0; flex-grow: 1; }
+Node .unity-object-field__input {
+     background-color: rgb(60, 60, 60); border-radius: 3px;
+     border-color: rgb(45, 45, 45); border-width: 1px;
+     min-height: 22px; padding-left: 5px; margin: 0;
+}
+Node .unity-object-field__input Label {
+     color: rgb(190, 190, 190); font-size: 11px;
+     min-width: 0; margin: 0; padding-top: 1px; margin-right: 0;
+}
+Node .unity-object-field__selector {
+    background-color: rgb(85, 85, 85); border-radius: 10px;
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; margin-right: 2px; border-width: 0;
+}
+Node .unity-object-field__selector:hover { background-color: rgb(100, 100, 100); }
+
+/* Botões */
+Node Button {
+    background-color: rgb(90, 90, 90); color: rgb(220, 220, 220);
+    border-color: rgb(55, 55, 55); border-width: 1px; border-radius: 4px;
+    padding: 4px 10px; margin-left: 5px; font-size: 11px;
+    flex-shrink: 0;
+}
+Node Button:hover { background-color: rgb(105, 105, 105); border-color: rgb(65, 65, 65); }
+Node Button:active { background-color: rgb(75, 75, 75); }
+
+/* Botão de adicionar escolha no título */
+Node > #title #title-button-container Button {
+    font-size: 11px; padding: 2px 6px;
+    background-color: rgb(70, 110, 75); border-color: rgb(50, 80, 55);
+}
+Node > #title #title-button-container Button:hover { background-color: rgb(80, 125, 85); }
+
+/* Botão de remover escolha ('X') */
+.choice-row Button.delete-button {
+   font-size: 10px; padding: 1px 5px 2px 5px;
+   min-width: 20px; width: 20px; height: 20px;
+   background-color: rgb(120, 70, 70); border-color: rgb(90, 50, 50);
+   margin-left: 5px;
+}
+.choice-row Button.delete-button:hover { background-color: rgb(140, 80, 80); }
+
+
+/* --- Estilo das Arestas (Conexões) --- */
+Edge {
+    /* --edge-control-point-tangent-length: 100; */
+    --edge-width: 2px;
+    --selected-edge-width: 3px;
+    --edge-color: rgb(160, 160, 160);
+    --selected-edge-color: rgb(90, 170, 240);
+}
