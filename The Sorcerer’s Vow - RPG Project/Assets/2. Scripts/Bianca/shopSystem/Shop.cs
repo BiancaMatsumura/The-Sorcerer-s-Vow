@@ -1,4 +1,5 @@
 using Inventory.Model;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -7,18 +8,29 @@ namespace ShopSystem
     public class Shop : MonoBehaviour
     {
         [SerializeField]
-        private ShopSO shopSO;
+        public ShopSO ShopSO;
+
         [SerializeField]
         private InventorySO playerInventory;
         [SerializeField]
         private ItemSO currencyItem; // <- Aqui você arrasta o seu "Moeda" ItemSO no inspector
 
+        private HashSet<int> purchasedItemIndices = new HashSet<int>();
+
+
+
         public void BuyItem(int shopItemIndex)
         {
-            if (shopItemIndex < 0 || shopItemIndex >= shopSO.ShopItems.Count)
+            if (shopItemIndex < 0 || shopItemIndex >= ShopSO.ShopItems.Count)
                 return;
 
-            ShopItem itemToBuy = shopSO.ShopItems[shopItemIndex];
+            if (purchasedItemIndices.Contains(shopItemIndex))
+            {
+                Debug.Log("Item já foi comprado anteriormente nesta loja.");
+                return;
+            }
+
+            ShopItem itemToBuy = ShopSO.ShopItems[shopItemIndex];
             int playerMoney = GetCurrencyAmount();
 
             if (playerMoney >= itemToBuy.price)
@@ -27,6 +39,7 @@ namespace ShopSystem
                 if (remainingQuantity == 0)
                 {
                     RemoveCurrency(itemToBuy.price);
+                    purchasedItemIndices.Add(shopItemIndex); // Marca como comprado
                     Debug.Log($"Comprou {itemToBuy.item.name}");
                 }
                 else
@@ -39,6 +52,13 @@ namespace ShopSystem
                 Debug.Log("Dinheiro insuficiente para comprar este item.");
             }
         }
+
+        public bool HasItemBeenPurchased(int index)
+        {
+            return purchasedItemIndices.Contains(index);
+        }
+
+
 
         public void SellItem(int inventoryIndex)
         {
@@ -55,7 +75,7 @@ namespace ShopSystem
 
         private int GetSellPrice(ItemSO item)
         {
-            ShopItem? shopItem = shopSO.ShopItems.Find(x => x.item == item);
+            ShopItem? shopItem = ShopSO.ShopItems.Find(x => x.item == item);
             if (shopItem.HasValue)
             {
                 return Mathf.FloorToInt(shopItem.Value.price * 0.5f);

@@ -26,7 +26,8 @@ public class AgentWeapon : MonoBehaviour
     public float CurrentDano => danoAtual;
     public float CurrentDurabilidade => durabilidadeAtual;
 
-
+    // Novo booleano para verificar se há uma arma equipada
+    public bool HasWeapon { get; private set; } = false;
 
     public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
     {
@@ -48,6 +49,9 @@ public class AgentWeapon : MonoBehaviour
         itemCurrentState = new List<ItemParameter>(itemState);
 
         ApplyWeaponStats(itemCurrentState);
+
+        // Atualiza o booleano para indicar que há uma arma equipada
+        HasWeapon = true;
     }
 
     private void ApplyWeaponStats(List<ItemParameter> parameters)
@@ -104,10 +108,6 @@ public class AgentWeapon : MonoBehaviour
         return 0; // Sem dano
     }
 
-
-
-
-
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
     {
         if (equippedIngredient != null)
@@ -134,14 +134,19 @@ public class AgentWeapon : MonoBehaviour
             }
         }
     }
+
     public void UnequipIngredient()
     {
         equippedIngredient = null;
         ingredientCurrentState = null;
     }
+
     public void UnequipWeapon()
     {
         weapon = null;
         itemCurrentState = null;
+
+        // Atualiza o booleano para indicar que não há arma equipada
+        HasWeapon = false;
     }
 }
