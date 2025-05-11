@@ -1435,6 +1435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7322447246451226803}
   - component: {fileID: 7586255911508224742}
+  - component: {fileID: 815182158522182400}
   m_Layer: 0
   m_Name: mixamorig:LeftFoot
   m_TagString: playerbattle
@@ -1479,6 +1480,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.22, y: 0.28, z: 0.31}
   m_Center: {x: 0, y: 0.06, z: 0}
+--- !u!114 &815182158522182400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846921107485036174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3849892676263431477
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,6 +2170,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6676362346574975823}
   - component: {fileID: 110222212307009061}
+  - component: {fileID: 2174853951603903231}
   m_Layer: 0
   m_Name: mixamorig:LeftHand
   m_TagString: Untagged
@@ -2205,6 +2219,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.15, y: 0.2, z: 0.16}
   m_Center: {x: 0, y: 0.12, z: 0}
+--- !u!114 &2174853951603903231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7694999132807994890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7731906500396083218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3693,8 +3719,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryData: {fileID: 11400000, guid: 68069beed1ad15642a8843877f2276fd, type: 2}
   parametersToModify:
-  - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
-    value: -10
+  - itemParameter: {fileID: 0}
+    value: 0
   itemCurrentState: []
   ingredientCurrentState: []
   handTransform: {fileID: 4119099463271014837}

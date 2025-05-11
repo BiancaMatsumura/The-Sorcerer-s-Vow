@@ -46,14 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a28880b16d4c27147bd8ac7f917989b4, type: 3}
   m_Name: GuardEncounterDialogue
   m_EditorClassIdentifier: 
-  EntryNode: {fileID: 5778281735635780882}
-  AllNodes:
-  - {fileID: 5778281735635780882}
-  - {fileID: 8955615430176419045}
-  - {fileID: -663533482997113106}
-  - {fileID: 8935913351302502580}
-  - {fileID: -3949551498520813843}
-  - {fileID: 2498851160874912797}
+  EntryNode: {fileID: 0}
+  AllNodes: []
   Sentences: []
 --- !u!114 &2498851160874912797
 MonoBehaviour:

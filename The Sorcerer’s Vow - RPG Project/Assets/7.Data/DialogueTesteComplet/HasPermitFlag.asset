@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: HasPermitFlag
   m_EditorClassIdentifier: Assembly-CSharp::FlagConditionSO
-  FlagName: PlayerHasPermit
+  FlagName: 
   RequiredValue: 1
