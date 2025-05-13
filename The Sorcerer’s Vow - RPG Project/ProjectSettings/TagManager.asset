@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - PauseUI
+  - Ground
+  - playerbattle
+  - Waypoint
   layers:
   - Default
   - TransparentFX
@@ -12,7 +15,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

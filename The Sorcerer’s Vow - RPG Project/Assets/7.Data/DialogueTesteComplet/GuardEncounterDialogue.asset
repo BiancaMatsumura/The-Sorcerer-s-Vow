@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3949551498520813843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Guard Response Permit OK
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
+  Guid: 83cb4c71af60bd040804391cb6cee434
+  GraphPosition: {x: 2043.775, y: -131.19995}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  Content: "Ah, sim. Uma permiss\xE3o v\xE1lida. Desculpe o inc\xF4modo, pode prosseguir."
+  NextNodeGuid: 
+--- !u!114 &-663533482997113106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Check Permit
+  m_EditorClassIdentifier: Assembly-CSharp::ConditionNode
+  Guid: 082049138250d784bad49b89db95d2a3
+  GraphPosition: {x: 1467.2, y: -33.199966}
+  ConditionToCheck: {fileID: 11400000, guid: e72092a387af85946bcc25a664267715, type: 2}
+  TrueNodeGuid: 83cb4c71af60bd040804391cb6cee434
+  FalseNodeGuid: b129485cdbf60a643a6cc5aec5037733
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28880b16d4c27147bd8ac7f917989b4, type: 3}
+  m_Name: GuardEncounterDialogue
+  m_EditorClassIdentifier: 
+  EntryNode: {fileID: 0}
+  AllNodes: []
+  Sentences: []
+--- !u!114 &2498851160874912797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Guard Response No Permit
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
+  Guid: b129485cdbf60a643a6cc5aec5037733
+  GraphPosition: {x: 2043.775, y: 87.20006}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  Content: "Assuntos oficiais? Voc\xEA n\xE3o tem a autoriza\xE7\xE3o necess\xE1ria!
+    Explique-se imediatamente ou sofrer\xE1 as consequ\xEAncias!"
+  NextNodeGuid: 
+--- !u!114 &5778281735635780882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Guard Halt
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
+  Guid: 80a619da269fd234d80a28f6521dcf1b
+  GraphPosition: {x: 659.2001, y: -131.19998}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  Content: "Alto l\xE1! Quem se aproxima?"
+  NextNodeGuid: b95c7668288da2c41b5b06eecf38d599
+--- !u!114 &8935913351302502580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Guard Response Traveler
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
+  Guid: 3528ca6519060fe4da74bd5e6fc0f5ac
+  GraphPosition: {x: 1467.2, y: -210.4}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  Content: "Hum... Muito bem. Siga seu caminho, mas n\xE3o cause problemas."
+  NextNodeGuid: 
+--- !u!114 &8955615430176419045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Player Identify
+  m_EditorClassIdentifier: Assembly-CSharp::ChoiceNode
+  Guid: b95c7668288da2c41b5b06eecf38d599
+  GraphPosition: {x: 1026.0149, y: -131.2}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  PromptContent: Identifique-se! O que faz aqui?
+  Choices:
+  - ChoiceText: Sou apenas um viajante.
+    AvailabilityCondition: {fileID: 0}
+    TargetNodeGuid: 3528ca6519060fe4da74bd5e6fc0f5ac
+  - ChoiceText: "Tenho assuntos oficiais (Mostrar Permiss\xE3o)"
+    AvailabilityCondition: {fileID: 11400000, guid: e72092a387af85946bcc25a664267715, type: 2}
+    TargetNodeGuid: 082049138250d784bad49b89db95d2a3

@@ -1,3 +1,4 @@
+// DialogueText.cs
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -5,33 +6,80 @@ using UnityEngine;
 [RequireComponent(typeof(TMP_Text))]
 public class DialogueText : MonoBehaviour
 {
-    [SerializeField] private float intervalBetweenChars = 0.1f;
+    [SerializeField] private float intervalBetweenChars = 0.05f; // Ajuste a velocidade aqui
 
-    private TMP_Text text;
+    private TMP_Text textComponent; // Renomeado para evitar conflito com 'text' obsoleto
+    private Coroutine textRevealCoroutine;
 
-    private void Awake() => text = GetComponent<TMP_Text>();
+    private void Awake() => textComponent = GetComponent<TMP_Text>();
 
-    public IEnumerator ShowText(string content)
+    // Inicia a exibição com animação de digitação
+    public Coroutine ShowText(string content)
     {
-        text.maxVisibleCharacters = 0;
-        text.SetText(content);
-        yield return RevealCharts();
+        // Para corrotina anterior se estiver rodando
+        if (textRevealCoroutine != null) StopCoroutine(textRevealCoroutine);
+
+        textComponent.SetText(content);
+        textComponent.maxVisibleCharacters = 0; // Começa invisível
+        textRevealCoroutine = StartCoroutine(RevealCharts());
+        return textRevealCoroutine;
     }
 
-    public void HideText() 
+    // Mostra o texto completo imediatamente
+    public void ShowImmediate(string content)
     {
-        text.SetText("");
-        text.maxVisibleCharacters = 0;
+        // Para corrotina anterior se estiver rodando
+        if (textRevealCoroutine != null) StopCoroutine(textRevealCoroutine);
+
+        textComponent.SetText(content);
+        textComponent.maxVisibleCharacters = content.Length; // Mostra tudo
     }
 
-    public void SkipAnimation() => text.maxVisibleCharacters = text.textInfo.characterCount;
+    // Esconde o texto completamente
+    public void HideText()
+    {
+        // Para corrotina anterior se estiver rodando
+        if (textRevealCoroutine != null) StopCoroutine(textRevealCoroutine);
 
+        textComponent.SetText("");
+        textComponent.maxVisibleCharacters = 0;
+    }
+
+    // Pula a animação atual, mostrando todo o texto
+    public void SkipAnimation()
+    {
+        // Para corrotina anterior se estiver rodando
+        if (textRevealCoroutine != null) StopCoroutine(textRevealCoroutine);
+
+        // Garante que todo o texto seja visível
+        if (textComponent != null && textComponent.textInfo != null) // Checagem extra
+        {
+            textComponent.maxVisibleCharacters = textComponent.textInfo.characterCount;
+        }
+        // Importante: A lógica que atualiza o ESTADO do DialogueManager
+        // (de typing para waiting) precisa acontecer DEPOIS que a corrotina terminar
+        // ou ser forçada aqui se a corrotina for parada abruptamente.
+        // No nosso caso, a corrotina ShowTextAndAdvance no Manager cuida disso.
+    }
+
+    // Corrotina interna para revelar caracteres
     private IEnumerator RevealCharts()
     {
-        while (text.maxVisibleCharacters <= text.textInfo.characterCount)
+        // Previne erros se o texto ou textInfo não estiverem prontos
+        yield return null; // Espera um frame para garantir inicialização do TextInfo
+        if (textComponent == null || textComponent.textInfo == null) yield break;
+
+        int totalVisibleCharacters = textComponent.textInfo.characterCount;
+        int counter = 0;
+
+        while (counter <= totalVisibleCharacters)
         {
+            textComponent.maxVisibleCharacters = counter;
+            counter++;
             yield return new WaitForSeconds(intervalBetweenChars);
-            text.maxVisibleCharacters++;
         }
+        // Garante que o último caractere seja exibido mesmo se a contagem for estranha
+        textComponent.maxVisibleCharacters = totalVisibleCharacters;
+        textRevealCoroutine = null; // Limpa referência da corrotina ao terminar
     }
 }

@@ -16,15 +16,13 @@ MonoBehaviour:
   <Description>k__BackingField: 'You can eat it!
 
     +5 pv'
+  <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   category: 3
   <IsStackable>k__BackingField: 1
   <MaxStackSize>k__BackingField: 99
   <ItemImage>k__BackingField: {fileID: 50824074, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
-  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: e212de75f30ce21499d23dfa6668762c, type: 2}
   <DefaultParametersList>k__BackingField: []
-  <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   modifiersData:
-  - statsModifier: {fileID: 11400000, guid: 054f3b878723cb943a1001173b1d0ce7, type: 2}
+  - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
     val: 5
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}

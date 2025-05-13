@@ -11,7 +11,7 @@ public class PauseMenu : MonoBehaviour
     private bool isPaused = false;
 
     [SerializeField]
-    private GameObject otherCanvas;
+    private GameObject[] otherCanvas;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -54,7 +54,10 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
-        otherCanvas.SetActive(false);
+        foreach (var UI in otherCanvas)
+        {
+            UI.SetActive(false); 
+        }
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
@@ -69,7 +72,10 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         pauseMenuUI.SetActive(false);
-        otherCanvas.SetActive(true);
+        foreach (var UI in otherCanvas)
+        {
+            UI.SetActive(true); 
+        }
         Time.timeScale = 1f;
         isPaused = false;
 

@@ -2,6 +2,15 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using System;
+using System.Linq;
+
+public enum QuestType
+{
+    Main,
+    Side,
+    Secret
+}
+
 
 public class QuestSystem : MonoBehaviour
 {
@@ -12,22 +21,18 @@ public class QuestSystem : MonoBehaviour
     void Start()
     {
         ResetQuests();
-      
-        var questsFaltando = EmptyQuest();
-        textOutput.text = questsFaltando.Count > 0
-            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
-            : "Todas as quests foram concluídas!";
 
-        // Inscreve no evento de cada quest para atualizar a UI quando for completada
+        UpdateUI();
+
         foreach (var quest in quests)
-        { 
+        {
+            quest.OnQuestCompleted -= UpdateUI;
             quest.OnQuestCompleted += UpdateUI;
         }
     }
 
     void OnDestroy()
     {
-        // Desinscrever todos os eventos para evitar múltiplas inscrições
         foreach (var quest in quests)
         {
             quest.OnQuestCompleted -= UpdateUI;
@@ -36,18 +41,34 @@ public class QuestSystem : MonoBehaviour
 
     public void UpdateUI()
     {
-        var questsFaltando = EmptyQuest();
-        var newText = questsFaltando.Count > 0
-            ? $"Quest List:\n{string.Join("\n", questsFaltando)}"
-            : "Todas as quests foram concluídas. Level Finalizado!";
+        string main = FormatQuestList(QuestType.Main);
+        string side = FormatQuestList(QuestType.Side);
+        string secret = FormatQuestList(QuestType.Secret);
 
-        // Atualiza a UI somente se o texto mudou
-        if (textOutput.text != newText)
+        string newText = $"<b>Main Quests:</b>\n{main}\n\n<b>Side Quests:</b>\n{side}\n\n<b>Secret Quests:</b>\n{secret}";
+
+        if (textOutput != null && textOutput.text != newText)
         {
             textOutput.text = newText;
         }
+
+        if (EmptyQuest().Count == 0)
+        {
+            OnAllQuestsCompleted?.Invoke();
+        }
     }
-    
+
+
+    private string FormatQuestList(QuestType type)
+    {
+        var questsByType = quests
+            .Where(q => q.questType == type && !q.isCompleted && q.isDiscovered)
+            .Select(q => q.questName)
+            .ToList();
+
+        return questsByType.Count > 0 ? string.Join("\n", questsByType) : "Nenhuma";
+    }
+
     public bool CheckQuests()
     {
         foreach (var quest in quests)
@@ -55,6 +76,7 @@ public class QuestSystem : MonoBehaviour
             if (!quest.isCompleted)
                 return false;
         }
+
         OnAllQuestsCompleted?.Invoke();
         return true;
     }
@@ -78,16 +100,23 @@ public class QuestSystem : MonoBehaviour
             {
                 if (CanCompleteQuest(quest))
                 {
-                    quest.CompleteQuest();
-                    return true; // Retorna verdadeiro para permitir o delay no Quest.cs
+                    if (!quest.isCompleted)
+                    {
+                        quest.CompleteQuest();
+                        UpdateUI();
+                        return true;
+                    }
+                    return false;
                 }
                 else
                 {
-                    textOutput.text = $"A Quest '{questName}' não pode ser concluída pois possui dependências pendentes!";
+                    textOutput.text = $"A Quest '{questName}' possui dependências pendentes!";
                     return false;
                 }
             }
         }
+
+        Debug.LogWarning($"Quest '{questName}' não encontrada!");
         return false;
     }
 
@@ -101,6 +130,7 @@ public class QuestSystem : MonoBehaviour
             if (!dependency.isCompleted)
                 return false;
         }
+
         return true;
     }
 
@@ -114,13 +144,35 @@ public class QuestSystem : MonoBehaviour
 
     public void NotifyItemCollected(QuestData quest)
     {
-        // Verificar se a quest está associada a este item
-        if (quest != null)
+        if (quest != null && CanCompleteQuest(quest) && !quest.isCompleted)
         {
-            // Atualize a UI ou a lógica de dependência de quest conforme necessário
-            quest.isCompleted = true; // Ou qualquer outra lógica de atualização de quest
-            UpdateUI();  // Atualiza a UI do QuestSystem
+            quest.CompleteQuest();
+            UpdateUI();
         }
     }
 
+
+    public void ActivateQuest(QuestData quest)
+    {
+        if (quest != null && !quests.Contains(quest))
+        {
+            quests.Add(quest);
+        }
+
+        
+        quest.isDiscovered = true;
+
+        quest.OnQuestCompleted -= UpdateUI;
+        quest.OnQuestCompleted += UpdateUI;
+        UpdateUI();
+
+        Debug.Log($"Quest '{quest.questName}' ativada e agora visível!");
+    }
+
+
+
+    public List<QuestData> GetQuestsByType(QuestType type)
+    {
+        return quests.FindAll(q => q.questType == type);
+    }
 }

@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Sword
   <Description>k__BackingField: Cuts Everthing!
+  <WorldPrefab>k__BackingField: {fileID: 2513955448080095352, guid: 6826d5faef29d5541b34ab77d3f62d8c, type: 3}
   category: 1
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
   <ItemImage>k__BackingField: {fileID: 1560193603, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
-  <ItemMesh>k__BackingField: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  <ItemMaterial>k__BackingField: {fileID: 2100000, guid: 1e526389e0d268e4693a2bf67a1717c9, type: 2}
   <DefaultParametersList>k__BackingField:
   - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
     value: 100
-  <WorldPrefab>k__BackingField: {fileID: 968049810416140241, guid: 40e956c6b28d7b84da33f530693cf31b, type: 3}
+  - itemParameter: {fileID: 11400000, guid: e2ec2f0c575ec5f42b3a3219c866b282, type: 2}
+    value: 10
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 1
+  animName: swordStart
+  animIndex: 1

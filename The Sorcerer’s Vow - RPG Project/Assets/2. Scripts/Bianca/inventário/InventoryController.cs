@@ -13,9 +13,13 @@ public class InventoryController : MonoBehaviour
 
     public List<InventoryItem> initialItems = new List<InventoryItem>();
 
-    [SerializeField] private AudioClip dropClip;
+    [SerializeField]
+    private AudioClip dropClip;
 
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField]
+    private AudioSource audioSource;
+    [SerializeField] private UIManager uiManager;
+
 
     private void Start()
     {
@@ -70,6 +74,7 @@ public class InventoryController : MonoBehaviour
         IItemAction itemAction = inventoryItem.item as IItemAction;
         if (itemAction != null)
         {
+
             inventoryUI.ShowItemAction(itemIndex);
             inventoryUI.AddAction(itemAction.ActionName, () => PerformAction(itemIndex));
         }
@@ -165,18 +170,18 @@ public class InventoryController : MonoBehaviour
         for (int i = 0; i < inventoryItem.itemState.Count; i++)
         {
             sb.Append($"{inventoryItem.itemState[i].itemParameter.ParameterName} " +
-                      $": {inventoryItem.itemState[i].value} / " +
-                      $"{inventoryItem.item.DefaultParametersList[i].value}");
+                $": {inventoryItem.itemState[i].value} / " +
+                $"{inventoryItem.item.DefaultParametersList[i].value}");
             sb.AppendLine();
         }
-
         return sb.ToString();
     }
-
+    
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            uiManager.ToggleInventory();
             if (!inventoryUI.isActiveAndEnabled)
             {
                 inventoryUI.Show();
@@ -202,6 +207,20 @@ public class InventoryController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked; // Trava o cursor novamente
                 Cursor.visible = false;
                 CameraController.isInventoryOpen = false; // Reativa o controle da câmera
+            }
+        }
+    }
+    
+    public void ForceUpdateDescription(ItemSO item, List<ItemParameter> itemState)
+    {
+        Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+        foreach (var kvp in currentState)
+        {
+            if (kvp.Value.item == item)
+            {
+                inventoryData.SetItemState(kvp.Key, itemState); // Crie esse método para atualizar o estado no inventário
+                HandleDescriptionRequest(kvp.Key); // Atualiza visual
+                break;
             }
         }
     }
