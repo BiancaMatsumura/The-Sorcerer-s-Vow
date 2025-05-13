@@ -2,14 +2,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
 {
     public class NewGameButton : MonoBehaviour
     {
         [SerializeField] private int slot = 0;
-        [SerializeField] private LoadSavePanel loadSavePanel;
-        [SerializeField] private SaveButtonTest saveButtonTest;
         private Image panel;
         private TMPro.TMP_Text text;
 
@@ -50,6 +49,7 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
         private void OnPanelClick()
         {
             SaveLoadProgressManager.Save(slot, null);
+            SceneManager.LoadScene("1. Scenes/CenaStore");
             // loadSavePanel.RefreshScreen();
         }
     }

@@ -20,5 +20,13 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
                 // inventory = new InventoryDTO(playerCharacter);
             }
         }
+
+        public void SetPlayerCharacterSaveData(PlayerCharacter playerCharacter)
+        {
+            playerCharacter.Name = playerData.Name;
+            playerCharacter.Level = playerData.Level;
+            playerCharacter.Speed = playerData.Speed;
+            playerCharacter.transform.position = playerData.Position;
+        }
     }
 }

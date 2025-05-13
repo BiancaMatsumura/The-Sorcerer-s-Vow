@@ -34,6 +34,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             }
 
             StoreSaveListToFile();
+            CurrentSave = slot;
             
             Debug.Log("Save successful.");
         }
@@ -96,6 +97,11 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
                 default:
                     return null;
             }
+        }
+
+        public static void SetCurrentSlot(int slot)
+        {
+            CurrentSave = slot;
         }
     }
 }
