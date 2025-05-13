@@ -17,16 +17,15 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
 
         public static void Save(int slot, PlayerCharacter playerCharacter)
         {
-
             if (slot == 0)
             {
                 slot0 = new SaveFileDTO(0, playerCharacter);
             } else if (slot == 1)
             {
-                slot1 = new SaveFileDTO(1, playerCharacter);;
+                slot1 = new SaveFileDTO(1, playerCharacter);
             } else if (slot == 2)
             {
-                slot2 = new SaveFileDTO(2, playerCharacter);;
+                slot2 = new SaveFileDTO(2, playerCharacter);
             }
             else
             {

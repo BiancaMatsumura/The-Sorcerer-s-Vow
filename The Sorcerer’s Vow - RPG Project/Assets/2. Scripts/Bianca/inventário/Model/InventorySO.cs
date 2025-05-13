@@ -9,8 +9,8 @@ namespace Inventory.Model
     [CreateAssetMenu]
 public class InventorySO : ScriptableObject
 {
-    [SerializeField]
-        private List<InventoryItem> inventoryItems;
+        [SerializeField]
+        public List<InventoryItem> inventoryItems;
 
         [field: SerializeField]
         public int Size { get; private set; } = 10;
