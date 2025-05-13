@@ -18,6 +18,7 @@ public class InventoryController : MonoBehaviour
 
     [SerializeField]
     private AudioSource audioSource;
+
     [SerializeField] private UIManager uiManager;
 
 
@@ -181,7 +182,7 @@ public class InventoryController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            uiManager.ToggleInventory();
+            //uiManager.ToggleInventory();
             if (!inventoryUI.isActiveAndEnabled)
             {
                 inventoryUI.Show();

@@ -11,7 +11,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad.Structure
 
         public InventoryDTO(PlayerCharacter playerCharacter)
         {
-            inventoryItems = ScriptableSerializer.SerializeList<InventoryItem>(playerCharacter.InventoryController.InventoryData.inventoryItems);
+            inventoryItems = playerCharacter.InventoryController.InventoryData.inventoryItems;
         }
     }
 }
