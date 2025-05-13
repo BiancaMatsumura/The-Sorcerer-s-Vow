@@ -1,6 +1,4 @@
-﻿using System;
-using _2._Scripts.Core.Domain.Character.Player;
-using _2._Scripts.Core.Engine.Service.SaveLoad;
+﻿using _2._Scripts.Core.Engine.Service.SaveLoad;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -51,18 +49,8 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
 
         private void OnPanelClick()
         {
-            PlayerCharacter playerCharacter;
-            GameObject playerObject = new GameObject("PlayerCharacter");
-            playerCharacter = playerObject.AddComponent<PlayerCharacter>();
-
-            playerCharacter.Level = 1;
-            playerCharacter.Name = "Partida " + (slot + 1);
-            playerCharacter.Speed = 30;
-
-            SaveLoadProgressManager.Save(slot, playerCharacter);
-            loadSavePanel.RefreshScreen();
-            
-            saveButtonTest.SetPlayerCharacter(playerCharacter);
+            SaveLoadProgressManager.Save(slot, null);
+            // loadSavePanel.RefreshScreen();
         }
     }
 }

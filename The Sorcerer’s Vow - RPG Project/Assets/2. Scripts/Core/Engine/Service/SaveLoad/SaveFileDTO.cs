@@ -17,7 +17,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             if (playerCharacter)
             {
                 playerData = new PlayerDataDTO(playerCharacter);
-                inventory = new InventoryDTO(playerCharacter);
+                // inventory = new InventoryDTO(playerCharacter);
             }
         }
     }
