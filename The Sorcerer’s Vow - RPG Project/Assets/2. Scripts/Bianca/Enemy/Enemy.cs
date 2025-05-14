@@ -209,8 +209,8 @@ public class Enemy : BaseCharacter
 
     private void UpdateAnimator()
     {
-        float speed = agent.velocity.magnitude;
-        animator.SetFloat("Speed", speed);
+        
+        animator.SetFloat("Speed", agent.speed);
 
         animator.SetBool("IsAttacking", currentState == EnemyState.Battle);
     }
