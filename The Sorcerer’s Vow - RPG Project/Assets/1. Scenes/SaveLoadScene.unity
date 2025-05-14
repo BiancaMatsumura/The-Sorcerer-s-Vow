@@ -308,8 +308,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
-<<<<<<< HEAD
-=======
 --- !u!114 &57634773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +323,6 @@ MonoBehaviour:
   slot: 0
   loadSavePanel: {fileID: 0}
   saveButtonTest: {fileID: 0}
->>>>>>> feat/stylish-save-load-screen
 --- !u!114 &57634774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1059,8 +1056,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
-<<<<<<< HEAD
-=======
 --- !u!114 &695037095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1076,7 +1071,6 @@ MonoBehaviour:
   slot: 0
   loadSavePanel: {fileID: 0}
   saveButtonTest: {fileID: 0}
->>>>>>> feat/stylish-save-load-screen
 --- !u!114 &695037096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1624,8 +1618,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
-<<<<<<< HEAD
-=======
 --- !u!114 &1160395440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,7 +1633,6 @@ MonoBehaviour:
   slot: 0
   loadSavePanel: {fileID: 0}
   saveButtonTest: {fileID: 0}
->>>>>>> feat/stylish-save-load-screen
 --- !u!114 &1160395441
 MonoBehaviour:
   m_ObjectHideFlags: 0
