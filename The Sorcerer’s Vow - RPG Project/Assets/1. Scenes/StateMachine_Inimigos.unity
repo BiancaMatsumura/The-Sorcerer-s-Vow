@@ -749,7 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questPairs:
   - questData: {fileID: 11400000, guid: fa704a938e2c48349b8a920b5aaee4a5, type: 2}
-    dialogueData: {fileID: 11400000, guid: 5bf7a6613002ab148b6cd021e5c7c38a, type: 2}
+    dialogueData: {fileID: 11400000, guid: 99b76b10778e5f34da7c08e6e546c448, type: 2}
   - questData: {fileID: 11400000, guid: 62a611f48ae8b094dad23f5884fc2c56, type: 2}
     dialogueData: {fileID: 11400000, guid: 750d19bd725ff664497821f08a571d19, type: 2}
   textOutput: {fileID: 1516147271}

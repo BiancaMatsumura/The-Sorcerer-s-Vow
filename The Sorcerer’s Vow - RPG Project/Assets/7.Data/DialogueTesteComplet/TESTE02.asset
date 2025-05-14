@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8196380735785384496
+--- !u!114 &-7436036288886761869
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,31 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Sentence_0eba
+  m_Name: Sentence_fa62
   m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
-  Guid: 0eba280adccbe754b9580cc33f23ed9f
-  GraphPosition: {x: 1093, y: 306}
-  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-  Content: Resultado 01
-  NextNodeGuid: 
---- !u!114 &-5106589464093000785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Sentence_4971
-  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
-  Guid: 4971ae7271369b54cbcdbdcbd1ad2c26
-  GraphPosition: {x: 1096, y: 472}
+  Guid: fa6236872896e8d4185b555f13914738
+  GraphPosition: {x: 1053.04, y: 308}
   ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
   Content: Resultado 02
   NextNodeGuid: 
---- !u!114 &-4518570992433803979
+--- !u!114 &-6425286197857357588
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,39 +27,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Sentence_13a3
+  m_Name: 02
+  m_EditorClassIdentifier: Assembly-CSharp::ChoiceNode
+  Guid: 1f126ab6fc5ca1e4c89425bcbb810e93
+  GraphPosition: {x: 686, y: 205}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  PromptContent: Escolha
+  Choices:
+  - ChoiceText: 01
+    AvailabilityCondition: {fileID: 0}
+    TargetNodeGuid: b1d380e480619a341a56176233fcf1b9
+  - ChoiceText: 02
+    AvailabilityCondition: {fileID: 0}
+    TargetNodeGuid: fa6236872896e8d4185b555f13914738
+  - ChoiceText: 03
+    AvailabilityCondition: {fileID: 0}
+    TargetNodeGuid: b5b3bc79c9effa1489f99ff2851ea4c2
+--- !u!114 &-154062498664079303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Sentence_b5b3
   m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
-  Guid: 13a3298e3d090ba4b8656d7760d74ea6
-  GraphPosition: {x: 1091, y: 666}
+  Guid: b5b3bc79c9effa1489f99ff2851ea4c2
+  GraphPosition: {x: 1049, y: 494}
   ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
   Content: Resultado 03
   NextNodeGuid: 
---- !u!114 &-1490266292318249024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Choice_522b
-  m_EditorClassIdentifier: Assembly-CSharp::ChoiceNode
-  Guid: 522b8405e70f60b46b0241bf3c6ae208
-  GraphPosition: {x: 680, y: 323}
-  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-  PromptContent: 'detre essas:'
-  Choices:
-  - ChoiceText: "op\xE7\xE3o 01"
-    AvailabilityCondition: {fileID: 0}
-    TargetNodeGuid: 0eba280adccbe754b9580cc33f23ed9f
-  - ChoiceText: "op\xE7\xE3o 02"
-    AvailabilityCondition: {fileID: 0}
-    TargetNodeGuid: 4971ae7271369b54cbcdbdcbd1ad2c26
-  - ChoiceText: "op\xE7\xE3o 03"
-    AvailabilityCondition: {fileID: 0}
-    TargetNodeGuid: 13a3298e3d090ba4b8656d7760d74ea6
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,12 +70,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a28880b16d4c27147bd8ac7f917989b4, type: 3}
-  m_Name: test
+  m_Name: TESTE02
   m_EditorClassIdentifier: 
-  EntryNode: {fileID: 0}
-  AllNodes: []
+  EntryNode: {fileID: 6840275707977872125}
+  AllNodes:
+  - {fileID: 6840275707977872125}
+  - {fileID: -6425286197857357588}
+  - {fileID: 8268723801967052556}
+  - {fileID: -7436036288886761869}
+  - {fileID: -154062498664079303}
   Sentences: []
---- !u!114 &2786854208964462746
+--- !u!114 &6840275707977872125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,10 +90,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Sentence_3053
+  m_Name: 01
   m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
-  Guid: 305381108be76fb49a6e65907c258cba
-  GraphPosition: {x: 267, y: 347}
+  Guid: 41c6a2f7781cde34981a666143ea9121
+  GraphPosition: {x: 307, y: 257}
   ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-  Content: Ola, escolha!
-  NextNodeGuid: 522b8405e70f60b46b0241bf3c6ae208
+  Content: "Ol\xE1"
+  NextNodeGuid: 1f126ab6fc5ca1e4c89425bcbb810e93
+--- !u!114 &8268723801967052556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Sentence_b1d3
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceNode
+  Guid: b1d380e480619a341a56176233fcf1b9
+  GraphPosition: {x: 1045, y: 133}
+  ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+  Content: Resultado 01
+  NextNodeGuid: 
