@@ -9,6 +9,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
     {
         public int slot = 0;
         public PlayerDataDTO playerData;
+        public InventoryDTO inventory;
         
         public SaveFileDTO(int slot, PlayerCharacter playerCharacter)
         {
@@ -16,7 +17,16 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             if (playerCharacter)
             {
                 playerData = new PlayerDataDTO(playerCharacter);
+                inventory = new InventoryDTO(playerCharacter);
             }
+        }
+
+        public void SetPlayerCharacterSaveData(PlayerCharacter playerCharacter)
+        {
+            playerCharacter.Name = playerData.Name;
+            playerCharacter.Level = playerData.Level;
+            playerCharacter.Speed = playerData.Speed;
+            playerCharacter.SetInitialPosition(playerData.Position);
         }
     }
 }

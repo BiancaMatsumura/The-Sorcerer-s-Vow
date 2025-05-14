@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using _2._Scripts.Core.Domain.Character.Base;
+using _2._Scripts.Core.Domain.Character.Player.Inputs;
+using _2._Scripts.Core.Engine.Service.SaveLoad;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +11,17 @@ namespace _2._Scripts.Core.Domain.Character.Player
     [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
+        public PlayerController playerController111;
+        
         [SerializeField] private Slider sliderLife;
        
 
+        [SerializeField]
+        private InventoryController inventoryController;
+
+        [SerializeField] 
+        private PlayerInputController playerInputController;
+        
         public override void Start()
         {
             base.Start();
@@ -19,6 +29,9 @@ namespace _2._Scripts.Core.Domain.Character.Player
             sliderLife.value = currentHealth;
 
             Debug.Log("PlayerCharacter Start");
+            SaveLoadProgressManager.LoadAllSaveDataFromFile();
+            inventoryController = GetComponent<InventoryController>();
+            playerInputController = GetComponent<PlayerInputController>();
         }
 
         public override void Update()
@@ -42,7 +55,13 @@ namespace _2._Scripts.Core.Domain.Character.Player
             ChangeVelocity(previousSpeed);
         }
 
+        public void SetInitialPosition(Vector3 position)
+        {
+            CharacterController characterController = GetComponent<CharacterController>();
+            characterController.Move(position - transform.position);
+        }
         
         
+        public InventoryController InventoryController => inventoryController;
     }
 }

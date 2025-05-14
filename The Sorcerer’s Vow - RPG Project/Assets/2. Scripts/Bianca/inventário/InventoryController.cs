@@ -7,11 +7,9 @@ using Inventory.Model;
 
 public class InventoryController : MonoBehaviour
 {
-    [SerializeField]
-    private UIInventoryPage inventoryUI;
+    [SerializeField] private UIInventoryPage inventoryUI;
 
-    [SerializeField]
-    private InventorySO inventoryData;
+    [SerializeField] private InventorySO inventoryData;
 
     public List<InventoryItem> initialItems = new List<InventoryItem>();
 
@@ -20,7 +18,10 @@ public class InventoryController : MonoBehaviour
 
     [SerializeField]
     private AudioSource audioSource;
+
     [SerializeField] private UIManager uiManager;
+
+
     private void Start()
     {
         PrepareUI();
@@ -84,7 +85,6 @@ public class InventoryController : MonoBehaviour
         {
             inventoryUI.AddAction("Drop", () => DropItem(itemIndex, inventoryItem.quantity));
         }
-
     }
 
     private void DropItem(int itemIndex, int quantity)
@@ -138,7 +138,6 @@ public class InventoryController : MonoBehaviour
         if (inventoryItem.IsEmpty)
             return;
         inventoryUI.CreateDraggedItem(inventoryItem.item.ItemImage, inventoryItem.quantity);
-
     }
 
     private void HandleSwapItems(int itemIndex_1, int itemIndex_2)
@@ -158,6 +157,7 @@ public class InventoryController : MonoBehaviour
             inventoryUI.ResetSelection();
             return;
         }
+
         ItemSO item = inventoryItem.item;
         string description = PrepareDescription(inventoryItem);
         inventoryUI.UpdateDescription(itemIndex, item.ItemImage, item.Name, description);
@@ -177,13 +177,41 @@ public class InventoryController : MonoBehaviour
         }
         return sb.ToString();
     }
+    
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            uiManager.ToggleInventory();
+            //uiManager.ToggleInventory();
+            if (!inventoryUI.isActiveAndEnabled)
+            {
+                inventoryUI.Show();
+                Time.timeScale = 0; // Pausa o jogo
+                Cursor.lockState = CursorLockMode.None; // Libera o cursor
+                Cursor.visible = true;
+                CameraController.isInventoryOpen = true; // Desativa o controle da câmera
+
+                foreach (var item in inventoryData.GetCurrentInventoryState())
+                {
+                    inventoryUI.UpdateData(
+                        item.Key,
+                        item.Value.item.ItemImage,
+                        item.Value.quantity,
+                        item.Value.item.Category
+                    );
+                }
+            }
+            else
+            {
+                inventoryUI.Hide();
+                Time.timeScale = 1; // Retoma o jogo
+                Cursor.lockState = CursorLockMode.Locked; // Trava o cursor novamente
+                Cursor.visible = false;
+                CameraController.isInventoryOpen = false; // Reativa o controle da câmera
+            }
         }
     }
+    
     public void ForceUpdateDescription(ItemSO item, List<ItemParameter> itemState)
     {
         Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
@@ -197,5 +225,6 @@ public class InventoryController : MonoBehaviour
             }
         }
     }
-
+    
+    public InventorySO InventoryData => inventoryData;
 }

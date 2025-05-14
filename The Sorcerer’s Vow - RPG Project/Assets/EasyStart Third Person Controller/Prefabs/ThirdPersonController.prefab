@@ -3475,6 +3475,9 @@ PrefabInstance:
       addedObject: {fileID: 5760591942523908572}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4235267908529383378}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1224160221212607381}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
       insertIndex: -1
@@ -3485,6 +3488,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5832805346522447542}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9180544473486181679}
   m_SourcePrefab: {fileID: 100100000, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
 --- !u!4 &4952467050408558629 stripped
 Transform:
@@ -3692,6 +3698,19 @@ MonoBehaviour:
     itemState: []
   dropClip: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   audioSource: {fileID: 8409717364387028090}
+  uiManager: {fileID: 0}
+--- !u!114 &4235267908529383378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5760493320708922015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648ffe630d184b97ac9e5bfb9594ee9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1224160221212607381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3758,3 +3777,20 @@ MonoBehaviour:
   AttackPower: 0
   DefensePower: 0
   sliderLife: {fileID: 8331184199234589672}
+  inventoryController: {fileID: 0}
+  playerInputController: {fileID: 0}
+--- !u!114 &9180544473486181679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5760493320708922015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca089ca18e8f8469c8e26daaeb1c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  currentHealth: {fileID: 11400000, guid: b88e3b7cc9f2bc0429c2fe504a39d9c9, type: 2}
+  sliderLife: {fileID: 0}
