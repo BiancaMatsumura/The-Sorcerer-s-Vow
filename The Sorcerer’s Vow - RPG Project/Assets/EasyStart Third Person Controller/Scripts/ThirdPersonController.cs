@@ -25,7 +25,7 @@ public class ThirdPersonController : MonoBehaviour
     public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
-
+    public  Transform spawnTarget;
 
     public BoxCollider[] collider;
 
@@ -199,6 +199,19 @@ public class ThirdPersonController : MonoBehaviour
     }
     void FireACtive() 
     {
-        Instantiate(BOLADEFOGO, transform.position, transform.rotation);
+        GameObject ball = Instantiate(BOLADEFOGO, spawnTarget.position, Quaternion.identity);
+
+        float ballSpeed = 4.0f;
+        // Pega a direção que o player está olhando (apenas no plano XZ)
+        Vector3 direction = transform.forward;
+        direction.y = 0;
+        direction.Normalize();
+
+        // Faz a bola andar nessa direção
+        Rigidbody rb = ball.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * ballSpeed;
+        }
     }
 }

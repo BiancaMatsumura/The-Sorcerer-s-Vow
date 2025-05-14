@@ -90,12 +90,7 @@ MonoBehaviour:
   m_Name: test
   m_EditorClassIdentifier: 
   EntryNode: {fileID: 0}
-  AllNodes:
-  - {fileID: 2786854208964462746}
-  - {fileID: -1490266292318249024}
-  - {fileID: -8196380735785384496}
-  - {fileID: -5106589464093000785}
-  - {fileID: -4518570992433803979}
+  AllNodes: []
   Sentences: []
 --- !u!114 &2786854208964462746
 MonoBehaviour:

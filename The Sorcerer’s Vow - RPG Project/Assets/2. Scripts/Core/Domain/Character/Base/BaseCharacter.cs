@@ -43,7 +43,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
             damageReductionMultiplier = 1f;
         }
 
-        public void ReduceHealth(int damage)
+        public void ReduceHealth(float damage)
         {
             int reducedDamage = Mathf.RoundToInt(damage * damageReductionMultiplier);
             currentHealth -= reducedDamage;
@@ -65,7 +65,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
             Debug.Log("Your Health is: " + currentHealth);
         }
 
-        private void Die()
+        public virtual void Die()
         {
             Debug.Log("Died");
             currentHealth = maxHealth;

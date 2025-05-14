@@ -12,6 +12,6 @@ public class fireball : MonoBehaviour
     void Update()
     {
         Vector3 frente = Vector3.forward;
-        transform.position += frente * speed * Time.deltaTime;
+        transform.localPosition += frente * speed * Time.deltaTime;
     }
 }
