@@ -17,6 +17,7 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
 
         private void Start()
         {
+            panel = GetComponent<Image>();
             Button button = panel.GetComponent<Button>();
             if (button == null)
             {

@@ -17,7 +17,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             if (playerCharacter)
             {
                 playerData = new PlayerDataDTO(playerCharacter);
-                // inventory = new InventoryDTO(playerCharacter);
+                inventory = new InventoryDTO(playerCharacter);
             }
         }
 
@@ -26,7 +26,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             playerCharacter.Name = playerData.Name;
             playerCharacter.Level = playerData.Level;
             playerCharacter.Speed = playerData.Speed;
-            playerCharacter.transform.position = playerData.Position;
+            playerCharacter.SetInitialPosition(playerData.Position);
         }
     }
 }

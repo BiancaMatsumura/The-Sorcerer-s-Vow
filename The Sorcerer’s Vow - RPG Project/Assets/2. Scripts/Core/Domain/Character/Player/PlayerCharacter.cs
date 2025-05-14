@@ -11,6 +11,8 @@ namespace _2._Scripts.Core.Domain.Character.Player
     [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
+        public PlayerController playerController111;
+        
         [SerializeField] private Slider sliderLife;
        
 
@@ -53,7 +55,11 @@ namespace _2._Scripts.Core.Domain.Character.Player
             ChangeVelocity(previousSpeed);
         }
 
-        
+        public void SetInitialPosition(Vector3 position)
+        {
+            CharacterController characterController = GetComponent<CharacterController>();
+            characterController.Move(position - transform.position);
+        }
         
         
         public InventoryController InventoryController => inventoryController;

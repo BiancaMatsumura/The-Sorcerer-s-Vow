@@ -5,11 +5,14 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {
     public class SaveLoadProgressScript : MonoBehaviour
     {
-        private void Start()
+        private void Awake()
         {
             SaveFileDTO fileDto = SaveLoadProgressManager.GetSlotDataFromSaveFile(SaveLoadProgressManager.CurrentSave);
             PlayerCharacter playerCharacter = FindFirstObjectByType<PlayerCharacter>();
-            fileDto.SetPlayerCharacterSaveData(playerCharacter);
+            if (fileDto != null && fileDto.playerData.Name != "")
+            {
+                fileDto.SetPlayerCharacterSaveData(playerCharacter);
+            }
             SaveLoadProgressManager.Save(SaveLoadProgressManager.CurrentSave, playerCharacter);
         }
     }
