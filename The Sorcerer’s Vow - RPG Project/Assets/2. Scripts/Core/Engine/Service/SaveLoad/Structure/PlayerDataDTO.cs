@@ -10,6 +10,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad.Structure
         public string Name;
         public int Level;
         public int Speed;
+        public float CurrentHealth;
         public Vector3 Position;
         
         public PlayerDataDTO(PlayerCharacter playerCharacter)
@@ -17,6 +18,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad.Structure
             Name = playerCharacter.Name;
             Level = playerCharacter.Level;
             Speed = playerCharacter.Speed;
+            CurrentHealth = playerCharacter.currentHealth;
             Position = playerCharacter.transform.position;
         }
     }
