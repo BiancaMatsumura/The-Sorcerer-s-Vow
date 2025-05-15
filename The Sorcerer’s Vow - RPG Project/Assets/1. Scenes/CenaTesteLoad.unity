@@ -16223,7 +16223,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398371817}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000012610668, y: 0.99573296, z: -0.09228202, w: 0.000013607047}
+  m_LocalRotation: {x: 0.0000012666709, y: 0.99573296, z: -0.09228201, w: 0.0000136675135}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33210,6 +33210,10 @@ PrefabInstance:
       propertyPath: AttackPower
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5832805346522447542, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6496463313002043174, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -33222,7 +33226,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: "ColliderM\xE3o"
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9180544473486181679, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 9180544473486181679, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -72207,7 +72216,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675673336}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000010140075, y: 0.99724317, z: -0.074202776, w: 0.000013627684}
+  m_LocalRotation: {x: 0.0000010179638, y: 0.99724317, z: -0.07420276, w: 0.000013680861}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

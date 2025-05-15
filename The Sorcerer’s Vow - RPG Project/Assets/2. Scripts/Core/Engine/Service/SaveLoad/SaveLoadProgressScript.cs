@@ -5,7 +5,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {
     public class SaveLoadProgressScript : MonoBehaviour
     {
-        private void Awake()
+        private void Start()
         {
             SaveFileDTO fileDto = SaveLoadProgressManager.GetSlotDataFromSaveFile(SaveLoadProgressManager.CurrentSave);
             PlayerCharacter playerCharacter = FindFirstObjectByType<PlayerCharacter>();

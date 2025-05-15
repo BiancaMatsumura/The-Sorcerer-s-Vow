@@ -5,13 +5,13 @@ using _2._Scripts.Core.Domain.Character.Player.Inputs;
 using _2._Scripts.Core.Engine.Service.SaveLoad;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace _2._Scripts.Core.Domain.Character.Player
 {
     [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
-        public PlayerController playerController111;
         
         [SerializeField] private Slider sliderLife;
        
@@ -21,6 +21,9 @@ namespace _2._Scripts.Core.Domain.Character.Player
 
         [SerializeField] 
         private PlayerInputController playerInputController;
+        
+        public Scene currentScene;
+
         
         public override void Start()
         {
@@ -32,6 +35,7 @@ namespace _2._Scripts.Core.Domain.Character.Player
             SaveLoadProgressManager.LoadAllSaveDataFromFile();
             inventoryController = GetComponent<InventoryController>();
             playerInputController = GetComponent<PlayerInputController>();
+            currentScene = SceneManager.GetActiveScene();
         }
 
         public override void Update()

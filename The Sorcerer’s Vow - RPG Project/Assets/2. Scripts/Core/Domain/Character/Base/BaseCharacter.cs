@@ -20,8 +20,8 @@ namespace _2._Scripts.Core.Domain.Character.Base
 
         public virtual void Start()
         {
-            currentHealth = maxHealth;
-            Debug.Log("BaseCharacter Start");
+            //currentHealth = maxHealth;
+            
         }
 
         public virtual void Update()

@@ -1492,6 +1492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownerType: 0
 --- !u!1 &3849892676263431477
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,6 +2232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownerType: 0
 --- !u!1 &7731906500396083218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,9 +3490,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5832805346522447542}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9180544473486181679}
   m_SourcePrefab: {fileID: 100100000, guid: 2222703f9efe56245b5a6e4acc93e2f2, type: 3}
 --- !u!4 &4952467050408558629 stripped
 Transform:
@@ -3665,6 +3664,7 @@ MonoBehaviour:
   BOLADEFOGO: {fileID: 3877327057306367375, guid: 669238785e51943499b981a65cd30515, type: 3}
   cc: {fileID: 8924800431626349384}
   playerCharacter: {fileID: 5832805346522447542}
+  spawnTarget: {fileID: 0}
   collider:
   - {fileID: 110222212307009061}
   - {fileID: 7586255911508224742}
@@ -3776,21 +3776,7 @@ MonoBehaviour:
   currentHealth: 0
   AttackPower: 0
   DefensePower: 0
+  playerController111: {fileID: 0}
   sliderLife: {fileID: 8331184199234589672}
   inventoryController: {fileID: 0}
   playerInputController: {fileID: 0}
---- !u!114 &9180544473486181679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5760493320708922015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ca089ca18e8f8469c8e26daaeb1c70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  currentHealth: {fileID: 11400000, guid: b88e3b7cc9f2bc0429c2fe504a39d9c9, type: 2}
-  sliderLife: {fileID: 0}

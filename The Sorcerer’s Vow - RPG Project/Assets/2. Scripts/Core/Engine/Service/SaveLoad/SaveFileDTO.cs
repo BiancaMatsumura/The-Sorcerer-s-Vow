@@ -27,6 +27,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             playerCharacter.Level = playerData.Level;
             playerCharacter.Speed = playerData.Speed;
             playerCharacter.currentHealth = playerData.CurrentHealth;
+            playerCharacter.currentScene = playerData.CurrentScene;
             playerCharacter.SetInitialPosition(playerData.Position);
         }
     }

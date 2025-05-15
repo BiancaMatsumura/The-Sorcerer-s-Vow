@@ -35,7 +35,7 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
         private void OnPanelClick()
         {
             SaveLoadProgressManager.SetCurrentSlot(slot);
-            SceneManager.LoadScene("1. Scenes/CenaStore");
+            SceneManager.LoadScene("1. Scenes/CenaTesteLoad");
             // loadSavePanel.RefreshScreen();
         }
         

@@ -49,7 +49,7 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
         private void OnPanelClick()
         {
             SaveLoadProgressManager.Save(slot, null);
-            SceneManager.LoadScene("1. Scenes/CenaStore");
+            //SceneManager.LoadScene("1. Scenes/CenaStore");
             // loadSavePanel.RefreshScreen();
         }
     }
