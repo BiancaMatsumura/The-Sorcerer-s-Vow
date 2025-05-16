@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf02686e725ca44aa0c8b533c96278d, type: 3}
+  m_Name: Pergaminho
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: "Pergaminho I \u2014 O In\xEDcio do Fim"
+  <Description>k__BackingField: "Quando os templos ru\xEDram e a f\xE9 virou cicatriz,
+    quatro ess\xEAncias foram espalhadas.\n Cada uma guarda um fragmento da verdade
+    esquecida.\n Somente quem encontrar todas, poder\xE1 caminhar at\xE9 o fim da
+    cruzada.\u201D\nSob um arco de pedra, o caminho esconde um dente da terra.\nUm
+    buraco feito pelo tempo sussurra segredos aos p\xE9s dos viajantes.\nAli repousa
+    a ess\xEAncia que te mostra onde a segunda est\xE1.\n\u201CProcura diante do
+    arco antigo, onde o ch\xE3o cede e o sil\xEAncio pesa"
+  <WorldPrefab>k__BackingField: {fileID: 0}
+  category: 0
+  <IsStackable>k__BackingField: 0
+  <MaxStackSize>k__BackingField: 1
+  <ItemImage>k__BackingField: {fileID: -51904632, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <DefaultParametersList>k__BackingField: []
+  modifiersData: []
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
