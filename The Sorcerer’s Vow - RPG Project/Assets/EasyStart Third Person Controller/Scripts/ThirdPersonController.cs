@@ -7,6 +7,7 @@ public class ThirdPersonController : MonoBehaviour
     public float jumpForce = 18f;
     public float jumpTime = 0.85f;
     public float gravity = 9.8f;
+    public float airKickMomentumMultiplier = 1.2f; // Multiplicador de momento para o chute no ar
 
     float jumpElapsedTime = 0;
 
@@ -14,20 +15,27 @@ public class ThirdPersonController : MonoBehaviour
     bool isJumping = false;
     bool isSprinting = false;
     bool isCrouching = false;
+    bool isAirKicking = false; // Nova variável para controlar o chute no ar
 
     float inputHorizontal;
     float inputVertical;
     bool inputJump;
     bool inputCrouch;
     bool inputSprint;
+
+    float lastHorizontalInput;
+    float lastVerticalInput;
+
     public GameObject BOLADEFOGO;
+    public Transform spawnTarget;
+    public BoxCollider[] collider;
+
+    private int currentAttackType = 0; // 1 = chute, 2 = soco, 3 = bola de fogo
+
     Animator animator;
     public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
-    public  Transform spawnTarget;
-
-    public BoxCollider[] collider;
 
     void Start()
     {
@@ -35,62 +43,81 @@ public class ThirdPersonController : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCharacter = GetComponent<PlayerCharacter>();
 
-
         if (animator == null)
             Debug.LogWarning("Hey buddy, you don't have the Animator component in your player. Without it, the animations won't work.");
     }
 
     void Update()
     {
+        // Capturar inputs
         inputHorizontal = Input.GetAxis("Horizontal");
         inputVertical = Input.GetAxis("Vertical");
         inputJump = Input.GetAxis("Jump") == 1f;
         inputSprint = Input.GetAxis("Fire3") == 1f;
         inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
-        if (!isStasis) { 
+
+        // Sempre armazenar o último input válido para uso durante ataques
+        if (inputHorizontal != 0)
+            lastHorizontalInput = inputHorizontal;
+        if (inputVertical != 0)
+            lastVerticalInput = inputVertical;
+
+        // Verificar se deve aplicar stasis de movimento
+        bool shouldApplyStasis = isStasis && !(isAirKicking || (currentAttackType == 1 && !cc.isGrounded));
+
+        // Se estiver em stasis sem ser chute no ar, zerar inputs
+        if (shouldApplyStasis)
+        {
+            inputHorizontal = 0;
+            inputVertical = 0;
+        }
+
+        // Lógica de agachamento
+        if (!shouldApplyStasis)
+        {
             if (inputCrouch)
                 isCrouching = !isCrouching;
-
-            if (cc.isGrounded && animator != null)
-            {
-                animator.SetBool("crouch", isCrouching);
-
-                float minimumSpeed = 0.9f;
-                animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
-                isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
-                animator.SetBool("sprint", isSprinting);
-            }
         }
+
+        // Atualizar animações baseadas no estado do personagem
+        if (cc.isGrounded && animator != null)
+        {
+            animator.SetBool("crouch", isCrouching);
+
+            float minimumSpeed = 0.9f;
+            animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
+            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
+            animator.SetBool("sprint", isSprinting);
+        }
+
         if (animator != null)
+        {
             animator.SetBool("air", !cc.isGrounded);
 
-        if (inputJump && cc.isGrounded)
+            float horizontalSpeed = new Vector3(cc.velocity.x, 0, cc.velocity.z).magnitude;
+            animator.SetFloat("Speed", horizontalSpeed);
+        }
+
+        // Lógica de pulo
+        if (inputJump && cc.isGrounded && !shouldApplyStasis)
         {
             isJumping = true;
         }
 
         HeadHittingDetect();
 
-        if (animator.IsInTransition(0))
-        {   //qnd estiver em transição impede que a animação se repita
-            isStasis = false;
-            animator.SetBool("Kick", false);
-            animator.SetBool("Punch", false);
-        }
-
-        if (Input.GetMouseButtonDown(0) && !isJumping && !isCrouching)
+        // Ataques
+        if (Input.GetMouseButtonDown(0) && !isCrouching)
         {
-            BattleSistem(1);
-            
+            BattleSistem(1); // Chute - agora permitido no ar
         }
         if (Input.GetMouseButtonDown(1) && !isJumping && !isCrouching)
         {
-            BattleSistem(2);
-            
+            BattleSistem(2); // Soco
         }
         if (Input.GetKey(KeyCode.F) && !isCrouching)
         {
-            BattleSistem(3);
+            BattleSistem(3); // Bola de fogo
         }
     }
 
@@ -104,8 +131,18 @@ public class ThirdPersonController : MonoBehaviour
         if (isCrouching)
             velocityAdittion = -(baseSpeed * 0.50f);
 
-        float directionX = inputHorizontal * (baseSpeed + velocityAdittion) * Time.deltaTime;
-        float directionZ = inputVertical * (baseSpeed + velocityAdittion) * Time.deltaTime;
+        // Se estiver executando um chute no ar, use o último input válido multiplicado pelo multiplicador de momento
+        float effectiveHorizontal = inputHorizontal;
+        float effectiveVertical = inputVertical;
+
+        if (isAirKicking)
+        {
+            effectiveHorizontal = lastHorizontalInput * airKickMomentumMultiplier;
+            effectiveVertical = lastVerticalInput * airKickMomentumMultiplier;
+        }
+
+        float directionX = effectiveHorizontal * (baseSpeed + velocityAdittion) * Time.deltaTime;
+        float directionZ = effectiveVertical * (baseSpeed + velocityAdittion) * Time.deltaTime;
         float directionY = 0;
 
         if (isJumping)
@@ -158,60 +195,77 @@ public class ThirdPersonController : MonoBehaviour
             isJumping = false;
         }
     }
+
     void BattleSistem(int var)
     {
-        //batle sistem 
+        if (isStasis && !(var == 1 && !cc.isGrounded))
+            return;
+
+        currentAttackType = var;
+
+        // Para chute no ar, configurar a variável específica
+        if (var == 1 && !cc.isGrounded)
+        {
+            isAirKicking = true;
+            // Para chute no ar, não entramos em stasis completo
+        }
+        else
+        {
+            isStasis = true;
+            isAirKicking = false;
+        }
+
         switch (var)
         {
-            case 1:
-                animator.SetBool("Kick", true);
-                isStasis = true;
+            case 1: // Chute
+                animator.SetTrigger("Kick");
                 break;
-            case 2:
-                animator.SetBool("Punch", true);
-                isStasis = true;
+            case 2: // Soco
+                animator.SetTrigger("Punch");
                 break;
-            case 3:
-                animator.Play("Power");
-      
-                break; 
+            case 3: // Bola de fogo
+                animator.SetTrigger("Power");
+                break;
         }
     }
 
     void ActiveCollider()
     {
-        int qnt = collider.Length;
-        for (int i = 0; i < qnt; i++)
-        {
-            collider[i].enabled = true;
-        }
+        foreach (var col in collider)
+            col.enabled = true;
     }
 
     void DesactiveCollider()
     {
-        int qnt = collider.Length;
-        for (int i = qnt - 1; i >= 0; i--)
-        {
-            collider[i].enabled = false;
-        }
-
-    
+        foreach (var col in collider)
+            col.enabled = false;
     }
-    void FireACtive() 
+
+    void FireActive()
     {
         GameObject ball = Instantiate(BOLADEFOGO, spawnTarget.position, Quaternion.identity);
 
         float ballSpeed = 4.0f;
-        // Pega a direção que o player está olhando (apenas no plano XZ)
         Vector3 direction = transform.forward;
         direction.y = 0;
         direction.Normalize();
 
-        // Faz a bola andar nessa direção
         Rigidbody rb = ball.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.linearVelocity = direction * ballSpeed;
         }
+
+        var proj = ball.GetComponent<ProjectileDamage>();
+        if (proj != null)
+        {
+            proj.SetDamage(playerCharacter.AttackPower);
+        }
+    }
+
+    public void EndAttack()
+    {
+        isStasis = false;
+        isAirKicking = false;
     }
 }

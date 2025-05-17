@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1658937839684645450}
   - component: {fileID: 6110882384466734284}
   - component: {fileID: 6664600773619191792}
+  - component: {fileID: -8891444562882500161}
+  - component: {fileID: 7048164683232365297}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: playerbattle
@@ -136,3 +138,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 36
   m_CollisionDetection: 0
+--- !u!114 &-8891444562882500161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3877327057306367375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8274d34e9b5274db347bc261a242bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerType: 0
+--- !u!114 &7048164683232365297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3877327057306367375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d18d80929e907742afe1093909dd021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  lifetime: 5

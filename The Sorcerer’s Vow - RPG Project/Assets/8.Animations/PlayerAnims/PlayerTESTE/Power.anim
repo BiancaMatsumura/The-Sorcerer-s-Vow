@@ -254128,7 +254128,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 5.266667
-    functionName: FireACtive
+    functionName: FireActive
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 7.7000003
+    functionName: EndAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

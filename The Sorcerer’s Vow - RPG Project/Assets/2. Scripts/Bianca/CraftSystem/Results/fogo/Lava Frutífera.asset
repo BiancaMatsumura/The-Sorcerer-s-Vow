@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bf02686e725ca44aa0c8b533c96278d, type: 3}
-  m_Name: BrisaFrutada
+  m_Name: "Lava Frut\xEDfera"
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Brisa Frutada
-  <Description>k__BackingField: Aumente a sua Velocidade de Movimento em +5 por 10s
-  <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 191bd5986a8e5b44d803f7ee3a490076, type: 3}
+  <Name>k__BackingField: "Lava Frut\xEDfera"
+  <Description>k__BackingField: Aumente o seu Dano em +25 por 25s
+  <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 11e2997ca61bdca469f9c9c57127a358, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
   <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
-  - statsModifier: {fileID: 11400000, guid: 51232cde4437f8646b088391cc3a1ad9, type: 2}
-    val: 5
-    duration: 10
+  - statsModifier: {fileID: 11400000, guid: 007c59460114cca4e8d58e4d1dfce2f1, type: 2}
+    val: 25
+    duration: 25
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}

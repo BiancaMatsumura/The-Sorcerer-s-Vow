@@ -77,10 +77,21 @@ namespace _2._Scripts.Core.Domain.Character.Base
 
         }
 
-        public void ChangeAttackPower(int newAttackPower)
+        private float originalAttackPower;
+
+        public void ChangeAttackPowerTemporarily(float newAttackPower, float duration)
         {
+            originalAttackPower = AttackPower;
             AttackPower = newAttackPower;
+            StartCoroutine(ResetAttackPowerAfterTime(duration));
         }
+        IEnumerator ResetAttackPowerAfterTime(float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            AttackPower = originalAttackPower;
+        }
+
+
         public void ChangeDefensePower(int newDefensePower)
         {
             DefensePower = newDefensePower;
