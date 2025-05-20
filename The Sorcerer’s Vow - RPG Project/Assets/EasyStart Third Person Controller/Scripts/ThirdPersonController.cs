@@ -86,7 +86,7 @@ public class ThirdPersonController : MonoBehaviour
 
             float minimumSpeed = 0.9f;
             animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
-            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
+            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint && playerCharacter.currentEnergy > 0;
             animator.SetBool("sprint", isSprinting);
         }
 
@@ -181,6 +181,13 @@ public class ThirdPersonController : MonoBehaviour
         Vector3 moviment = verticalDirection + horizontalDirection;
 
         cc.Move(moviment);
+
+        if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
+        {
+            float energyDrainPerSecond = playerCharacter.energyReductionRate; 
+            playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
+        }
+
     }
 
     void HeadHittingDetect()
@@ -198,16 +205,17 @@ public class ThirdPersonController : MonoBehaviour
 
     void BattleSistem(int var)
     {
+        if (playerCharacter.currentEnergy <= 0)
+            return;
+
         if (isStasis && !(var == 1 && !cc.isGrounded))
             return;
 
         currentAttackType = var;
 
-        // Para chute no ar, configurar a variável específica
         if (var == 1 && !cc.isGrounded)
         {
             isAirKicking = true;
-            // Para chute no ar, não entramos em stasis completo
         }
         else
         {
@@ -219,15 +227,20 @@ public class ThirdPersonController : MonoBehaviour
         {
             case 1: // Chute
                 animator.SetTrigger("Kick");
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate*2); // custo do chute
                 break;
             case 2: // Soco
                 animator.SetTrigger("Punch");
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate); // custo do soco
                 break;
             case 3: // Bola de fogo
                 animator.SetTrigger("Power");
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate*4); // custo da bola de fogo
                 break;
         }
+
     }
+
 
     void ActiveCollider()
     {
@@ -262,6 +275,12 @@ public class ThirdPersonController : MonoBehaviour
             proj.SetDamage(playerCharacter.AttackPower);
         }
     }
+
+    public bool IsSprinting()
+    {
+        return isSprinting;
+    }
+
 
     public void EndAttack()
     {

@@ -15,8 +15,10 @@ namespace _2._Scripts.Core.Domain.Character.Base
         public float currentHealth;
         public float AttackPower;
         public float DefensePower;
-
         private float damageReductionMultiplier = 1f; // 1f = 100% do dano, 0.5f = 50%, etc.
+
+        private bool isImmuneToDamage = false;
+        private Coroutine immunityCoroutine;
 
         public virtual void Start()
         {
@@ -26,13 +28,13 @@ namespace _2._Scripts.Core.Domain.Character.Base
 
         public virtual void Update()
         {
-            // Debug.Log("BaseCharacter Update");
+
         }
 
         public void ApplyDamageReductionTemporarily(float reductionPercentage, float duration)
         {
             float newMultiplier = 1f - (reductionPercentage / 100f);
-            StopCoroutine("ResetDamageReduction"); 
+            StopCoroutine("ResetDamageReduction");
             damageReductionMultiplier = Mathf.Clamp(newMultiplier, 0f, 1f);
             StartCoroutine(ResetDamageReductionAfterTime(duration));
         }
@@ -45,6 +47,12 @@ namespace _2._Scripts.Core.Domain.Character.Base
 
         public void ReduceHealth(float damage)
         {
+            if (isImmuneToDamage)
+            {
+                Debug.Log("Damage ignored: player is immune.");
+                return;
+            }
+
             int reducedDamage = Mathf.RoundToInt(damage * damageReductionMultiplier);
             currentHealth -= reducedDamage;
             if (currentHealth < 0) currentHealth = 0;
@@ -92,9 +100,20 @@ namespace _2._Scripts.Core.Domain.Character.Base
         }
 
 
-        public void ChangeDefensePower(int newDefensePower)
+        public void ApplyDamageImmunityTemporarily(float duration)
         {
-            DefensePower = newDefensePower;
+            if (immunityCoroutine != null)
+                StopCoroutine(immunityCoroutine);
+
+            immunityCoroutine = StartCoroutine(DamageImmunityRoutine(duration));
         }
+
+        private IEnumerator DamageImmunityRoutine(float duration)
+        {
+            isImmuneToDamage = true;
+            yield return new WaitForSeconds(duration);
+            isImmuneToDamage = false;
+        }
+
     }
 }
