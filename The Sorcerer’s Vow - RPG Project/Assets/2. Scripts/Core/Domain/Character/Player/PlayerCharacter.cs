@@ -11,34 +11,58 @@ namespace _2._Scripts.Core.Domain.Character.Player
     [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
-        public PlayerController playerController111;
-        
+
+        public float maxEnergy;
+        public float currentEnergy;
+        public float energyReductionRate = 5f;
+        public float energyRecoveryRate = 5f;
+
         [SerializeField] private Slider sliderLife;
-       
+        [SerializeField] private Slider sliderEnergy;
+
 
         [SerializeField]
         private InventoryController inventoryController;
 
-        [SerializeField] 
-        private PlayerInputController playerInputController;
-        
         public override void Start()
         {
             base.Start();
             sliderLife.maxValue = maxHealth;
             sliderLife.value = currentHealth;
 
-            Debug.Log("PlayerCharacter Start");
+
+            currentEnergy = maxEnergy;
+            sliderEnergy.maxValue = maxEnergy;
+            sliderEnergy.value = currentEnergy;
+
             SaveLoadProgressManager.LoadAllSaveDataFromFile();
             inventoryController = GetComponent<InventoryController>();
-            playerInputController = GetComponent<PlayerInputController>();
+
         }
 
         public override void Update()
         {
             base.Update();
             sliderLife.value = currentHealth;
-            // Debug.Log("PlayerCharacter Update");
+            sliderEnergy.value = currentEnergy;
+
+            if (currentEnergy < maxEnergy)
+            {
+                bool isNotSprinting = true;
+
+                // Checa se o personagem não está correndo
+                var controller = GetComponent<ThirdPersonController>();
+                if (controller != null)
+                    isNotSprinting = !controller.IsSprinting();
+
+                if (isNotSprinting)
+                {
+                    currentEnergy += energyRecoveryRate * Time.deltaTime;
+                    if (currentEnergy > maxEnergy)
+                        currentEnergy = maxEnergy;
+                }
+            }
+
         }
 
         public void ChangeVelocityTemporarily(int newSpeed, float duration)
@@ -60,8 +84,19 @@ namespace _2._Scripts.Core.Domain.Character.Player
             CharacterController characterController = GetComponent<CharacterController>();
             characterController.Move(position - transform.position);
         }
-        
-        
+
+        public void ReduceEnergy(float amount)
+        {
+            currentEnergy -= amount;
+            if (currentEnergy < 0) currentEnergy = 0;
+        }
+
+        public void RecoverEnergy(float amount)
+        {
+            currentEnergy += amount;
+            if (currentEnergy < 0) currentEnergy = 0;
+        }
+
         public InventoryController InventoryController => inventoryController;
     }
 }
