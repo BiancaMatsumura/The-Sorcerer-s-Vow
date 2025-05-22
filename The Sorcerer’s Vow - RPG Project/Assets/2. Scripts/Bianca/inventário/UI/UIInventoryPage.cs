@@ -19,26 +19,26 @@ public class UIInventoryPage : MonoBehaviour
 
     [SerializeField]
     private MouseFollower mouseFollower;
-    
+
     [SerializeField]
     private ItemActionPanel itemActionPanel;
 
     [Header("Category Tabs")]
     [SerializeField]
     private Transform tabsContainer;
-    
+
     [SerializeField]
     private GameObject tabButtonPrefab;
-    
+
     [SerializeField]
     private Color selectedTabColor = Color.white;
-    
+
     [SerializeField]
     private Color unselectedTabColor = new Color(0.7f, 0.7f, 0.7f, 1f);
 
     private Dictionary<ItemCategory, Button> categoryTabs = new Dictionary<ItemCategory, Button>();
     private ItemCategory currentCategory = ItemCategory.Geral;
-    
+
     private List<UIInventoryItem> listOfUIItems = new List<UIInventoryItem>();
     private Dictionary<ItemCategory, List<UIInventoryItem>> categorizedItems = new Dictionary<ItemCategory, List<UIInventoryItem>>();
     private Dictionary<int, ItemCategory> slotCategories = new Dictionary<int, ItemCategory>();
@@ -58,7 +58,7 @@ public class UIInventoryPage : MonoBehaviour
     {
         // Initialize the category tabs first
         InitializeCategoryTabs();
-        
+
         // Then create inventory slots
         for (int i = 0; i < inventorySize; i++)
         {
@@ -71,51 +71,51 @@ public class UIInventoryPage : MonoBehaviour
             uiItem.OnItemEndDrag += HandleEndDrag;
             uiItem.OnRightMouseBtnClick += HandleShowItemActions;
         }
-        
+
         // Initialize empty categorized lists
         foreach (ItemCategory category in Enum.GetValues(typeof(ItemCategory)))
         {
             categorizedItems[category] = new List<UIInventoryItem>();
         }
-        
+
         // Start with the Default category selected
         SelectCategory(ItemCategory.Geral);
     }
-    
+
     private void InitializeCategoryTabs()
     {
         // Skip if tabsContainer is not assigned
         if (tabsContainer == null || tabButtonPrefab == null)
             return;
-            
+
         // Get all categories from the enum
         ItemCategory[] categories = (ItemCategory[])Enum.GetValues(typeof(ItemCategory));
-        
+
         foreach (ItemCategory category in categories)
         {
             // Create a tab button for each category
             GameObject tabObj = Instantiate(tabButtonPrefab, tabsContainer);
             Button tabButton = tabObj.GetComponent<Button>();
             TextMeshProUGUI tabText = tabObj.GetComponentInChildren<TextMeshProUGUI>();
-            
+
             if (tabText != null)
             {
                 tabText.text = category.ToString();
             }
-            
+
             // Store reference to the tab button
             categoryTabs[category] = tabButton;
-            
+
             // Add click listener
             ItemCategory capturedCategory = category; // Capture for lambda
             tabButton.onClick.AddListener(() => SelectCategory(capturedCategory));
         }
     }
-    
-   public void SelectCategory(ItemCategory category)
+
+    public void SelectCategory(ItemCategory category)
     {
         currentCategory = category;
-        
+
         // Update tab button visuals
         foreach (var tab in categoryTabs)
         {
@@ -125,17 +125,17 @@ public class UIInventoryPage : MonoBehaviour
                 tabImage.color = (tab.Key == category) ? selectedTabColor : unselectedTabColor;
             }
         }
-        
+
         // Update UI items visibility
         UpdateItemsVisibility();
-        
+
         // Reset selection when changing categories
         ResetSelection();
-        
+
         // Force layout refresh
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentPanel);
-        
+
         // Notify any listeners about category change
         OnCategoryChanged?.Invoke(category);
     }
@@ -143,7 +143,7 @@ public class UIInventoryPage : MonoBehaviour
     {
         // NÃO usaremos SetActive(false) para itens que não estão na categoria atual
         // Em vez disso, vamos ajustar a visibilidade sem desativar o GameObject completamente
-        
+
         if (currentCategory == ItemCategory.Geral)
         {
             // No modo default, mostrar todos os slots (ocupados ou não)
@@ -154,21 +154,21 @@ public class UIInventoryPage : MonoBehaviour
             }
             return;
         }
-        
+
         // Para outras categorias, contamos quantos slots pertencem a essa categoria
         int visibleCount = 0;
-        
+
         // Primeiro, marque todos como invisíveis
         foreach (UIInventoryItem item in listOfUIItems)
         {
             item.gameObject.SetActive(false);
         }
-        
+
         // Depois, ative apenas os slots que contêm itens da categoria selecionada
         // E os reposicione no início do conteúdo
         for (int i = 0; i < listOfUIItems.Count; i++)
         {
-            if (slotCategories.TryGetValue(i, out ItemCategory category) && 
+            if (slotCategories.TryGetValue(i, out ItemCategory category) &&
                 category == currentCategory)
             {
                 listOfUIItems[i].gameObject.SetActive(true);
@@ -177,7 +177,7 @@ public class UIInventoryPage : MonoBehaviour
                 visibleCount++;
             }
         }
-        
+
         // Force layout refresh
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentPanel);
     }
@@ -186,19 +186,19 @@ public class UIInventoryPage : MonoBehaviour
         if (listOfUIItems.Count > itemIndex)
         {
             listOfUIItems[itemIndex].SetData(itemImage, itemQuantity);
-            
+
             // Store the category of this item for filtering
             if (itemImage != null && itemQuantity > 0)
             {
-                
+
                 slotCategories[itemIndex] = category;
-                
+
                 // Certifique-se de que a lista categorizada existe
                 if (!categorizedItems.ContainsKey(category))
                 {
                     categorizedItems[category] = new List<UIInventoryItem>();
                 }
-                
+
                 // Add to categorized list if not already there
                 if (!categorizedItems[category].Contains(listOfUIItems[itemIndex]))
                 {
@@ -218,12 +218,12 @@ public class UIInventoryPage : MonoBehaviour
                     slotCategories.Remove(itemIndex);
                 }
             }
-            
+
             // Update visibility based on current category
             UpdateItemsVisibility();
         }
     }
-    
+
     // Overload for backward compatibility
     public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity)
     {
@@ -247,45 +247,45 @@ public class UIInventoryPage : MonoBehaviour
     }
 
     private void HandleSwap(UIInventoryItem inventoryItemUI)
-{
-    // Se estamos em uma categoria específica que não é Default,
-    // só permitimos trocar itens dentro dessa categoria
-    int index = listOfUIItems.IndexOf(inventoryItemUI);
-    if (index == -1)
     {
-        return;
+        // Se estamos em uma categoria específica que não é Default,
+        // só permitimos trocar itens dentro dessa categoria
+        int index = listOfUIItems.IndexOf(inventoryItemUI);
+        if (index == -1)
+        {
+            return;
+        }
+
+        // Verificamos se o item arrastado e o item alvo pertencem à categoria atual
+        // ou se estamos na categoria Default
+        bool canSwap = currentCategory == ItemCategory.Geral;
+
+        if (!canSwap)
+        {
+            // Se não for Default, verificamos se ambos itens pertencem à categoria atual
+            bool sourceIsInCategory = slotCategories.TryGetValue(currentlyDraggedItemIndex, out ItemCategory sourceCategory) &&
+                                     sourceCategory == currentCategory;
+
+            bool targetIsInCategory = slotCategories.TryGetValue(index, out ItemCategory targetCategory) &&
+                                     targetCategory == currentCategory;
+
+            // Se o alvo está vazio, o swap ainda é válido
+            bool targetIsEmpty = !slotCategories.ContainsKey(index);
+
+            canSwap = sourceIsInCategory && (targetIsInCategory || targetIsEmpty);
+        }
+
+        if (canSwap)
+        {
+            OnSwapItems?.Invoke(currentlyDraggedItemIndex, index);
+            HandleItemSelection(inventoryItemUI);
+        }
+        else
+        {
+            // Reseta o drag se não for possível trocar
+            ResetDraggedItem();
+        }
     }
-    
-    // Verificamos se o item arrastado e o item alvo pertencem à categoria atual
-    // ou se estamos na categoria Default
-    bool canSwap = currentCategory == ItemCategory.Geral;
-    
-    if (!canSwap)
-    {
-        // Se não for Default, verificamos se ambos itens pertencem à categoria atual
-        bool sourceIsInCategory = slotCategories.TryGetValue(currentlyDraggedItemIndex, out ItemCategory sourceCategory) &&
-                                 sourceCategory == currentCategory;
-        
-        bool targetIsInCategory = slotCategories.TryGetValue(index, out ItemCategory targetCategory) &&
-                                 targetCategory == currentCategory;
-        
-        // Se o alvo está vazio, o swap ainda é válido
-        bool targetIsEmpty = !slotCategories.ContainsKey(index);
-                                 
-        canSwap = sourceIsInCategory && (targetIsInCategory || targetIsEmpty);
-    }
-    
-    if (canSwap)
-    {
-        OnSwapItems?.Invoke(currentlyDraggedItemIndex, index);
-        HandleItemSelection(inventoryItemUI);
-    }
-    else
-    {
-        // Reseta o drag se não for possível trocar
-        ResetDraggedItem();
-    }
-}
 
     private void ResetDraggedItem()
     {
@@ -298,16 +298,16 @@ public class UIInventoryPage : MonoBehaviour
         int index = listOfUIItems.IndexOf(inventoryItemUI);
         if (index == -1)
             return;
-        
+
         // Verificamos se o item pertence à categoria atual
         bool canDrag = currentCategory == ItemCategory.Geral;
-        
+
         if (!canDrag)
         {
             canDrag = slotCategories.TryGetValue(index, out ItemCategory category) &&
                     category == currentCategory;
         }
-        
+
         if (canDrag)
         {
             currentlyDraggedItemIndex = index;
@@ -378,21 +378,21 @@ public class UIInventoryPage : MonoBehaviour
     }
 
     internal void ResetAllItems()
-{
-    foreach (var item in listOfUIItems)
     {
-        item.ResetData();
-        item.Deselect();
+        foreach (var item in listOfUIItems)
+        {
+            item.ResetData();
+            item.Deselect();
+        }
+
+        // Limpe os dados de categorização
+        slotCategories.Clear();
+        foreach (var category in categorizedItems.Keys.ToList())
+        {
+            categorizedItems[category].Clear();
+        }
+
+        // Reset para categoria padrão
+        SelectCategory(ItemCategory.Geral);
     }
-    
-    // Limpe os dados de categorização
-    slotCategories.Clear();
-    foreach (var category in categorizedItems.Keys.ToList())
-    {
-        categorizedItems[category].Clear();
-    }
-    
-    // Reset para categoria padrão
-    SelectCategory(ItemCategory.Geral);
-}
 }

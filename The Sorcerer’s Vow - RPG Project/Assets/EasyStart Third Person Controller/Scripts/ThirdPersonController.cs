@@ -7,7 +7,7 @@ public class ThirdPersonController : MonoBehaviour
     public float jumpForce = 18f;
     public float jumpTime = 0.85f;
     public float gravity = 9.8f;
-    public float airKickMomentumMultiplier = 1.2f; // Multiplicador de momento para o chute no ar
+    public float airKickMomentumMultiplier = 1.2f;
 
     float jumpElapsedTime = 0;
 
@@ -15,7 +15,7 @@ public class ThirdPersonController : MonoBehaviour
     bool isJumping = false;
     bool isSprinting = false;
     bool isCrouching = false;
-    bool isAirKicking = false; // Nova variável para controlar o chute no ar
+    bool isAirKicking = false;
 
     float inputHorizontal;
     float inputVertical;
@@ -30,12 +30,14 @@ public class ThirdPersonController : MonoBehaviour
     public Transform spawnTarget;
     public BoxCollider[] collider;
 
-    private int currentAttackType = 0; // 1 = chute, 2 = soco, 3 = bola de fogo
+    private int currentAttackType = 0;
 
     Animator animator;
     public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
+    [SerializeField] 
+    private DialogueManager dialogueManager;
 
     void Start()
     {
@@ -49,37 +51,46 @@ public class ThirdPersonController : MonoBehaviour
 
     void Update()
     {
-        // Capturar inputs
+        bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
+
+        if (dialogueActive)
+        {
+            // Zera inputs e não processa movimentação ou ataque
+            inputHorizontal = 0;
+            inputVertical = 0;
+            inputJump = false;
+            inputSprint = false;
+            inputCrouch = false;
+
+            return;  // Sai do Update, não processa nada.
+        }
+
+        // Captura de input somente se NÃO estiver em diálogo
         inputHorizontal = Input.GetAxis("Horizontal");
         inputVertical = Input.GetAxis("Vertical");
         inputJump = Input.GetAxis("Jump") == 1f;
         inputSprint = Input.GetAxis("Fire3") == 1f;
         inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
 
-        // Sempre armazenar o último input válido para uso durante ataques
         if (inputHorizontal != 0)
             lastHorizontalInput = inputHorizontal;
         if (inputVertical != 0)
             lastVerticalInput = inputVertical;
 
-        // Verificar se deve aplicar stasis de movimento
         bool shouldApplyStasis = isStasis && !(isAirKicking || (currentAttackType == 1 && !cc.isGrounded));
 
-        // Se estiver em stasis sem ser chute no ar, zerar inputs
         if (shouldApplyStasis)
         {
             inputHorizontal = 0;
             inputVertical = 0;
         }
 
-        // Lógica de agachamento
         if (!shouldApplyStasis)
         {
             if (inputCrouch)
                 isCrouching = !isCrouching;
         }
 
-        // Atualizar animações baseadas no estado do personagem
         if (cc.isGrounded && animator != null)
         {
             animator.SetBool("crouch", isCrouching);
@@ -93,12 +104,10 @@ public class ThirdPersonController : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("air", !cc.isGrounded);
-
             float horizontalSpeed = new Vector3(cc.velocity.x, 0, cc.velocity.z).magnitude;
             animator.SetFloat("Speed", horizontalSpeed);
         }
 
-        // Lógica de pulo
         if (inputJump && cc.isGrounded && !shouldApplyStasis)
         {
             isJumping = true;
@@ -106,23 +115,27 @@ public class ThirdPersonController : MonoBehaviour
 
         HeadHittingDetect();
 
-        // Ataques
         if (Input.GetMouseButtonDown(0) && !isCrouching)
         {
-            BattleSistem(1); // Chute - agora permitido no ar
+            BattleSistem(1);
         }
         if (Input.GetMouseButtonDown(1) && !isJumping && !isCrouching)
         {
-            BattleSistem(2); // Soco
+            BattleSistem(2);
         }
         if (Input.GetKey(KeyCode.F) && !isCrouching)
         {
-            BattleSistem(3); // Bola de fogo
+            BattleSistem(3);
         }
     }
 
     private void FixedUpdate()
     {
+        bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
+
+        if (dialogueActive)
+            return;  // Impede movimentação física
+
         float baseSpeed = playerCharacter.Speed;
         float velocityAdittion = 0;
 
@@ -131,7 +144,6 @@ public class ThirdPersonController : MonoBehaviour
         if (isCrouching)
             velocityAdittion = -(baseSpeed * 0.50f);
 
-        // Se estiver executando um chute no ar, use o último input válido multiplicado pelo multiplicador de momento
         float effectiveHorizontal = inputHorizontal;
         float effectiveVertical = inputVertical;
 
@@ -184,10 +196,9 @@ public class ThirdPersonController : MonoBehaviour
 
         if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
         {
-            float energyDrainPerSecond = playerCharacter.energyReductionRate; 
+            float energyDrainPerSecond = playerCharacter.energyReductionRate;
             playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
         }
-
     }
 
     void HeadHittingDetect()
@@ -225,22 +236,20 @@ public class ThirdPersonController : MonoBehaviour
 
         switch (var)
         {
-            case 1: // Chute
+            case 1:
                 animator.SetTrigger("Kick");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate*2); // custo do chute
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 2);
                 break;
-            case 2: // Soco
+            case 2:
                 animator.SetTrigger("Punch");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate); // custo do soco
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate);
                 break;
-            case 3: // Bola de fogo
+            case 3:
                 animator.SetTrigger("Power");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate*4); // custo da bola de fogo
+                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 4);
                 break;
         }
-
     }
-
 
     void ActiveCollider()
     {
@@ -280,7 +289,6 @@ public class ThirdPersonController : MonoBehaviour
     {
         return isSprinting;
     }
-
 
     public void EndAttack()
     {

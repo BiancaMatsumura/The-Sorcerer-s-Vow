@@ -73,19 +73,7 @@ public class StoreTrigger : MonoBehaviour
     }
 
 
-    private void ActivateStore()
-    {
-
-        uiShopPage.gameObject.SetActive(true);
-        uiShopPage.InitializeShopUI(shop);
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        Time.timeScale = 0f;
-        CameraController.isInventoryOpen = true;
-
-        isStoreOpen = true;
-    }
+    
 
     private void CloseStore()
     {

@@ -63,6 +63,11 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public bool IsDialogueActive()
+    {
+        return state != StateDialogue.disabled;
+    }
+
     private void OnDestroy()
     {
         // Unsubscribe to prevent memory leaks
@@ -187,9 +192,7 @@ public class DialogueManager : MonoBehaviour
         if (Input.GetKeyDown(skipAnimationDialogue) && state == StateDialogue.typing)
         {
             dialogueText.SkipAnimation();
-            // The state will automatically transition to 'waiting' when the
-            // ShowText coroutine finishes (or is stopped by SkipAnimation).
-            // The ShowTextAndAdvance coroutine handles setting state to waiting.
+            state = StateDialogue.waiting; // ← FORÇA o estado para waiting!
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using _2._Scripts.Core.Domain.Character.Player.Inputs.Shurtcuts;
+using _2._Scripts.Core.Domain.Character.Player.Inputs;
 using UnityEngine;
 
 namespace _2._Scripts.Core.Domain.Character.Player.Inputs
@@ -11,7 +11,7 @@ namespace _2._Scripts.Core.Domain.Character.Player.Inputs
 
         private void Start()
         {
-            saveShortcutInput = new SaveShortcutInput();
+            //saveShortcutInput = new SaveShortcutInput();
         }
         
         private void Update()
@@ -23,7 +23,7 @@ namespace _2._Scripts.Core.Domain.Character.Player.Inputs
                 {
                     GameObject player = GameObject.FindGameObjectWithTag("Player");
                     PlayerCharacter playerCharacter = player.GetComponent<PlayerCharacter>();
-                    (saveShortcutInput as SaveShortcutInput).SetPlayerCharacter(playerCharacter);
+                    //(saveShortcutInput as SaveShortcutInput).SetPlayerCharacter(playerCharacter);
                     saveShortcutInput.input(pressedKey);
                 }
             }
