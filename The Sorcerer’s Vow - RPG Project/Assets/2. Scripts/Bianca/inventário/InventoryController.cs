@@ -182,33 +182,7 @@ public class InventoryController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            //uiManager.ToggleInventory();
-            if (!inventoryUI.isActiveAndEnabled)
-            {
-                inventoryUI.Show();
-                Time.timeScale = 0; // Pausa o jogo
-                Cursor.lockState = CursorLockMode.None; // Libera o cursor
-                Cursor.visible = true;
-                CameraController.isInventoryOpen = true; // Desativa o controle da câmera
-
-                foreach (var item in inventoryData.GetCurrentInventoryState())
-                {
-                    inventoryUI.UpdateData(
-                        item.Key,
-                        item.Value.item.ItemImage,
-                        item.Value.quantity,
-                        item.Value.item.Category
-                    );
-                }
-            }
-            else
-            {
-                inventoryUI.Hide();
-                Time.timeScale = 1; // Retoma o jogo
-                Cursor.lockState = CursorLockMode.Locked; // Trava o cursor novamente
-                Cursor.visible = false;
-                CameraController.isInventoryOpen = false; // Reativa o controle da câmera
-            }
+            uiManager.ToggleInventory();
         }
     }
     

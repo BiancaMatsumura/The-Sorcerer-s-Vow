@@ -11,30 +11,22 @@ public class UIManager : MonoBehaviour
 
     private Shop activeShop;
 
-    public bool IsInventoryOpen => inventoryUI.isActiveAndEnabled;
-    public bool IsShopOpen => shopUI.gameObject.activeSelf;
-
-
     public void ToggleInventory()
     {
-        // Close shop if it's open
-        if (IsShopOpen)
-        {
+        // Fecha Shop se estiver aberto
+        if (shopUI.gameObject.activeSelf)
             CloseShop();
-        }
 
-        if (!IsInventoryOpen)
+        if (!inventoryUI.isActiveAndEnabled)
         {
-            // Show inventory
             inventoryUI.Show();
             Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             CameraController.isInventoryOpen = true;
 
-            // Populate inventory items
-            var currentState = inventoryData.GetCurrentInventoryState();
-            foreach (var kvp in currentState)
+            // Atualiza o inventário
+            foreach (var kvp in inventoryData.GetCurrentInventoryState())
             {
                 inventoryUI.UpdateData(
                     kvp.Key,
@@ -46,7 +38,6 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // Hide inventory
             inventoryUI.Hide();
             Time.timeScale = 1f;
             Cursor.lockState = CursorLockMode.Locked;
@@ -57,15 +48,12 @@ public class UIManager : MonoBehaviour
 
     public void ToggleShop(Shop shop)
     {
-        // Close inventory if it's open
-        if (IsInventoryOpen)
-        {
-            ToggleInventory();
-        }
+        // Fecha Inventário se estiver aberto
+        if (inventoryUI.isActiveAndEnabled)
+            inventoryUI.Hide();
 
-        if (!IsShopOpen)
+        if (!shopUI.gameObject.activeSelf)
         {
-            // Open shop
             activeShop = shop;
             shopUI.gameObject.SetActive(true);
             shopUI.InitializeShopUI(activeShop);
@@ -77,7 +65,6 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // Close shop
             CloseShop();
         }
     }
