@@ -16,5 +16,8 @@ MonoBehaviour:
   AllNodes: []
   Sentences:
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-    Content: "Para utilizar o poder dos Frutos, voc\xEA dever\xE1 encontr\xE1-lo
-      em seu invent\xE1rio e consumilo, se atente em sua descri\xE7\xE3o!"
+    Content: "Para utilizar o poder dos FRUTOS, voc\xEA dever\xE1 encontr\xE1-lo
+      em seu invent\xE1rio e consum\xCD-lo, se atente em sua descri\xE7\xE3o!"
+  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+    Content: "Desbrave o Mundo e me encontre logo ap\xF3s a vila, estarei te esperando
+      por l\xE1. Voc\xEA tem grandes talentos jovem!"

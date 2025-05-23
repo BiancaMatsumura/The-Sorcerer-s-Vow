@@ -213,4 +213,51 @@ public class Quest : MonoBehaviour
         DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
         DialogueGameEvents.Instace.OnStartDialog -= StartTalkingAnimation;
     }
+
+    public void OnPlayerEnterRange()
+    {
+        if (!IsValidIndex() || isTransitioning) return;
+
+        Debug.Log("Quest: Player entrou na área.");
+
+        var dialogData = GetCurrentDialogueData();
+
+        if (questSystem != null)
+        {
+            var currentQuest = questPairs[currentQuestIndex].questData;
+            questSystem.ActivateQuest(currentQuest);
+        }
+
+        if (dialogData != null)
+        {
+            textOutput.text = "Aperte E para falar.\nBotão Esquerdo do mouse para pular a animação.\nAperte Q para o próximo Diálogo";
+
+            DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
+            DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
+
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", true);
+            }
+
+            DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
+            DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
+        }
+        else
+        {
+            CheckQuest();
+        }
+    }
+
+    public void OnPlayerExitRange()
+    {
+        Debug.Log("Quest: Player saiu da área.");
+        textOutput.text = "Se aproxime novamente!";
+
+        DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
+        DialogueGameEvents.Instace.PlayerExitedDialogueRange();
+
+        UpdateQuestList();
+    }
+
 }

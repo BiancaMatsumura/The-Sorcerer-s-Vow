@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a28880b16d4c27147bd8ac7f917989b4, type: 3}
-  m_Name: Dialogue3
+  m_Name: Dialogue5
   m_EditorClassIdentifier: 
   EntryNode: {fileID: 0}
   AllNodes: []
   Sentences:
   - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-    Content: "Certo! Agora, EQUIPE a ess\xEAncia que voc\xEA havia coletado, se aproxime
-      do BROTO e conquiste o seu novo FRUTO"
-  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
-    Content: "Ele poder\xE1 te conceder habilidades inimagin\xE1veis!"
+    Content: "Voc\xEA dever\xE1 continuar a sua jornada sem mim, v\xE1 at\xE9 o ZIGURATE
+      a frente, mas esteja preparado!"
