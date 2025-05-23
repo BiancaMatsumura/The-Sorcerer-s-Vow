@@ -53,7 +53,7 @@ public class DialogueManager : MonoBehaviour
         // Subscribe to global events
         if (DialogueGameEvents.Instace != null)
         {
-            DialogueGameEvents.Instace.OnStartDialog += HandheldStartDialogueInternal; // Renamed for clarity
+            //DialogueGameEvents.Instace.OnStartDialog += HandheldStartDialogueInternal; // Renamed for clarity
             DialogueGameEvents.Instace.OnPlayerEnteredDialogueRange += HandlePlayerEnteredRange;
             DialogueGameEvents.Instace.OnPlayerExitedDialogueRange += HandlePlayerExitedRange;
         }

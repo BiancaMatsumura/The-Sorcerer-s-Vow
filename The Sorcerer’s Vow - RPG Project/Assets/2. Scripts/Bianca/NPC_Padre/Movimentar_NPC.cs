@@ -1,21 +1,33 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Movimentar_NPC : MonoBehaviour
 {
     [Header("Waypoints e Missão")]
-    public Transform[] waypoints;
-    public QuestData questTrigger;
+    public Transform[] waypoints01;
+    public Transform[] waypoints02;
+    public QuestData questTrigger01;
+    public QuestData questTrigger02;
+    public QuestData questTrigger03;
 
     [Header("Configurações de Movimento")]
     public float walkSpeed = 2f;
     public float runSpeed = 6f;
     public float runAfterSeconds = 5f;
+    public float waypointReachDistance = 1f;
 
     private int currentWaypointIndex = 0;
-    public bool isMoving = false;
+    private int currentWaypointIndex02 = 0;
+
+    private bool isMoving = false;
+    private bool isMovingToWaypoints02 = false;
     private bool isRunning = false;
+
+    private bool hasStartedMovement = false;
+    private bool hasStartedMovement02 = false;
+
     private float movementStartTime;
 
     private Animator animator;
@@ -25,29 +37,42 @@ public class Movimentar_NPC : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-
         ConfigureAgent();
     }
 
     private void Update()
     {
-        if (!isMoving && questTrigger != null && questTrigger.isCompleted)
+        if (!isMoving && !hasStartedMovement && questTrigger01 != null && questTrigger01.isCompleted)
         {
             StartMovement();
+            hasStartedMovement = true;
         }
 
         if (isMoving)
         {
             UpdateMovement();
         }
+
+        // Inicia movimento para waypoints02 após completar questTrigger03
+        if (!isMovingToWaypoints02 && !hasStartedMovement02 && questTrigger03 != null && questTrigger03.isCompleted)
+        {
+            StartMovement02();
+            hasStartedMovement02 = true;
+        }
+
+        if (isMovingToWaypoints02)
+        {
+            UpdateMovement02();
+        }
     }
+
 
     private void ConfigureAgent()
     {
-        agent.autoBraking = false;
-        agent.acceleration = 999f;
-        agent.angularSpeed = 999f;
-        agent.stoppingDistance = 0.01f;
+        agent.autoBraking = true;
+        agent.acceleration = 8f;
+        agent.angularSpeed = 120f;
+        agent.stoppingDistance = 0.5f;
     }
 
     private void StartMovement()
@@ -58,21 +83,123 @@ public class Movimentar_NPC : MonoBehaviour
         movementStartTime = Time.time;
         agent.speed = walkSpeed;
         agent.isStopped = false;
-        SetDestinationToCurrentWaypoint();
+        SetDestinationToCurrentWaypoint(waypoints01, currentWaypointIndex);
     }
 
     private void UpdateMovement()
     {
         UpdateSpeedAndAnimation();
 
-        // Força a velocidade constante para evitar desaceleração
-        agent.velocity = agent.desiredVelocity.normalized * agent.speed;
-
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (HasReachedCurrentWaypoint(waypoints01, currentWaypointIndex))
         {
-            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            currentWaypointIndex++;
+
+            if (currentWaypointIndex >= waypoints01.Length)
             {
-                ProceedToNextWaypoint();
+                StopMovement();
+            }
+            else
+            {
+                SetDestinationToCurrentWaypoint(waypoints01, currentWaypointIndex);
+            }
+        }
+    }
+
+    private void StopMovement()
+    {
+        isMoving = false;
+        isRunning = false;
+
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+
+        Debug.Log($"NPC parou no último waypoint01: {waypoints01[waypoints01.Length - 1].name}");
+
+        if (questTrigger02 != null)
+        {
+            QuestSystem questSystem = FindObjectOfType<QuestSystem>();
+            if (questSystem != null)
+            {
+                questSystem.ActivateQuest(questTrigger02);
+            }
+        }
+    }
+
+    private void StartMovement02()
+    {
+        isMovingToWaypoints02 = true;
+        isRunning = false;
+        currentWaypointIndex02 = 0;
+        movementStartTime = Time.time;
+        agent.speed = walkSpeed;
+        agent.isStopped = false;
+        SetDestinationToCurrentWaypoint(waypoints02, currentWaypointIndex02);
+    }
+
+    private void UpdateMovement02()
+    {
+        UpdateSpeedAndAnimation();
+
+        if (HasReachedCurrentWaypoint(waypoints02, currentWaypointIndex02))
+        {
+            currentWaypointIndex02++;
+
+            if (currentWaypointIndex02 >= waypoints02.Length)
+            {
+                StopMovement02();
+            }
+            else
+            {
+                SetDestinationToCurrentWaypoint(waypoints02, currentWaypointIndex02);
+            }
+        }
+    }
+
+    private void StopMovement02()
+    {
+        isMovingToWaypoints02 = false;
+        isRunning = false;
+
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+
+        Debug.Log($"NPC parou no último waypoint02: {waypoints02[waypoints02.Length - 1].name}");
+    }
+
+    private bool HasReachedCurrentWaypoint(Transform[] waypoints, int index)
+    {
+        if (waypoints == null || index >= waypoints.Length)
+            return false;
+
+        Transform currentWaypoint = waypoints[index];
+        if (currentWaypoint == null)
+            return false;
+
+        float distanceToWaypoint = Vector3.Distance(transform.position, currentWaypoint.position);
+        bool closeEnough = distanceToWaypoint <= waypointReachDistance;
+        bool agentReached = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
+        bool almostStopped = agent.velocity.magnitude < 0.1f;
+
+        return closeEnough && (agentReached || almostStopped);
+    }
+
+    private void SetDestinationToCurrentWaypoint(Transform[] waypoints, int index)
+    {
+        if (waypoints != null && index < waypoints.Length)
+        {
+            Transform targetWaypoint = waypoints[index];
+            if (targetWaypoint != null)
+            {
+                agent.SetDestination(targetWaypoint.position);
+                Debug.Log($"NPC indo para waypoint: {targetWaypoint.name}");
             }
         }
     }
@@ -85,51 +212,19 @@ public class Movimentar_NPC : MonoBehaviour
             agent.speed = runSpeed;
         }
 
-        if (isRunning)
-        {
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isRunning", true); // força a animação de corrida
-        }
-        else
-        {
-            bool isMovingNow = agent.velocity.magnitude > 0.1f;
-            animator.SetBool("isWalking", isMovingNow);
-            animator.SetBool("isRunning", false);
-        }
+        bool isMovingNow = agent.velocity.magnitude > 0.1f;
 
-    }
-
-    private void ProceedToNextWaypoint()
-    {
-        currentWaypointIndex++;
-
-        if (currentWaypointIndex >= waypoints.Length)
-        {
-            StopMovement();
-        }
-        else
-        {
-            SetDestinationToCurrentWaypoint();
-        }
-    }
-
-    private void StopMovement()
-    {
-        isMoving = false;
-        agent.isStopped = true;
-        animator.SetBool("isWalking", false);
-        animator.SetBool("isRunning", false);
-    }
-
-    private void SetDestinationToCurrentWaypoint()
-    {
-        if (waypoints != null && currentWaypointIndex < waypoints.Length)
-        {
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-        }
+        animator.SetBool("isWalking", isMovingNow && !isRunning);
+        animator.SetBool("isRunning", isMovingNow && isRunning);
     }
 
     private void OnDrawGizmos()
+    {
+        DrawWaypointsGizmos(waypoints01, currentWaypointIndex, isMoving, Color.red);
+        DrawWaypointsGizmos(waypoints02, currentWaypointIndex02, isMovingToWaypoints02, Color.cyan);
+    }
+
+    private void DrawWaypointsGizmos(Transform[] waypoints, int currentIndex, bool isMovingState, Color color)
     {
         if (waypoints == null || waypoints.Length == 0) return;
 
@@ -137,24 +232,13 @@ public class Movimentar_NPC : MonoBehaviour
         {
             if (waypoints[i] == null) continue;
 
-            Gizmos.color = Color.red;
+            Gizmos.color = (i == currentIndex && isMovingState) ? Color.green : color;
             Gizmos.DrawSphere(waypoints[i].position, 0.2f);
 
             if (i < waypoints.Length - 1 && waypoints[i + 1] != null)
             {
                 Gizmos.color = Color.yellow;
-                Vector3 start = waypoints[i].position;
-                Vector3 end = waypoints[i + 1].position;
-                int segments = 10;
-
-                for (int j = 0; j < segments; j++)
-                {
-                    float t1 = j / (float)segments;
-                    float t2 = (j + 1) / (float)segments;
-                    Vector3 pos1 = Vector3.Lerp(start, end, t1);
-                    Vector3 pos2 = Vector3.Lerp(start, end, t2);
-                    Gizmos.DrawLine(pos1, pos2);
-                }
+                Gizmos.DrawLine(waypoints[i].position, waypoints[i + 1].position);
             }
         }
     }

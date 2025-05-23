@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b68bc04503ab7f40adf0a1627df63f3, type: 3}
   m_Name: Falar_NPC
   m_EditorClassIdentifier: 
-  questName: Fale com o Padre
+  questName: '- Fale com o Padre'
   questDependencies: []
-  isCompleted: 0
+  isCompleted: 1
   isDiscovered: 1
   questType: 0
