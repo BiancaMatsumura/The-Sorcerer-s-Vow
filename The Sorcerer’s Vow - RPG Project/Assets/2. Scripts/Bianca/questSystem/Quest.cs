@@ -26,7 +26,6 @@ public class Quest : MonoBehaviour
         animator = GetComponent<Animator>();
         SubscribeToCurrentQuest();
         DialogueGameEvents.Instace.OnStartDialog += StartTalkingAnimation;
-
     }
 
     private void SubscribeToCurrentQuest()
@@ -38,7 +37,6 @@ public class Quest : MonoBehaviour
             currentQuest.OnQuestCompleted -= HandleQuestCompletion;
             currentQuest.OnQuestCompleted += HandleQuestCompletion;
 
-            // Garantir que a quest está no sistema
             if (questSystem != null && !questSystem.quests.Contains(currentQuest))
             {
                 questSystem.quests.Add(currentQuest);
@@ -61,7 +59,6 @@ public class Quest : MonoBehaviour
         Debug.Log($"Quest '{completedQuest.questName}' completada!");
         textOutput.text = $"Quest '{completedQuest.questName}' completada com sucesso!";
 
-        // Cancelar inscrição no evento OnFinishDialog antes de avançar
         DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
 
         Invoke(nameof(AdvanceToNextQuest), 2f);
@@ -69,7 +66,6 @@ public class Quest : MonoBehaviour
 
     private void AdvanceToNextQuest()
     {
-        // Desinscreve da quest atual antes de avançar
         if (IsValidIndex())
         {
             var currentQuest = questPairs[currentQuestIndex].questData;
@@ -81,8 +77,16 @@ public class Quest : MonoBehaviour
 
         if (IsValidIndex())
         {
+            var nextQuest = questPairs[currentQuestIndex].questData;
+
             SubscribeToCurrentQuest();
             UpdateQuestList();
+
+            // ✅ Ativando automaticamente a próxima quest
+            if (questSystem != null)
+            {
+                questSystem.ActivateQuest(nextQuest);
+            }
 
             var dialogData = GetCurrentDialogueData();
             if (dialogData != null)
@@ -90,7 +94,6 @@ public class Quest : MonoBehaviour
                 DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
             }
         }
-
 
         isTransitioning = false;
     }
@@ -113,7 +116,6 @@ public class Quest : MonoBehaviour
         if (questSystem.CheckQuest(quest.questName))
         {
             Debug.Log($"Quest {quest.questName} concluída com sucesso!");
-            // Cancelar inscrição no evento para evitar múltiplas chamadas
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             HandleQuestCompletion();
         }
@@ -134,11 +136,16 @@ public class Quest : MonoBehaviour
             Debug.Log("Player entrou na área da quest");
             var dialogData = GetCurrentDialogueData();
 
+            if (questSystem != null && IsValidIndex())
+            {
+                var currentQuest = questPairs[currentQuestIndex].questData;
+                questSystem.ActivateQuest(currentQuest);
+            }
+
             if (dialogData != null)
             {
                 textOutput.text = "Aperte E para falar.\nBotão Esquerdo do mouse para pular a animação.\nAperte Q para o próximo Diálogo";
 
-                // Remover inscrição anterior antes de inscrever novamente
                 DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
                 DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
 
@@ -147,8 +154,7 @@ public class Quest : MonoBehaviour
                     animator.SetBool("isTalking", true);
                 }
 
-
-                DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation; // Inscrever para parar a animação
+                DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
                 DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
             }
             else
@@ -160,25 +166,22 @@ public class Quest : MonoBehaviour
 
     private void StopTalkingAnimation()
     {
-        // Parar a animação de "isTalking" quando o diálogo terminar
-        animator.SetBool("isTalking", false);
-
-        // Cancelar inscrição para evitar múltiplas chamadas
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", false);
+        }
         DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
     }
+
     private void StartTalkingAnimation(DialogueDataSO dialogueData)
     {
-        // Verifica se é o diálogo atual antes de ativar a animação
         if (dialogueData == GetCurrentDialogueData() && animator != null)
         {
             animator.SetBool("isTalking", true);
-
-            // Garantir que a animação seja parada no final do diálogo
             DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
             DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {
@@ -187,7 +190,6 @@ public class Quest : MonoBehaviour
             Debug.Log("Player saiu da área da quest");
             textOutput.text = "Se aproxime novamente!";
 
-            // Remover inscrição no evento ao sair
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             DialogueGameEvents.Instace.PlayerExitedDialogueRange();
 
@@ -197,13 +199,11 @@ public class Quest : MonoBehaviour
 
     private void OnDisable()
     {
-        // Remover inscrição no evento quando o objeto for desativado
         DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
     }
 
     private void OnDestroy()
     {
-        // Limpar todas as inscrições
         if (IsValidIndex())
         {
             var currentQuest = questPairs[currentQuestIndex].questData;
@@ -212,6 +212,5 @@ public class Quest : MonoBehaviour
 
         DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
         DialogueGameEvents.Instace.OnStartDialog -= StartTalkingAnimation;
-
     }
 }

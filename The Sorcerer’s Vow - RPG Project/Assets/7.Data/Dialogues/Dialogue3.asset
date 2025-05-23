@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28880b16d4c27147bd8ac7f917989b4, type: 3}
+  m_Name: Dialogue3
+  m_EditorClassIdentifier: 
+  EntryNode: {fileID: 0}
+  AllNodes: []
+  Sentences:
+  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+    Content: "Certo!\nAgora, equipe a ess\xEAncia que voc\xEA havia coletado, \nse
+      aproxime do BROTO e conquiste o seu novo FRUTO"
+  - ActorData: {fileID: 11400000, guid: ee639ec02d26271458cd43ac547a515c, type: 2}
+    Content: "Ele poder\xE1 te conceder habilidades inimagin\xE1veis!"
