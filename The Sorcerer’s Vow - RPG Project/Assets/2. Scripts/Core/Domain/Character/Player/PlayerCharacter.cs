@@ -20,6 +20,8 @@ namespace _2._Scripts.Core.Domain.Character.Player
         [SerializeField] private Slider sliderLife;
         [SerializeField] private Slider sliderEnergy;
 
+        [SerializeField] private GameObject gameOverUI;
+
 
         [SerializeField]
         private InventoryController inventoryController;
@@ -62,6 +64,13 @@ namespace _2._Scripts.Core.Domain.Character.Player
                         currentEnergy = maxEnergy;
                 }
             }
+
+            if(isDead)
+            {
+                gameOverUI.SetActive(true);
+                
+            }
+            
 
         }
 

@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1. Scenes/CenasAntigas/LEVEL01.unity
     guid: 85e39334b806c1149bef2449c5a23851
-  - enabled: 1
+  - enabled: 0
     path: Assets/1. Scenes/CenasAntigas/CraftingScene.unity
     guid: 80bbacc4ded2861469df050c55c0f694
   - enabled: 0
@@ -29,10 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1. Scenes/Zigurat_Fase1.unity
     guid: 7c4ee9391871875409914e2bb84906c0
-  - enabled: 1
+  - enabled: 0
     path: Assets/1. Scenes/CenaStore.unity
     guid: 5688b4aab72ab5c40a147d97fa0bd741
-  - enabled: 1
+  - enabled: 0
     path: Assets/1. Scenes/SaveLoadScene.unity
     guid: 636cd5c892f27b04b893a20f1712f14e
   - enabled: 1

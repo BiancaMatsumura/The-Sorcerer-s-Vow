@@ -28,6 +28,10 @@ public class UIInventoryItem : MonoBehaviour,IPointerClickHandler,IBeginDragHand
     }
     public void ResetData()
     {
+        if (itemImage == null)
+        {
+            itemImage = GetComponent<Image>();
+        }
         itemImage.gameObject.SetActive(false);
         empty = true;
     }

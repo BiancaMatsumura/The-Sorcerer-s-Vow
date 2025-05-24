@@ -4,6 +4,9 @@ public class TeleportToNextLevel : MonoBehaviour
 {
     private FadeTransition fade;
 
+    [SerializeField]
+    private QuestData lastQuest;
+
     private void Start()
     {
         fade = FindFirstObjectByType<FadeTransition>();
@@ -13,7 +16,7 @@ public class TeleportToNextLevel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && lastQuest != null && lastQuest.isCompleted)
         {
             fade.nextSceneName = "Zigurat_Fase1"; // ou o nome correto da próxima cena
             fade.StartFade();
