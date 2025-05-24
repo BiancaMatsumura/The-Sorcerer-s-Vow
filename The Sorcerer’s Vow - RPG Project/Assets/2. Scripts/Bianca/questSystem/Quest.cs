@@ -200,12 +200,22 @@ public class Quest : MonoBehaviour
             Debug.Log("Player saiu da área da quest");
             textOutput.text = "Se aproxime novamente!";
 
+            // Parar animação de fala
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", false);
+            }
+
+            // Desinscrever para evitar múltiplas inscrições
+            DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
+
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             DialogueGameEvents.Instace.PlayerExitedDialogueRange();
 
             UpdateQuestList();
         }
     }
+
 
     private void OnDisable()
     {
