@@ -48,7 +48,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
             damageReductionMultiplier = 1f;
         }
 
-        public void ReduceHealth(float damage)
+        public virtual void ReduceHealth(float damage)
         {
             if (isImmuneToDamage)
             {

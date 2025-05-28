@@ -235,7 +235,7 @@ public class ThirdPersonController : MonoBehaviour
         if (playerCharacter.currentEnergy <= 0)
             return;
 
-        if (isStasis && !(var == 1 && !cc.isGrounded))
+        if (isStasis && !cc.isGrounded)
             return;
 
         currentAttackType = var;
