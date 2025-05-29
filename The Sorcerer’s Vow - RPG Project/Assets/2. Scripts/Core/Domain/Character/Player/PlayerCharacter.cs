@@ -16,9 +16,12 @@ namespace _2._Scripts.Core.Domain.Character.Player
         public float currentEnergy;
         public float energyReductionRate = 5f;
         public float energyRecoveryRate = 5f;
+        private Animator _animator; 
 
         [SerializeField] private Slider sliderLife;
         [SerializeField] private Slider sliderEnergy;
+
+        [SerializeField] private GameObject gameOverUI;
 
 
         [SerializeField]
@@ -35,16 +38,20 @@ namespace _2._Scripts.Core.Domain.Character.Player
             sliderEnergy.maxValue = maxEnergy;
             sliderEnergy.value = currentEnergy;
 
+            _animator = GetComponent<Animator>();
+
             SaveLoadProgressManager.LoadAllSaveDataFromFile();
             inventoryController = GetComponent<InventoryController>();
 
         }
-
+        
         public override void Update()
         {
             base.Update();
             sliderLife.value = currentHealth;
             sliderEnergy.value = currentEnergy;
+
+  
 
             if (currentEnergy < maxEnergy)
             {
@@ -63,8 +70,24 @@ namespace _2._Scripts.Core.Domain.Character.Player
                 }
             }
 
-        }
+            if(isDead)
+            {
+                _animator.Play("DIeAnimation");
+                gameOverUI.SetActive(true);
+                
+            }
+            
 
+        }
+        public override void ReduceHealth(float damage)
+        {   
+            base.ReduceHealth(damage);
+            _animator.Play("HitAnimation");
+        }
+       
+    
+          
+       
         public void ChangeVelocityTemporarily(int newSpeed, float duration)
         {
             StopCoroutine(nameof(ResetSpeedCoroutine)); // previne sobreposição

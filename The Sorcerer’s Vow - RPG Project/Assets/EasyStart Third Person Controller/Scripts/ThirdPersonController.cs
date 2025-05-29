@@ -36,7 +36,7 @@ public class ThirdPersonController : MonoBehaviour
     public CharacterController cc;
     [SerializeField]
     private PlayerCharacter playerCharacter;
-    [SerializeField] 
+    [SerializeField]
     private DialogueManager dialogueManager;
 
     void Start()
@@ -55,17 +55,14 @@ public class ThirdPersonController : MonoBehaviour
 
         if (dialogueActive)
         {
-            // Zera inputs e não processa movimentação ou ataque
             inputHorizontal = 0;
             inputVertical = 0;
             inputJump = false;
             inputSprint = false;
             inputCrouch = false;
-
-            return;  // Sai do Update, não processa nada.
+            return;
         }
 
-        // Captura de input somente se NÃO estiver em diálogo
         inputHorizontal = Input.GetAxis("Horizontal");
         inputVertical = Input.GetAxis("Vertical");
         inputJump = Input.GetAxis("Jump") == 1f;
@@ -96,8 +93,10 @@ public class ThirdPersonController : MonoBehaviour
             animator.SetBool("crouch", isCrouching);
 
             float minimumSpeed = 0.9f;
-            animator.SetBool("run", cc.velocity.magnitude > minimumSpeed);
-            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint && playerCharacter.currentEnergy > 0;
+            bool isMoving = cc.velocity.magnitude > minimumSpeed;
+
+
+            animator.SetBool("run", isMoving);
             animator.SetBool("sprint", isSprinting);
         }
 
@@ -134,15 +133,18 @@ public class ThirdPersonController : MonoBehaviour
         bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
 
         if (dialogueActive)
-            return;  // Impede movimentação física
+            return;
 
         float baseSpeed = playerCharacter.Speed;
         float velocityAdittion = 0;
+
+        isSprinting = inputSprint && cc.velocity.magnitude > 0.9f && playerCharacter.currentEnergy > 0;
 
         if (isSprinting)
             velocityAdittion = sprintAdittion;
         if (isCrouching)
             velocityAdittion = -(baseSpeed * 0.50f);
+
 
         float effectiveHorizontal = inputHorizontal;
         float effectiveVertical = inputVertical;
@@ -194,10 +196,24 @@ public class ThirdPersonController : MonoBehaviour
 
         cc.Move(moviment);
 
+        // Sprint: reduz energia apenas se tiver
         if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
         {
             float energyDrainPerSecond = playerCharacter.energyReductionRate;
             playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
+        }
+
+        // Recupera energia se NÃO estiver sprintando
+        if (!isSprinting && playerCharacter.currentEnergy < playerCharacter.maxEnergy)
+        {
+            float energyRecoveryPerSecond = playerCharacter.energyRecoveryRate;
+            playerCharacter.RecoverEnergy(energyRecoveryPerSecond * Time.deltaTime);
+        }
+
+        // Força parar de correr se energia acabar
+        if (playerCharacter.currentEnergy <= 0)
+        {
+            isSprinting = false;
         }
     }
 
@@ -219,7 +235,7 @@ public class ThirdPersonController : MonoBehaviour
         if (playerCharacter.currentEnergy <= 0)
             return;
 
-        if (isStasis && !(var == 1 && !cc.isGrounded))
+        if (isStasis && !cc.isGrounded)
             return;
 
         currentAttackType = var;

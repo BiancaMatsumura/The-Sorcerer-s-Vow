@@ -10,16 +10,18 @@ public class CraftingTrigger : MonoBehaviour
     [SerializeField]
     private GameObject interactObject;
 
-    [SerializeField] 
+    [SerializeField]
     private KeyCode interactionKey = KeyCode.E;
 
     [SerializeField] private AudioSource audioPadrao;
     private Transform mainCamera;
     private bool isIn = false;
+    public Animator PlayerAnimator;
 
     void Start()
     {
         mainCamera = Camera.main.transform;
+
     }
 
     void Update()
@@ -50,7 +52,7 @@ public class CraftingTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             isIn = false;
             interactObject.SetActive(false);
@@ -59,7 +61,7 @@ public class CraftingTrigger : MonoBehaviour
 
     private void TryCraft()
     {
-         Debug.Log("Tentando craftar...");
+        Debug.Log("Tentando craftar...");
         var player = GameObject.FindGameObjectWithTag("Player"); // Aqui buscamos o jogador.
         var weaponSystem = player.GetComponent<AgentWeapon>();
         if (weaponSystem == null || weaponSystem.CurrentIngredient == null) return;
@@ -80,6 +82,13 @@ public class CraftingTrigger : MonoBehaviour
 
             Debug.Log($"Verificando receita com item: {requiredItem.Name} (ID: {requiredItem.ID})");
 
+            // ✅ Aqui garantimos que só vai criar se o item equipado for o mesmo da receita.
+            if (requiredItem.ID != equippedItem.ID)
+            {
+                Debug.Log("Ingrediente equipado não corresponde ao necessário para esta receita.");
+                continue;
+            }
+
             if (recipe.resultItem.WorldPrefab != null)
             {
                 var instance = Instantiate(recipe.resultItem.WorldPrefab, transform.position + Vector3.up, Quaternion.identity);
@@ -90,12 +99,18 @@ public class CraftingTrigger : MonoBehaviour
                 weaponSystem.UnequipIngredient();
 
                 Debug.Log($"Criado: {recipe.resultItem.Name}");
+                PlayerAnimator.Play("CraftAnimation");
+
+                // ✅ Opcional: se quiser que só crafte uma vez e pare o loop:
+                break;
             }
             else
             {
                 Debug.LogWarning("Prefab do item de resultado não definido!");
             }
         }
-
     }
+
+
+
 }

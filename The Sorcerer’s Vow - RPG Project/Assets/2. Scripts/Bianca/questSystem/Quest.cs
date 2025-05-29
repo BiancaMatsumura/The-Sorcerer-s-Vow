@@ -15,18 +15,20 @@ public class Quest : MonoBehaviour
     [SerializeField] public TextMeshProUGUI textOutput;
 
     Animator animator;
+    private GameObject player;
 
     private QuestSystem questSystem;
     private int currentQuestIndex = 0;
     private bool isTransitioning = false;
-
     void Awake()
     {
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
         animator = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player");
         SubscribeToCurrentQuest();
         DialogueGameEvents.Instace.OnStartDialog += StartTalkingAnimation;
     }
+
 
     private void SubscribeToCurrentQuest()
     {
@@ -64,6 +66,7 @@ public class Quest : MonoBehaviour
         Invoke(nameof(AdvanceToNextQuest), 2f);
     }
 
+
     private void AdvanceToNextQuest()
     {
         if (IsValidIndex())
@@ -82,7 +85,6 @@ public class Quest : MonoBehaviour
             SubscribeToCurrentQuest();
             UpdateQuestList();
 
-            // ✅ Ativando automaticamente a próxima quest
             if (questSystem != null)
             {
                 questSystem.ActivateQuest(nextQuest);
@@ -96,7 +98,15 @@ public class Quest : MonoBehaviour
         }
 
         isTransitioning = false;
+
+        // ✅ FORÇA o playerInRange a false no DialogueManager
+        DialogueManager dm = Object.FindAnyObjectByType<DialogueManager>();
+        if (dm != null)
+        {
+            dm.playerInRange = false;
+        }
     }
+
 
     private void UpdateQuestList()
     {
@@ -190,12 +200,22 @@ public class Quest : MonoBehaviour
             Debug.Log("Player saiu da área da quest");
             textOutput.text = "Se aproxime novamente!";
 
+            // Parar animação de fala
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", false);
+            }
+
+            // Desinscrever para evitar múltiplas inscrições
+            DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
+
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             DialogueGameEvents.Instace.PlayerExitedDialogueRange();
 
             UpdateQuestList();
         }
     }
+
 
     private void OnDisable()
     {
@@ -217,6 +237,13 @@ public class Quest : MonoBehaviour
     public void OnPlayerEnterRange()
     {
         if (!IsValidIndex() || isTransitioning) return;
+
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance > 2f) // exemplo: 2 metros de distância mínima
+        {
+            Debug.Log("Muito longe para iniciar diálogo.");
+            return;
+        }
 
         Debug.Log("Quest: Player entrou na área.");
 
@@ -248,6 +275,7 @@ public class Quest : MonoBehaviour
             CheckQuest();
         }
     }
+
 
     public void OnPlayerExitRange()
     {

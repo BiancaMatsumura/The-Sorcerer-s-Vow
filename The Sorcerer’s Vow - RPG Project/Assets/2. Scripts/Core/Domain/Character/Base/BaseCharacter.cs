@@ -20,9 +20,12 @@ namespace _2._Scripts.Core.Domain.Character.Base
         private bool isImmuneToDamage = false;
         private Coroutine immunityCoroutine;
 
+        public bool isDead = false;
+
         public virtual void Start()
         {
             currentHealth = maxHealth;
+            isDead = false;
             Debug.Log("BaseCharacter Start");
         }
 
@@ -45,7 +48,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
             damageReductionMultiplier = 1f;
         }
 
-        public void ReduceHealth(float damage)
+        public virtual void ReduceHealth(float damage)
         {
             if (isImmuneToDamage)
             {
@@ -76,6 +79,7 @@ namespace _2._Scripts.Core.Domain.Character.Base
         public virtual void Die()
         {
             Debug.Log("Died");
+            isDead = true;
             currentHealth = maxHealth;
         }
 

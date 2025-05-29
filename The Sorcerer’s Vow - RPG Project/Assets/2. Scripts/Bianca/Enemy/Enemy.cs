@@ -97,7 +97,13 @@ public class Enemy : BaseCharacter
 
 
     }
-
+    public override void ReduceHealth(float damage)
+    {
+        if (!IsDead) {
+        animator.Play("HitAnimation");
+        }
+        base.ReduceHealth(damage); 
+    }
     private void UpdateState()
     {
         if (target == null)

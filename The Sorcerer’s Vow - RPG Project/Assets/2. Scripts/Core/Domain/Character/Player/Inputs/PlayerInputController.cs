@@ -24,7 +24,7 @@ namespace _2._Scripts.Core.Domain.Character.Player.Inputs
                     GameObject player = GameObject.FindGameObjectWithTag("Player");
                     PlayerCharacter playerCharacter = player.GetComponent<PlayerCharacter>();
                     //(saveShortcutInput as SaveShortcutInput).SetPlayerCharacter(playerCharacter);
-                    saveShortcutInput.input(pressedKey);
+                    //saveShortcutInput.input(pressedKey);
                 }
             }
 

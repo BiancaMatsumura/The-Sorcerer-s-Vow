@@ -41,10 +41,12 @@ public class DialogueManager : MonoBehaviour
     private List<Button> currentChoiceButtons = new List<Button>();
 
     // Flag to know if the player is in range (FIXED: Added declaration)
-    private bool playerInRange = false;
+    public bool playerInRange = false;
 
     void Start()
     {
+        playerInRange = false; // Initialize playerInRange to false
+
         state = StateDialogue.disabled;
         // Hide UI initially
         HideDialogue(); // Ensure UI is hidden at start
@@ -145,6 +147,7 @@ public class DialogueManager : MonoBehaviour
         // Check if player is in range, interaction key is pressed, a dialogue is available, and not already in dialogue
         if (playerInRange && Input.GetKeyDown(interactionKey) && currentDialogue != null && state == StateDialogue.disabled)
         {
+            Debug.Log($"Starting dialogue: {currentDialogue.name}");
             HandheldStartDialogueInternal(currentDialogue);
         }
 
