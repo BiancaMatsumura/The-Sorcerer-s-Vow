@@ -17,6 +17,9 @@ namespace ShopSystem
     public struct ShopItem
     {
         public ItemSO item;
-        public int price; // preço de compra (e talvez preço de venda também)
+        public int price;
+        public int minQuantity;
+        public int maxQuantity;
     }
+
 }

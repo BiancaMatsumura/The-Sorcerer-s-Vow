@@ -19,28 +19,26 @@ namespace ShopSystem
 
 
 
-        public void BuyItem(int shopItemIndex)
+        public void BuyItem(int shopItemIndex, int quantity)
         {
             if (shopItemIndex < 0 || shopItemIndex >= ShopSO.ShopItems.Count)
                 return;
 
-            if (purchasedItemIndices.Contains(shopItemIndex))
-            {
-                Debug.Log("Item já foi comprado anteriormente nesta loja.");
-                return;
-            }
-
             ShopItem itemToBuy = ShopSO.ShopItems[shopItemIndex];
             int playerMoney = GetCurrencyAmount();
+            int totalPrice = itemToBuy.price * quantity;
 
-            if (playerMoney >= itemToBuy.price)
+            if (playerMoney >= totalPrice)
             {
-                int remainingQuantity = playerInventory.AddItem(itemToBuy.item, 1);
-                if (remainingQuantity == 0)
+                int remainingQuantity = playerInventory.AddItem(itemToBuy.item, quantity);
+                int purchasedQuantity = quantity - remainingQuantity;
+
+                if (purchasedQuantity > 0)
                 {
-                    RemoveCurrency(itemToBuy.price);
-                    purchasedItemIndices.Add(shopItemIndex); // Marca como comprado
-                    Debug.Log($"Comprou {itemToBuy.item.name}");
+                    RemoveCurrency(itemToBuy.price * purchasedQuantity);
+                    Debug.Log($"Comprou {purchasedQuantity}x {itemToBuy.item.name}");
+
+                    
                 }
                 else
                 {
@@ -52,6 +50,7 @@ namespace ShopSystem
                 Debug.Log("Dinheiro insuficiente para comprar este item.");
             }
         }
+
 
         public bool HasItemBeenPurchased(int index)
         {

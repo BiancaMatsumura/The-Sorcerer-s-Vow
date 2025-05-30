@@ -37,11 +37,14 @@ public class UIShopPage : MonoBehaviour
 
             UIShopItem itemUI = Instantiate(shopItemPrefab, parentPanel);
             itemUI.SetData(
-                shopItem.item.ItemImage,
-                shopItem.price,
-                i,
-                HandleBuyItem
+            shopItem.item.ItemImage,
+            shopItem.price,
+            i,
+            HandleBuyItem,
+            shopItem.minQuantity,
+            shopItem.maxQuantity
             );
+
             if (shopReference.HasItemBeenPurchased(i))
             {
                 itemUI.SetUnavailable();
@@ -51,13 +54,11 @@ public class UIShopPage : MonoBehaviour
         }
     }
 
-    private void HandleBuyItem(int index)
+    private void HandleBuyItem(int index, int quantity)
     {
-        shopReference.BuyItem(index);
-        PopulateShopItems(); // Atualiza interface após compra
+        shopReference.BuyItem(index, quantity);
+        PopulateShopItems(); // Atualiza após compra
     }
-
-
 
 }
 

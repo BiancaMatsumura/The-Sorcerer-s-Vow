@@ -119,6 +119,8 @@ public class UIInventoryPage : MonoBehaviour
         // Update tab button visuals
         foreach (var tab in categoryTabs)
         {
+            if (tab.Value == null) continue; // <-- Adicionado: ignora botões destruídos
+
             Image tabImage = tab.Value.GetComponent<Image>();
             if (tabImage != null)
             {
@@ -141,44 +143,41 @@ public class UIInventoryPage : MonoBehaviour
     }
     private void UpdateItemsVisibility()
     {
-        // NÃO usaremos SetActive(false) para itens que não estão na categoria atual
-        // Em vez disso, vamos ajustar a visibilidade sem desativar o GameObject completamente
+        // Remove referências a itens destruídos
+        listOfUIItems = listOfUIItems.Where(item => item != null).ToList();
 
         if (currentCategory == ItemCategory.Geral)
         {
-            // No modo default, mostrar todos os slots (ocupados ou não)
             foreach (UIInventoryItem item in listOfUIItems)
             {
-                // Não desative o objeto, apenas ajuste a visibilidade se necessário
+                if (item == null) continue; // Adicionado: ignora itens destruídos
                 item.gameObject.SetActive(true);
             }
             return;
         }
 
-        // Para outras categorias, contamos quantos slots pertencem a essa categoria
         int visibleCount = 0;
 
-        // Primeiro, marque todos como invisíveis
         foreach (UIInventoryItem item in listOfUIItems)
         {
+            if (item == null) continue; // Adicionado: ignora itens destruídos
             item.gameObject.SetActive(false);
         }
 
-        // Depois, ative apenas os slots que contêm itens da categoria selecionada
-        // E os reposicione no início do conteúdo
         for (int i = 0; i < listOfUIItems.Count; i++)
         {
+            var item = listOfUIItems[i];
+            if (item == null) continue; // Adicionado: ignora itens destruídos
+
             if (slotCategories.TryGetValue(i, out ItemCategory category) &&
                 category == currentCategory)
             {
-                listOfUIItems[i].gameObject.SetActive(true);
-                // Reposicione o item na hierarquia para ficar na ordem correta visualmente
-                listOfUIItems[i].transform.SetSiblingIndex(visibleCount);
+                item.gameObject.SetActive(true);
+                item.transform.SetSiblingIndex(visibleCount);
                 visibleCount++;
             }
         }
 
-        // Force layout refresh
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentPanel);
     }
     public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity, ItemCategory category)
@@ -357,6 +356,7 @@ public class UIInventoryPage : MonoBehaviour
     {
         foreach (UIInventoryItem item in listOfUIItems)
         {
+            if (item == null) continue;
             item.Deselect();
         }
         itemActionPanel.Toggle(false);
@@ -390,6 +390,13 @@ public class UIInventoryPage : MonoBehaviour
         foreach (var category in categorizedItems.Keys.ToList())
         {
             categorizedItems[category].Clear();
+        }
+
+        // Limpe tabs destruídas do dicionário
+        foreach (var key in categoryTabs.Keys.ToList())
+        {
+            if (categoryTabs[key] == null)
+                categoryTabs.Remove(key);
         }
 
         // Reset para categoria padrão

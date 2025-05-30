@@ -53,7 +53,8 @@ public class ThirdPersonController : MonoBehaviour
     {
         bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
 
-        if (dialogueActive)
+        // Se o diálogo estiver ativo ou qualquer UI (inventário/loja), bloqueia entrada
+        if (dialogueActive || CameraController.isInventoryOpen)
         {
             inputHorizontal = 0;
             inputVertical = 0;
@@ -95,7 +96,6 @@ public class ThirdPersonController : MonoBehaviour
             float minimumSpeed = 0.9f;
             bool isMoving = cc.velocity.magnitude > minimumSpeed;
 
-
             animator.SetBool("run", isMoving);
             animator.SetBool("sprint", isSprinting);
         }
@@ -114,6 +114,10 @@ public class ThirdPersonController : MonoBehaviour
 
         HeadHittingDetect();
 
+        // ✅ BLOQUEIO DE ATAQUE CASO ALGUMA UI ESTEJA ABERTA
+        if (CameraController.isInventoryOpen)
+            return;
+
         if (Input.GetMouseButtonDown(0) && !isCrouching)
         {
             BattleSistem(1);
@@ -127,6 +131,7 @@ public class ThirdPersonController : MonoBehaviour
             BattleSistem(3);
         }
     }
+
 
     private void FixedUpdate()
     {

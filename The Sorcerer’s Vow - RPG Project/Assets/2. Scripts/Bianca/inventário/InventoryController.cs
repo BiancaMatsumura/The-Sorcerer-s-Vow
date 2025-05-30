@@ -21,11 +21,29 @@ public class InventoryController : MonoBehaviour
 
     [SerializeField] private UIManager uiManager;
 
+    [SerializeField] private GameObject notificationPanel;
+
 
     private void Start()
     {
         PrepareUI();
         PrepareInventoryData();
+        notificationPanel.SetActive(false);
+
+
+    }
+
+    private void HandleInventoryFull()
+    {
+        Debug.Log("Inventário está cheio!");
+        notificationPanel.SetActive(true);
+        Invoke(nameof(HideNotification), 2f); // Hide after 2 seconds
+    }
+
+    private object HideNotification()
+    {
+        notificationPanel.SetActive(false);
+        return null;
     }
 
     private void PrepareInventoryData()
@@ -54,6 +72,11 @@ public class InventoryController : MonoBehaviour
                 item.Value.quantity,
                 item.Value.item.Category
             );
+        }
+        
+        if (inventoryData.InventoryIsFull())
+        {
+            HandleInventoryFull();
         }
     }
 
@@ -177,7 +200,7 @@ public class InventoryController : MonoBehaviour
         }
         return sb.ToString();
     }
-    
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -185,7 +208,7 @@ public class InventoryController : MonoBehaviour
             uiManager.ToggleInventory();
         }
     }
-    
+
     public void ForceUpdateDescription(ItemSO item, List<ItemParameter> itemState)
     {
         Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
@@ -199,6 +222,6 @@ public class InventoryController : MonoBehaviour
             }
         }
     }
-    
+
     public InventorySO InventoryData => inventoryData;
 }

@@ -19,6 +19,13 @@ public class Item3D : MonoBehaviour
     private QuestData linkedQuest;
 
     public Quest quesCheck;
+    private InventoryController inventoryController;
+
+    private void Awake()
+    {
+        inventoryController = Object.FindAnyObjectByType<InventoryController>();
+    }
+
 
     public void DestroyItem()
     {
@@ -27,9 +34,19 @@ public class Item3D : MonoBehaviour
             return;
         }
 
-        GetComponent<Collider>().enabled = false;
-        StartCoroutine(AnimateItemPickup());
+        if (inventoryController.InventoryData.CanAddItem(InventoryItem, Quantity))
+        {
+            GetComponent<Collider>().enabled = false;
+            StartCoroutine(AnimateItemPickup());
+        }
+        else
+        {
+            Debug.Log("Não é possível coletar: inventário cheio.");
+        }
+
     }
+
+
 
     private IEnumerator AnimateItemPickup()
     {
@@ -45,7 +62,7 @@ public class Item3D : MonoBehaviour
             yield return null;
         }
 
-        if(quesCheck != null)
+        if (quesCheck != null)
         {
             quesCheck.CheckQuest();
         }

@@ -15,22 +15,22 @@ MonoBehaviour:
   inventoryItems:
   - quantity: 5
     item: {fileID: 11400000, guid: ef89107bc222d674aa45a07120e45135, type: 2}
-  - quantity: 0
-    item: {fileID: 0}
+    itemState: []
+  - quantity: 50
+    item: {fileID: 11400000, guid: 5f003d78aa4df0e49b8900303595fb6a, type: 2}
+    itemState: []
   - quantity: 1
     item: {fileID: 11400000, guid: 316dc1bfe0489b64289afaf2daef018a, type: 2}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 50
-    item: {fileID: 11400000, guid: 7e0665ecf19531a43a204c916ea5a1db, type: 2}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 0
-    item: {fileID: 0}
-  <Size>k__BackingField: 10
+    itemState:
+    - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
+      value: 100
+    - itemParameter: {fileID: 11400000, guid: e2ec2f0c575ec5f42b3a3219c866b282, type: 2}
+      value: 10
+  - quantity: 1
+    item: {fileID: 11400000, guid: 316dc1bfe0489b64289afaf2daef018a, type: 2}
+    itemState:
+    - itemParameter: {fileID: 11400000, guid: 6ead11072df2af04896f1fd64989fb89, type: 2}
+      value: 100
+    - itemParameter: {fileID: 11400000, guid: e2ec2f0c575ec5f42b3a3219c866b282, type: 2}
+      value: 10
+  <Size>k__BackingField: 56

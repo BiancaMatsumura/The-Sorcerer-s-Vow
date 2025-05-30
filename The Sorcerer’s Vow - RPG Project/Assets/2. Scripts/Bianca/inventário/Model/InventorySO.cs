@@ -7,13 +7,13 @@ using UnityEngine;
 namespace Inventory.Model
 {
     [CreateAssetMenu]
-public class InventorySO : ScriptableObject
-{
+    public class InventorySO : ScriptableObject
+    {
         [SerializeField]
         public List<InventoryItem> inventoryItems;
 
         [field: SerializeField]
-        public int Size { get; private set; } = 10;
+        public int Size { get; private set; } = 50;
 
         public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
 
@@ -70,11 +70,19 @@ public class InventorySO : ScriptableObject
                     return quantity;
                 }
             }
+
             return 0;
         }
 
+
         private bool IsInventoryFull()
             => inventoryItems.Where(item => item.IsEmpty).Any() == false;
+
+        public bool InventoryIsFull()
+        {
+            return IsInventoryFull();
+        }
+
 
         private int AddStackableItem(ItemSO item, int quantity)
         {
@@ -82,34 +90,41 @@ public class InventorySO : ScriptableObject
             {
                 if (inventoryItems[i].IsEmpty)
                     continue;
+
                 if (inventoryItems[i].item.ID == item.ID)
                 {
-                    int amountPossibleToTake =
-                        inventoryItems[i].item.MaxStackSize - inventoryItems[i].quantity;
+                    int amountPossibleToTake = inventoryItems[i].item.MaxStackSize - inventoryItems[i].quantity;
 
                     if (quantity > amountPossibleToTake)
                     {
-                        inventoryItems[i] = inventoryItems[i]
-                            .ChangeQuantity(inventoryItems[i].item.MaxStackSize);
+                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].item.MaxStackSize);
                         quantity -= amountPossibleToTake;
                     }
                     else
                     {
-                        inventoryItems[i] = inventoryItems[i]
-                            .ChangeQuantity(inventoryItems[i].quantity + quantity);
+                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity + quantity);
                         InformAboutChange();
                         return 0;
                     }
                 }
             }
-            while (quantity > 0 && IsInventoryFull() == false)
+
+            while (quantity > 0)
             {
+                if (IsInventoryFull())
+                {
+
+                    break;
+                }
+
                 int newQuantity = Mathf.Clamp(quantity, 0, item.MaxStackSize);
                 quantity -= newQuantity;
                 AddItemToFirstFreeSlot(item, newQuantity);
             }
+
             return quantity;
         }
+
 
         public void RemoveItem(int itemIndex, int amount)
         {
@@ -164,6 +179,32 @@ public class InventorySO : ScriptableObject
         {
             OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
         }
+
+        public bool HasItem(ItemSO questRequiredItem)
+        {
+            return inventoryItems.Any(slot => !slot.IsEmpty && slot.item == questRequiredItem && slot.quantity > 0);
+        }
+
+        public bool CanAddItem(ItemSO item, int quantity)
+        {
+            if (!item.IsStackable)
+            {
+                int freeSlots = inventoryItems.Count(i => i.IsEmpty);
+                return freeSlots >= quantity;
+            }
+            else
+            {
+                // Verifica se há espaço para stackar ou slots vazios
+                foreach (var invItem in inventoryItems)
+                {
+                    if (invItem.IsEmpty) return true;
+                    if (invItem.item == item && invItem.quantity < item.MaxStackSize) return true;
+                }
+                return false;
+            }
+        }
+
+
     }
 
     [Serializable]

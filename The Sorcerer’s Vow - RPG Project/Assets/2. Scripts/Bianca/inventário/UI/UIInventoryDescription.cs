@@ -19,18 +19,25 @@ public class UIInventoryDescription : MonoBehaviour
 
     public void ResetDescription()
     {
-        itemImage.gameObject.SetActive(false);
-        title.text = "";
-        description.text = "";
+        if (itemImage != null)
+            itemImage.gameObject.SetActive(false);
+        if (title != null)
+            title.text = "";
+        if (description != null)
+            description.text = "";
     }
 
-    public void SetDescription(Sprite sprite, string itemName,
-        string itemDescription)
+    public void SetDescription(Sprite sprite, string itemName, string itemDescription)
     {
-        itemImage.gameObject.SetActive(true);
-        itemImage.sprite = sprite;
-        title.text = itemName;
-        description.text = itemDescription;
+        if (itemImage != null)
+        {
+            itemImage.gameObject.SetActive(true);
+            itemImage.sprite = sprite;
+        }
+        if (title != null)
+            title.text = itemName;
+        if (description != null)
+            description.text = itemDescription;
     }
     
 }
