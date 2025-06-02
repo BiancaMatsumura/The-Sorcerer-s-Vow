@@ -28,16 +28,20 @@ public class UIInventoryItem : MonoBehaviour,IPointerClickHandler,IBeginDragHand
     }
     public void ResetData()
     {
+        if (this == null) return; // Adicionado: impede execução se o objeto foi destruído
+
         if (itemImage == null)
         {
             itemImage = GetComponent<Image>();
         }
-        itemImage.gameObject.SetActive(false);
+        if (itemImage != null)
+            itemImage.gameObject.SetActive(false);
         empty = true;
     }
     public void Deselect()
     {
-        borderImage.enabled = false;
+        if (borderImage != null)
+            borderImage.enabled = false;
     }
 
     public void SetData(Sprite sprite, int quantity)
@@ -50,7 +54,8 @@ public class UIInventoryItem : MonoBehaviour,IPointerClickHandler,IBeginDragHand
 
     public void Select()
     {
-        borderImage.enabled = true;
+        if (borderImage != null)
+            borderImage.enabled = true;
     }
 
 

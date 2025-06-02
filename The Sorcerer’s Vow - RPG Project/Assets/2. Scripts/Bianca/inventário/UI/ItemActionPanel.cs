@@ -16,9 +16,11 @@ public class ItemActionPanel : MonoBehaviour
 
         public void Toggle(bool val)
         {
+            if (this == null) return; // Evita erro se o painel foi destruído
             if (val == true)
                 RemoveOldButtons();
-            gameObject.SetActive(val);
+            if (gameObject != null)
+                gameObject.SetActive(val);
         }
 
         public void RemoveOldButtons()
@@ -28,4 +30,20 @@ public class ItemActionPanel : MonoBehaviour
                 Destroy(transformChildObjects.gameObject);
             }
         }
+}
+
+public class SomeOtherClass : MonoBehaviour
+{
+    [SerializeField]
+    private ItemActionPanel itemActionPanel;
+
+    private void SomeMethod()
+    {
+        // Some code...
+
+        if (itemActionPanel != null)
+            itemActionPanel.Toggle(false);
+
+        // Some more code...
+    }
 }

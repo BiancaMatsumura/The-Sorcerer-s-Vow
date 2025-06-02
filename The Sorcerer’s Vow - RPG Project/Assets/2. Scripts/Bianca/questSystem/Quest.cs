@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using Inventory.Model;
 
 [System.Serializable]
 public class QuestDialoguePair
@@ -14,21 +15,28 @@ public class Quest : MonoBehaviour
     [SerializeField] public List<QuestDialoguePair> questPairs;
     [SerializeField] public TextMeshProUGUI textOutput;
 
-    Animator animator;
+    [SerializeField] private ItemSO questRequiredItem; // ✅ Item necessário para completar a quest
+
+    private Animator animator;
     private GameObject player;
 
     private QuestSystem questSystem;
+    private InventoryController inventoryController; // ✅ Referência ao InventoryController
+
     private int currentQuestIndex = 0;
     private bool isTransitioning = false;
+
     void Awake()
     {
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
+        inventoryController = Object.FindAnyObjectByType<InventoryController>(); // ✅ Busca referência ao InventoryController
+
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
+
         SubscribeToCurrentQuest();
         DialogueGameEvents.Instace.OnStartDialog += StartTalkingAnimation;
     }
-
 
     private void SubscribeToCurrentQuest()
     {
@@ -66,7 +74,6 @@ public class Quest : MonoBehaviour
         Invoke(nameof(AdvanceToNextQuest), 2f);
     }
 
-
     private void AdvanceToNextQuest()
     {
         if (IsValidIndex())
@@ -99,14 +106,13 @@ public class Quest : MonoBehaviour
 
         isTransitioning = false;
 
-        // ✅ FORÇA o playerInRange a false no DialogueManager
+        // ✅ Força playerInRange a false
         DialogueManager dm = Object.FindAnyObjectByType<DialogueManager>();
         if (dm != null)
         {
             dm.playerInRange = false;
         }
     }
-
 
     private void UpdateQuestList()
     {
@@ -169,7 +175,15 @@ public class Quest : MonoBehaviour
             }
             else
             {
-                CheckQuest();
+                // ✅ Só chama CheckQuest se tiver o item necessário
+                if (inventoryController != null && inventoryController.InventoryData.HasItem(questRequiredItem))
+                {
+                    CheckQuest();
+                }
+                else
+                {
+                    Debug.Log("Não é possível completar a quest: item necessário não está no inventário.");
+                }
             }
         }
     }
@@ -200,13 +214,11 @@ public class Quest : MonoBehaviour
             Debug.Log("Player saiu da área da quest");
             textOutput.text = "Se aproxime novamente!";
 
-            // Parar animação de fala
             if (animator != null)
             {
                 animator.SetBool("isTalking", false);
             }
 
-            // Desinscrever para evitar múltiplas inscrições
             DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
 
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
@@ -215,7 +227,6 @@ public class Quest : MonoBehaviour
             UpdateQuestList();
         }
     }
-
 
     private void OnDisable()
     {
@@ -239,7 +250,7 @@ public class Quest : MonoBehaviour
         if (!IsValidIndex() || isTransitioning) return;
 
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance > 2f) // exemplo: 2 metros de distância mínima
+        if (distance > 2f)
         {
             Debug.Log("Muito longe para iniciar diálogo.");
             return;
@@ -272,10 +283,17 @@ public class Quest : MonoBehaviour
         }
         else
         {
-            CheckQuest();
+            // ✅ Só chama CheckQuest se tiver o item necessário
+            if (inventoryController != null && inventoryController.InventoryData.HasItem(questRequiredItem))
+            {
+                CheckQuest();
+            }
+            else
+            {
+                Debug.Log("Não é possível completar a quest: item necessário não está no inventário.");
+            }
         }
     }
-
 
     public void OnPlayerExitRange()
     {
@@ -287,5 +305,4 @@ public class Quest : MonoBehaviour
 
         UpdateQuestList();
     }
-
 }
