@@ -21,8 +21,10 @@ public class Item3D : MonoBehaviour
     public Quest quesCheck;
     private InventoryController inventoryController;
 
+    private Animation anim;
     private void Awake()
-    {
+    {   
+        anim = GetComponent<Animation>();
         inventoryController = Object.FindAnyObjectByType<InventoryController>();
     }
 
@@ -51,6 +53,7 @@ public class Item3D : MonoBehaviour
     private IEnumerator AnimateItemPickup()
     {
         audioSource.Play();
+        anim.Stop();
         Vector3 startScale = transform.localScale;
         Vector3 endScale = Vector3.zero;
         float currentTime = 0;
