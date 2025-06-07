@@ -53,7 +53,11 @@ public class Item3D : MonoBehaviour
     private IEnumerator AnimateItemPickup()
     {
         audioSource.Play();
-        anim.Stop();
+        if (anim != null)
+        {
+            anim.Stop();
+        }
+        
         Vector3 startScale = transform.localScale;
         Vector3 endScale = Vector3.zero;
         float currentTime = 0;

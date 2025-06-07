@@ -59,6 +59,19 @@ public class Enemy : BaseCharacter
         sliderLife.value = currentHealth;
 
         animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+                Debug.LogWarning($"{gameObject.name} não possui Animator nem em filhos!");
+            else if (animator.runtimeAnimatorController == null)
+                Debug.LogWarning($"{gameObject.name} Animator (em filho) sem Controller atribuído!");
+        }
+        else if (animator.runtimeAnimatorController == null)
+        {
+            Debug.LogWarning($"{gameObject.name} Animator sem Controller atribuído!");
+        }
+
         agent = GetComponent<NavMeshAgent>();
 
 
