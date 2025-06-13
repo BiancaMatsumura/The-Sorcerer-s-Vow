@@ -99,7 +99,11 @@ public class CraftingTrigger : MonoBehaviour
                 weaponSystem.UnequipIngredient();
 
                 Debug.Log($"Criado: {recipe.resultItem.Name}");
-                PlayerAnimator.Play("CraftAnimation");
+                if (PlayerAnimator != null)
+                {
+                    PlayerAnimator.Play("CraftAnimation");
+                }
+                
 
                 // ✅ Opcional: se quiser que só crafte uma vez e pare o loop:
                 break;

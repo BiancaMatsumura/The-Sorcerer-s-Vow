@@ -9,12 +9,14 @@ public class TriggerAtoII : MonoBehaviour
         atoIIPanel.SetActive(false);
         StartCoroutine(ShowPanel());
     }
-    
+
     IEnumerator ShowPanel()
     {
         yield return new WaitForSeconds(5f);
         Time.timeScale = 0f;
         atoIIPanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     
     }
 
