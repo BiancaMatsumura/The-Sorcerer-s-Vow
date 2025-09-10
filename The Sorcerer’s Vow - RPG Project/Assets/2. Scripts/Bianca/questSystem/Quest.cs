@@ -42,6 +42,12 @@ public class Quest : MonoBehaviour
     {
         if (IsValidIndex())
         {
+            var saveScript = FindAnyObjectByType<_2._Scripts.Core.Engine.Service.SaveLoad.SaveLoadProgressScript>();
+            if (saveScript != null)
+            {
+                saveScript.SaveCurrentPlayer();
+            }
+            
             Debug.Log($"Inscrevendo na quest: {questPairs[currentQuestIndex].questData.questName}");
             var currentQuest = questPairs[currentQuestIndex].questData;
             currentQuest.OnQuestCompleted -= HandleQuestCompletion;
@@ -64,6 +70,12 @@ public class Quest : MonoBehaviour
         if (isTransitioning) return;
 
         isTransitioning = true;
+        
+        var saveScript = FindAnyObjectByType<_2._Scripts.Core.Engine.Service.SaveLoad.SaveLoadProgressScript>();
+        if (saveScript != null)
+        {
+            saveScript.SaveCurrentPlayer();
+        }
 
         var completedQuest = questPairs[currentQuestIndex].questData;
         Debug.Log($"Quest '{completedQuest.questName}' completada!");
@@ -106,7 +118,6 @@ public class Quest : MonoBehaviour
 
         isTransitioning = false;
 
-        // ✅ Força playerInRange a false
         DialogueManager dm = Object.FindAnyObjectByType<DialogueManager>();
         if (dm != null)
         {
@@ -272,7 +283,7 @@ public class Quest : MonoBehaviour
 
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
-
+            
             if (animator != null)
             {
                 animator.SetBool("isTalking", true);
@@ -304,5 +315,20 @@ public class Quest : MonoBehaviour
         DialogueGameEvents.Instace.PlayerExitedDialogueRange();
 
         UpdateQuestList();
+    }
+
+    public int GetCurrentQuestIndex()
+    {
+        return currentQuestIndex;
+    }
+
+    public void SetCurrentQuestIndex(int index)
+    {
+        if (questPairs != null && index >= 0 && index < questPairs.Count)
+        {
+            currentQuestIndex = index;
+            SubscribeToCurrentQuest();
+            UpdateQuestList();
+        }
     }
 }

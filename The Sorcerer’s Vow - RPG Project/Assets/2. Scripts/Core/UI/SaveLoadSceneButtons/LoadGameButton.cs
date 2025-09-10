@@ -12,6 +12,7 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
         [SerializeField] private int slot = 0;
         [SerializeField] private TMPro.TMP_Text saveName;
         [SerializeField] private TMPro.TMP_Text saveLevel;
+        private string sceneName;
         
         private Image panel;
 
@@ -26,17 +27,17 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
             button.onClick.AddListener(OnPanelClick);
         }
 
-        public void SetTextData(string name, int level)
+        public void SetTextData(string name, int level, string scene)
         {
             saveName.text = name;
-            saveLevel.text = "Level: " + level.ToString();
+            sceneName = scene;
+            saveLevel.text = "Level: " + level;
         }
         
         private void OnPanelClick()
         {
             SaveLoadProgressManager.SetCurrentSlot(slot);
-            SceneManager.LoadScene("1. Scenes/CenaStore");
-            // loadSavePanel.RefreshScreen();
+            SceneManager.LoadScene(sceneName);
         }
         
     }

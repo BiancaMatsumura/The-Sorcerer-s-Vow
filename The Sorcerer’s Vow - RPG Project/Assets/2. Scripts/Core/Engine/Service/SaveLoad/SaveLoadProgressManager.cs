@@ -7,100 +7,65 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {
     public class SaveLoadProgressManager
     {
-        private static readonly string FileName = "save-data.json";
+        private static readonly string FileName = Path.Combine(Application.persistentDataPath, "save-data.json");
 
-        private static SaveFileDTO slot0;
-        private static SaveFileDTO slot1;
-        private static SaveFileDTO slot2;
+        private static SaveFileDTO[] _slots = new SaveFileDTO[3];
 
-        public static int CurrentSave = 0;
+        public static int CurrentSave { get; private set; }
 
-        public static void Save(int slot, PlayerCharacter playerCharacter)
+        public static void Save(int slot, PlayerCharacter playerCharacter, int currentQuestIndex = 0, string sceneName = "")
         {
-            if (slot == 0)
+            if (slot < 0 || slot > 2)
             {
-                slot0 = new SaveFileDTO(0, playerCharacter);
-            } else if (slot == 1)
-            {
-                slot1 = new SaveFileDTO(1, playerCharacter);
-            } else if (slot == 2)
-            {
-                slot2 = new SaveFileDTO(2, playerCharacter);
-            }
-            else
-            {
-                Debug.LogError("Invalid slot index provided for the save.");
+                Debug.LogError($"Invalid slot index {slot} provided for the save.");
                 throw new System.Exception("Invalid slot index provided for the save.");
             }
-
+            _slots[slot] = new SaveFileDTO(slot, playerCharacter, currentQuestIndex, sceneName);
             StoreSaveListToFile();
             CurrentSave = slot;
-            
-            Debug.Log("Save successful.");
+            Debug.Log($"Save successful in slot {slot}.");
         }
 
         private static void StoreSaveListToFile()
         {
-            var saves = new List<SaveFileDTO>();
-            saves.Add(slot0);
-            saves.Add(slot1);
-            saves.Add(slot2);
-            
+            var saves = new List<SaveFileDTO>(_slots);
             SaveFileModel.Instance.Saves = saves;
             string initialSaveJson = JsonUtility.ToJson(SaveFileModel.Instance);
-            
-            Debug.Log(initialSaveJson);
-            
-            using (FileStream file = new FileStream(FileName, FileMode.Create))
-            {
-                byte[] dataBytes = System.Text.Encoding.ASCII.GetBytes(initialSaveJson);
-                file.Write(dataBytes, 0, dataBytes.Length);
-            }
+            Debug.Log($"Saving data: {initialSaveJson}");
+            File.WriteAllText(FileName, initialSaveJson);
         }
-        
+
         public static void LoadAllSaveDataFromFile()
         {
             if (!File.Exists(FileName))
             {
+                _slots = new SaveFileDTO[3];
                 StoreSaveListToFile();
             }
             try
             {
-                using FileStream file = new FileStream(FileName, FileMode.Open);
-                byte[] dataBytes = new byte[file.Length];
-                file.Read(dataBytes, 0, dataBytes.Length);
-        
-                string encryptedData = System.Text.Encoding.ASCII.GetString(dataBytes);
-        
+                string encryptedData = File.ReadAllText(FileName);
                 SaveFileModel.Instance = JsonUtility.FromJson<SaveFileModel>(encryptedData);
-                
-                slot0 = SaveFileModel.Instance.Saves[0];
-                slot1 = SaveFileModel.Instance.Saves[1];
-                slot2 = SaveFileModel.Instance.Saves[2];
+                for (int i = 0; i < 3; i++)
+                {
+                    _slots[i] = (SaveFileModel.Instance.Saves != null && SaveFileModel.Instance.Saves.Count > i) ? SaveFileModel.Instance.Saves[i] : null;
+                }
             }
             catch (System.Exception e)
             {
-                Debug.LogError(e);
+                Debug.LogError($"Failed to load save data: {e}");
             }
         }
-        
+
         public static SaveFileDTO GetSlotDataFromSaveFile(int slot)
         {
-            switch (slot)
-            {
-                case 0:
-                    return slot0;
-                case 1:
-                    return slot1;
-                case 2:
-                    return slot2;
-                default:
-                    return null;
-            }
+            if (slot < 0 || slot > 2) return null;
+            return _slots[slot];
         }
 
         public static void SetCurrentSlot(int slot)
         {
+            if (slot < 0 || slot > 2) return;
             CurrentSave = slot;
         }
     }
