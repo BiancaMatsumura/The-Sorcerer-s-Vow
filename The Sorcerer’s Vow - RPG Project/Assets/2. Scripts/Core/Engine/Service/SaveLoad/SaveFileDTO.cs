@@ -7,26 +7,35 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
     [Serializable]
     public class SaveFileDTO
     {
-        public int slot = 0;
-        public PlayerDataDTO playerData;
-        public InventoryDTO inventory;
+        public int SlotIndex = 0;
+        public PlayerDataDTO PlayerData;
+        public InventoryDTO InventoryData;
+        public int CurrentQuestIndex = 0;
+        public string SceneName = "";
         
-        public SaveFileDTO(int slot, PlayerCharacter playerCharacter)
+        public SaveFileDTO(int slot, PlayerCharacter playerCharacter, int currentQuestIndex = 0, string sceneName = "")
         {
-            this.slot = slot;
-            if (playerCharacter)
+            SlotIndex = slot;
+            CurrentQuestIndex = currentQuestIndex;
+            SceneName = sceneName;
+            if (playerCharacter != null)
             {
-                playerData = new PlayerDataDTO(playerCharacter);
-                inventory = new InventoryDTO(playerCharacter);
+                PlayerData = new PlayerDataDTO(playerCharacter);
+                InventoryData = new InventoryDTO(playerCharacter);
             }
         }
 
-        public void SetPlayerCharacterSaveData(PlayerCharacter playerCharacter)
+        public void ApplyToPlayerCharacter(PlayerCharacter playerCharacter, Quest quest = null)
         {
-            playerCharacter.Name = playerData.Name;
-            playerCharacter.Level = playerData.Level;
-            playerCharacter.Speed = playerData.Speed;
-            playerCharacter.SetInitialPosition(playerData.Position);
+            if (PlayerData == null || playerCharacter == null) return;
+            playerCharacter.Name = PlayerData.Name;
+            playerCharacter.Level = PlayerData.Level;
+            playerCharacter.Speed = PlayerData.Speed;
+            playerCharacter.SetInitialPosition(PlayerData.Position);
+            if (quest != null)
+            {
+                quest.SetCurrentQuestIndex(CurrentQuestIndex);
+            }
         }
     }
 }

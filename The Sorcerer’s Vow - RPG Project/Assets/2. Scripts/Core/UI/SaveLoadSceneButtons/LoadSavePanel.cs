@@ -36,9 +36,9 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
             panelNewGame1.gameObject.SetActive(false);
             panelNewGame2.gameObject.SetActive(false);
             
-            if (slot0.playerData.Name != "")
+            if (slot0.PlayerData.Name != "")
             {
-                panelLoad0.SetTextData(slot0.playerData.Name, slot0.playerData.Level);
+                panelLoad0.SetTextData(slot0.PlayerData.Name, slot0.PlayerData.Level, slot0.SceneName);
                 panelLoad0.gameObject.SetActive(true);
             }
             else
@@ -46,9 +46,9 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
                 panelNewGame0.gameObject.SetActive(true);
             }
             
-            if (slot1.playerData.Name != "")
+            if (slot1.PlayerData.Name != "")
             {
-                panelLoad1.SetTextData(slot1.playerData.Name, slot1.playerData.Level);
+                panelLoad1.SetTextData(slot1.PlayerData.Name, slot1.PlayerData.Level, slot0.SceneName);
                 panelLoad1.gameObject.SetActive(true);
             }
             else
@@ -56,9 +56,9 @@ namespace _2._Scripts.Core.UI.SaveLoadSceneButtons
                 panelNewGame1.gameObject.SetActive(true);
             }
             
-            if (slot2.playerData.Name != "")
+            if (slot2.PlayerData.Name != "")
             {
-                panelLoad2.SetTextData(slot2.playerData.Name, slot2.playerData.Level);
+                panelLoad2.SetTextData(slot2.PlayerData.Name, slot2.PlayerData.Level, slot0.SceneName);
                 panelLoad2.gameObject.SetActive(true);
             }
             else

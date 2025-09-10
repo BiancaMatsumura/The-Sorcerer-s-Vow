@@ -9,6 +9,7 @@ TagManager:
   - playerbattle
   - Waypoint
   - Enemy
+  - SaveUi
   layers:
   - Default
   - TransparentFX
