@@ -2,6 +2,7 @@ using _2._Scripts.Core.Domain.Character.Base;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using System.Collections;
 
 public enum EnemyState
 {
@@ -112,10 +113,11 @@ public class Enemy : BaseCharacter
     }
     public override void ReduceHealth(float damage)
     {
-        if (!IsDead) {
-        animator.Play("HitAnimation");
+        if (!IsDead)
+        {
+            animator.Play("HitAnimation");
         }
-        base.ReduceHealth(damage); 
+        base.ReduceHealth(damage);
     }
     private void UpdateState()
     {
@@ -228,7 +230,7 @@ public class Enemy : BaseCharacter
 
     private void UpdateAnimator()
     {
-        
+
         animator.SetFloat("Speed", agent.speed);
 
         animator.SetBool("IsAttacking", currentState == EnemyState.Battle);
@@ -243,7 +245,13 @@ public class Enemy : BaseCharacter
         agent.enabled = false;
         animator.Play("Die");
         currentHealth = 0;
+        StartCoroutine(DestroyAfterDeath());
 
+    }
 
+    IEnumerator DestroyAfterDeath()
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(gameObject);
     }
 }

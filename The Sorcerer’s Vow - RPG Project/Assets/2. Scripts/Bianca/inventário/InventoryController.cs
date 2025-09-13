@@ -30,7 +30,6 @@ public class InventoryController : MonoBehaviour
         PrepareInventoryData();
         notificationPanel.SetActive(false);
 
-
     }
 
     private void HandleInventoryFull()
