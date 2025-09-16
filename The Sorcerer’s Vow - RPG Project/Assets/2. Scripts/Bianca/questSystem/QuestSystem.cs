@@ -6,11 +6,8 @@ using System.Linq;
 
 public enum QuestType
 {
-    Main,
-    Side,
-    Secret
+    Main
 }
-
 
 public class QuestSystem : MonoBehaviour
 {
@@ -18,16 +15,26 @@ public class QuestSystem : MonoBehaviour
     [SerializeField] public TextMeshProUGUI textOutput;
     public event Action OnAllQuestsCompleted;
 
+    private QuestData activeQuest; // quest ativa
+
     void Start()
     {
         ResetQuests();
 
-        UpdateUI();
+        // 🔹 Ativar a primeira quest automaticamente se existir
+        if (quests.Count > 0)
+        {
+            ActivateQuest(quests[0]);
+        }
+        else
+        {
+            UpdateUI();
+        }
 
         foreach (var quest in quests)
         {
-            quest.OnQuestCompleted -= UpdateUI;
-            quest.OnQuestCompleted += UpdateUI;
+            quest.OnQuestCompleted -= OnQuestCompletedHandler;
+            quest.OnQuestCompleted += OnQuestCompletedHandler;
         }
     }
 
@@ -35,38 +42,51 @@ public class QuestSystem : MonoBehaviour
     {
         foreach (var quest in quests)
         {
-            quest.OnQuestCompleted -= UpdateUI;
+            quest.OnQuestCompleted -= OnQuestCompletedHandler;
+        }
+    }
+
+    private void OnQuestCompletedHandler()
+    {
+        // se a quest ativa foi concluída, ativa a próxima da lista
+        if (activeQuest != null && activeQuest.isCompleted)
+        {
+            int index = quests.IndexOf(activeQuest);
+
+            if (index >= 0 && index + 1 < quests.Count)
+            {
+                ActivateQuest(quests[index + 1]);
+            }
+            else
+            {
+                activeQuest = null; // nenhuma próxima
+                UpdateUI();
+                OnAllQuestsCompleted?.Invoke();
+            }
+        }
+        else
+        {
+            UpdateUI();
         }
     }
 
     public void UpdateUI()
     {
-        string main = FormatQuestList(QuestType.Main);
-        string side = FormatQuestList(QuestType.Side);
-        string secret = FormatQuestList(QuestType.Secret);
+        if (textOutput == null) return;
 
-        string newText = $"<b>Main Quests:</b>\n{main}\n\n<b>Side Quests:</b>\n{side}\n\n<b>Secret Quests:</b>\n{secret}";
-
-        if (textOutput != null && textOutput.text != newText)
+        if (activeQuest != null && !activeQuest.isCompleted && activeQuest.isDiscovered)
         {
-            textOutput.text = newText;
+            textOutput.text = $"<b>Quest Ativa:</b>\n{activeQuest.questName}";
+        }
+        else
+        {
+            textOutput.text = "Nenhuma quest ativa.";
         }
 
         if (EmptyQuest().Count == 0)
         {
             OnAllQuestsCompleted?.Invoke();
         }
-    }
-
-
-    private string FormatQuestList(QuestType type)
-    {
-        var questsByType = quests
-            .Where(q => q.questType == type && !q.isCompleted && q.isDiscovered)
-            .Select(q => q.questName)
-            .ToList();
-
-        return questsByType.Count > 0 ? string.Join("\n", questsByType) : "Nenhuma";
     }
 
     public bool CheckQuests()
@@ -103,7 +123,6 @@ public class QuestSystem : MonoBehaviour
                     if (!quest.isCompleted)
                     {
                         quest.CompleteQuest();
-                        UpdateUI();
                         return true;
                     }
                     return false;
@@ -140,6 +159,7 @@ public class QuestSystem : MonoBehaviour
         {
             quest.isCompleted = false;
         }
+        activeQuest = null;
     }
 
     public void NotifyItemCollected(QuestData quest)
@@ -147,29 +167,25 @@ public class QuestSystem : MonoBehaviour
         if (quest != null && CanCompleteQuest(quest) && !quest.isCompleted)
         {
             quest.CompleteQuest();
-            UpdateUI();
         }
     }
 
-
     public void ActivateQuest(QuestData quest)
     {
-        if (quest != null && !quests.Contains(quest))
+        if (quest == null) return;
+
+        if (!quests.Contains(quest))
         {
             quests.Add(quest);
         }
 
-        
         quest.isDiscovered = true;
+        activeQuest = quest; // define a quest ativa
 
-        quest.OnQuestCompleted -= UpdateUI;
-        quest.OnQuestCompleted += UpdateUI;
         UpdateUI();
 
-        Debug.Log($"Quest '{quest.questName}' ativada e agora visível!");
+        Debug.Log($"Quest '{quest.questName}' ativada como ativa!");
     }
-
-
 
     public List<QuestData> GetQuestsByType(QuestType type)
     {

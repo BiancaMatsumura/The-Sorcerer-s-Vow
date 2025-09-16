@@ -29,7 +29,7 @@ public class Quest : MonoBehaviour
     void Awake()
     {
         questSystem = Object.FindAnyObjectByType<QuestSystem>();
-        inventoryController = Object.FindAnyObjectByType<InventoryController>(); // ✅ Busca referência ao InventoryController
+        inventoryController = Object.FindAnyObjectByType<InventoryController>(); 
 
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -160,100 +160,8 @@ public class Quest : MonoBehaviour
     {
         if (other.CompareTag("Player") && IsValidIndex() && !isTransitioning)
         {
-            Debug.Log("Player entrou na área da quest");
-            var dialogData = GetCurrentDialogueData();
-
-            if (questSystem != null && IsValidIndex())
-            {
-                var currentQuest = questPairs[currentQuestIndex].questData;
-                questSystem.ActivateQuest(currentQuest);
-            }
-
-            if (dialogData != null)
-            {
-                textOutput.text = "Aperte E para falar.\nBotão Esquerdo do mouse para pular a animação.\nAperte Q para o próximo Diálogo";
-
-                DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
-                DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
-
-                if (animator != null)
-                {
-                    animator.SetBool("isTalking", true);
-                }
-
-                DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
-                DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
-            }
-            else
-            {
-                // ✅ Só chama CheckQuest se tiver o item necessário
-                if (inventoryController != null && inventoryController.InventoryData.HasItem(questRequiredItem))
-                {
-                    CheckQuest();
-                }
-                else
-                {
-                    Debug.Log("Não é possível completar a quest: item necessário não está no inventário.");
-                }
-            }
+            HandlePlayerEnter();
         }
-    }
-
-    private void StopTalkingAnimation()
-    {
-        if (animator != null)
-        {
-            animator.SetBool("isTalking", false);
-        }
-        DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
-    }
-
-    private void StartTalkingAnimation(DialogueDataSO dialogueData)
-    {
-        if (dialogueData == GetCurrentDialogueData() && animator != null)
-        {
-            animator.SetBool("isTalking", true);
-            DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
-            DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player saiu da área da quest");
-            textOutput.text = "Se aproxime novamente!";
-
-            if (animator != null)
-            {
-                animator.SetBool("isTalking", false);
-            }
-
-            DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
-
-            DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
-            DialogueGameEvents.Instace.PlayerExitedDialogueRange();
-
-            UpdateQuestList();
-        }
-    }
-
-    private void OnDisable()
-    {
-        DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
-    }
-
-    private void OnDestroy()
-    {
-        if (IsValidIndex())
-        {
-            var currentQuest = questPairs[currentQuestIndex].questData;
-            currentQuest.OnQuestCompleted -= HandleQuestCompletion;
-        }
-
-        DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
-        DialogueGameEvents.Instace.OnStartDialog -= StartTalkingAnimation;
     }
 
     public void OnPlayerEnterRange()
@@ -267,8 +175,12 @@ public class Quest : MonoBehaviour
             return;
         }
 
-        Debug.Log("Quest: Player entrou na área.");
+        HandlePlayerEnter();
+    }
 
+    private void HandlePlayerEnter()
+    {
+        Debug.Log("Player entrou na área da quest");
         var dialogData = GetCurrentDialogueData();
 
         if (questSystem != null)
@@ -283,8 +195,9 @@ public class Quest : MonoBehaviour
 
             DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
             DialogueGameEvents.Instace.OnFinishDialog += CheckQuest;
-            
-            if (animator != null)
+
+            // ✅ Só ativa animação se NPC não estiver andando ou correndo
+            if (animator != null && !animator.GetBool("isWalking") && !animator.GetBool("isRunning"))
             {
                 animator.SetBool("isTalking", true);
             }
@@ -306,15 +219,74 @@ public class Quest : MonoBehaviour
         }
     }
 
+    private void StopTalkingAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", false);
+        }
+        DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
+    }
+
+    private void StartTalkingAnimation(DialogueDataSO dialogueData)
+    {
+        if (dialogueData == GetCurrentDialogueData() && animator != null)
+        {
+            // ✅ Só ativa animação se NPC não estiver andando ou correndo
+            if (!animator.GetBool("isWalking") && !animator.GetBool("isRunning"))
+            {
+                animator.SetBool("isTalking", true);
+                DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
+                DialogueGameEvents.Instace.OnFinishDialog += StopTalkingAnimation;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            HandlePlayerExit();
+        }
+    }
+
     public void OnPlayerExitRange()
     {
-        Debug.Log("Quest: Player saiu da área.");
+        HandlePlayerExit();
+    }
+
+    private void HandlePlayerExit()
+    {
+        Debug.Log("Player saiu da área da quest");
         textOutput.text = "Se aproxime novamente!";
 
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", false);
+        }
+
+        DialogueGameEvents.Instace.OnFinishDialog -= StopTalkingAnimation;
         DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
         DialogueGameEvents.Instace.PlayerExitedDialogueRange();
 
         UpdateQuestList();
+    }
+
+    private void OnDisable()
+    {
+        DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
+    }
+
+    private void OnDestroy()
+    {
+        if (IsValidIndex())
+        {
+            var currentQuest = questPairs[currentQuestIndex].questData;
+            currentQuest.OnQuestCompleted -= HandleQuestCompletion;
+        }
+
+        DialogueGameEvents.Instace.OnFinishDialog -= CheckQuest;
+        DialogueGameEvents.Instace.OnStartDialog -= StartTalkingAnimation;
     }
 
     public int GetCurrentQuestIndex()
