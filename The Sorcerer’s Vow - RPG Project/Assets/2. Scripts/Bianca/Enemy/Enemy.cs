@@ -56,6 +56,16 @@ public class Enemy : BaseCharacter
 
         base.Start();
 
+        // Se não tiver pontos setados manualmente, busca no manager
+        if (patrolPoints == null || patrolPoints.Length == 0)
+        {
+            PatrolManager manager = FindFirstObjectByType<PatrolManager>();
+            if (manager != null)
+            {
+                patrolPoints = manager.GetPatrolPoints();
+            }
+        }
+
         sliderLife.maxValue = maxHealth;
         sliderLife.value = currentHealth;
 
@@ -176,6 +186,14 @@ public class Enemy : BaseCharacter
             GoToNextPatrolPoint();
         }
     }
+    public void SetPatrolPoints(Transform[] points)
+    {
+        patrolPoints = points;
+
+        if (patrolPoints.Length > 0 && agent != null)
+            GoToNextPatrolPoint();
+    }
+
 
     private void GoToNextPatrolPoint()
     {
@@ -252,6 +270,7 @@ public class Enemy : BaseCharacter
     IEnumerator DestroyAfterDeath()
     {
         yield return new WaitForSeconds(5f);
+
         Destroy(gameObject);
     }
 }
