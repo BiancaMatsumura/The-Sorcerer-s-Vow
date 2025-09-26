@@ -4,7 +4,8 @@ using UnityEngine;
 public enum WeaponOwnerType
 {
     Player,
-    Enemy
+    Enemy,
+    Toten
 }
 
 public class WeaponDamageTrigger : MonoBehaviour
@@ -14,6 +15,8 @@ public class WeaponDamageTrigger : MonoBehaviour
     private AgentWeapon weapon;
     private PlayerCharacter player;
     private Enemy enemy;
+    private TotenSpawnEnemy toten;
+    [SerializeField] private float damage = 20f;
 
     private void Start()
     {
@@ -26,6 +29,10 @@ public class WeaponDamageTrigger : MonoBehaviour
         else if (ownerType == WeaponOwnerType.Enemy)
         {
             enemy = GetComponentInParent<Enemy>();
+        }
+        else if (ownerType == WeaponOwnerType.Toten)
+        {
+            toten = GetComponentInParent<TotenSpawnEnemy>();
         }
     }
 
@@ -46,6 +53,13 @@ public class WeaponDamageTrigger : MonoBehaviour
                 detectedEnemy.ReduceHealth(dano);
                 weapon.UseWeapon();
             }
+
+            TotenSpawnEnemy toten = other.GetComponentInParent<TotenSpawnEnemy>();
+            if (toten != null)
+            {
+                toten.TakeDamage(damage);
+                return;
+            }
         }
         else if (ownerType == WeaponOwnerType.Enemy)
         {
@@ -56,5 +70,6 @@ public class WeaponDamageTrigger : MonoBehaviour
                 //weapon.UseWeapon();
             }
         }
+
     }
 }

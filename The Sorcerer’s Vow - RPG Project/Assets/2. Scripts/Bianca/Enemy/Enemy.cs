@@ -15,6 +15,7 @@ public class Enemy : BaseCharacter
 {
     [Header("UI")]
     [SerializeField] private Slider sliderLife;
+    private Transform mainCamera;
 
     [Header("AI Settings")]
     public EnemyState currentState;
@@ -52,7 +53,7 @@ public class Enemy : BaseCharacter
 
     public override void Start()
     {
-
+        mainCamera = Camera.main.transform;
 
         base.Start();
 
@@ -98,6 +99,12 @@ public class Enemy : BaseCharacter
         base.Update();
 
         sliderLife.value = currentHealth;
+
+        if (sliderLife.gameObject.activeSelf && target != null)
+        {
+            sliderLife.transform.LookAt(mainCamera);
+            sliderLife.transform.Rotate(0f, 180f, 0f);
+        }
 
         if (!IsDead)
         {

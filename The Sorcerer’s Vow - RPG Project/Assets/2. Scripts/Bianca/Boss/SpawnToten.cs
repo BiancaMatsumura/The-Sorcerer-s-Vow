@@ -7,9 +7,11 @@ public class SpawnToten : MonoBehaviour
     [SerializeField] private GameObject totenPrefab;
     private BoxCollider col;
 
+
     void Awake()
     {
         col = GetComponent<BoxCollider>();
+        
     }
 
     public void Spawn()
@@ -52,6 +54,7 @@ public class SpawnToten : MonoBehaviour
             }
 
         }
+        
 
     }
 }
