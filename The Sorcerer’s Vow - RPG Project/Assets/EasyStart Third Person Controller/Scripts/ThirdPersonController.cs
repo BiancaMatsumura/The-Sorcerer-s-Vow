@@ -39,6 +39,11 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField]
     private DialogueManager dialogueManager;
 
+    // --- FORÇA EXTERNA (vento/campo magnético) ---
+    private Vector3 externalForce = Vector3.zero;
+    [SerializeField] private float externalForceDecay = 2f; // quanto mais alto, mais rápido a força some
+
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -136,34 +141,31 @@ public class ThirdPersonController : MonoBehaviour
     private void FixedUpdate()
     {
         bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
-
-        if (dialogueActive)
-            return;
+        if (dialogueActive) return;
 
         float baseSpeed = playerCharacter.Speed;
         float velocityAdittion = 0;
 
+        // Sprint
         isSprinting = inputSprint && cc.velocity.magnitude > 0.9f && playerCharacter.currentEnergy > 0;
+        if (isSprinting) velocityAdittion = sprintAdittion;
+        if (isCrouching) velocityAdittion = -(baseSpeed * 0.50f);
 
-        if (isSprinting)
-            velocityAdittion = sprintAdittion;
-        if (isCrouching)
-            velocityAdittion = -(baseSpeed * 0.50f);
-
-
+        // Ajuste de input para air kick
         float effectiveHorizontal = inputHorizontal;
         float effectiveVertical = inputVertical;
-
         if (isAirKicking)
         {
             effectiveHorizontal = lastHorizontalInput * airKickMomentumMultiplier;
             effectiveVertical = lastVerticalInput * airKickMomentumMultiplier;
         }
 
+        // Direção horizontal
         float directionX = effectiveHorizontal * (baseSpeed + velocityAdittion) * Time.deltaTime;
         float directionZ = effectiveVertical * (baseSpeed + velocityAdittion) * Time.deltaTime;
-        float directionY = 0;
 
+        // Direção vertical (jump + gravidade)
+        float directionY = 0;
         if (isJumping)
         {
             directionY = Mathf.SmoothStep(jumpForce, jumpForce * 0.30f, jumpElapsedTime / jumpTime) * Time.deltaTime;
@@ -174,20 +176,19 @@ public class ThirdPersonController : MonoBehaviour
                 jumpElapsedTime = 0;
             }
         }
-
         directionY -= gravity * Time.deltaTime;
 
+        // Direção baseada na câmera
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
-
         forward.y = 0;
         right.y = 0;
         forward.Normalize();
         right.Normalize();
-
         forward *= directionZ;
         right *= directionX;
 
+        // Rotação do player
         if (directionX != 0 || directionZ != 0)
         {
             float angle = Mathf.Atan2(forward.x + right.x, forward.z + right.z) * Mathf.Rad2Deg;
@@ -195,33 +196,37 @@ public class ThirdPersonController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.15f);
         }
 
+        // Movimento final
         Vector3 verticalDirection = Vector3.up * directionY;
         Vector3 horizontalDirection = forward + right;
+
+        // --- SOMAR FORÇA EXTERNA ---
+        horizontalDirection += externalForce;
+
         Vector3 moviment = verticalDirection + horizontalDirection;
 
         cc.Move(moviment);
 
-        // Sprint: reduz energia apenas se tiver
+        // --- REDUZIR FORÇA EXTERNA GRADUALMENTE ---
+        externalForce = Vector3.Lerp(externalForce, Vector3.zero, Time.deltaTime * externalForceDecay);
+
+        // Energia
         if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
         {
             float energyDrainPerSecond = playerCharacter.energyReductionRate;
             playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
         }
-
-        // Recupera energia se NÃO estiver sprintando
         if (!isSprinting && playerCharacter.currentEnergy < playerCharacter.maxEnergy)
         {
             float energyRecoveryPerSecond = playerCharacter.energyRecoveryRate;
             playerCharacter.RecoverEnergy(energyRecoveryPerSecond * Time.deltaTime);
         }
-
-        // Força parar de correr se energia acabar
-        if (playerCharacter.currentEnergy <= 0)
-        {
-            isSprinting = false;
-        }
+        if (playerCharacter.currentEnergy <= 0) isSprinting = false;
     }
-
+    public void AddExternalForce(Vector3 force)
+    {
+        externalForce += force;
+    }
     void HeadHittingDetect()
     {
         float headHitDistance = 1.1f;

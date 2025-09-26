@@ -53,6 +53,7 @@ public class Enemy : BaseCharacter
 
     public override void Start()
     {
+
         mainCamera = Camera.main.transform;
 
         base.Start();
@@ -255,11 +256,17 @@ public class Enemy : BaseCharacter
 
     private void UpdateAnimator()
     {
+        if (animator == null || agent == null) return;
 
-        animator.SetFloat("Speed", agent.speed);
+        // velocidade atual (m/s)
+        float currentVelocity = agent.velocity.magnitude;
+
+        // aplica no Animator com damping (suaviza a transição)
+        animator.SetFloat("Speed", currentVelocity, 0.1f, Time.deltaTime);
 
         animator.SetBool("IsAttacking", currentState == EnemyState.Battle);
     }
+
 
 
 
