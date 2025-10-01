@@ -49,15 +49,8 @@ public class TotenSpawnEnemy : MonoBehaviour
             sliderLife.maxValue = maxHealth;
             sliderLife.value = currentHealth;
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player entrou no totem");
-
-        }
+        StartCoroutine(SpawnDelay(3));
     }
 
     public void TakeDamage(float damage)
@@ -155,5 +148,11 @@ public class TotenSpawnEnemy : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
         }
         isSpawned = true;
+    }
+
+    IEnumerator SpawnDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartCoroutine(SpawnRoutine());
     }
 }

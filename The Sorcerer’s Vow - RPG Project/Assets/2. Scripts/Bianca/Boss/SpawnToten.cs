@@ -31,11 +31,6 @@ public class SpawnToten : MonoBehaviour
         return col.transform.position + col.transform.rotation * new Vector3(x, y, z);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, GetComponent<BoxCollider>().size);
-    }
 
     void Start()
     {
