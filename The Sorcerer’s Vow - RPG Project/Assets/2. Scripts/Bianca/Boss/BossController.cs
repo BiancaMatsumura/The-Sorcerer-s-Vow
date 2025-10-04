@@ -46,10 +46,10 @@ public class BossController : MonoBehaviour
                 StartCoroutine(HandleState());
         }
 
-        if (Input.GetMouseButtonDown(0)) // clique esquerdo
+        /*if (Input.GetMouseButtonDown(0)) // clique esquerdo
         {
             boss.GetComponent<BossCharacter>().ReduceHealth(5f);
-        }
+        }*/
     }
 
     IEnumerator HandleState()

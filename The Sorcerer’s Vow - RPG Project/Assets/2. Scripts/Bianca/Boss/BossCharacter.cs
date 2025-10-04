@@ -47,6 +47,27 @@ public class BossCharacter : BaseCharacter
         }
     }
 
+    public override void ReduceHealth(float damage)
+    {
+        if (isDead) return;
+
+        // Aplica defesa do boss (pode vir da BaseCharacter)
+        float finalDamage = Mathf.Max(damage - DefensePower, 1f);
+
+        currentHealth -= finalDamage;
+
+        if (sliderLife != null)
+            sliderLife.value = currentHealth;
+
+        Debug.Log($"Boss recebeu {finalDamage} de dano. Vida atual: {currentHealth}");
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+
     public override void Die()
     {
         currentLives--;

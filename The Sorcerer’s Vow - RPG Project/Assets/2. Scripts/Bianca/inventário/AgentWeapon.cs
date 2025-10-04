@@ -29,6 +29,14 @@ public class AgentWeapon : MonoBehaviour
     // Novo booleano para verificar se há uma arma equipada
     public bool HasWeapon { get; private set; } = false;
 
+    // Referência ao trigger de dano
+    private WeaponDamageTrigger weaponTrigger;
+
+    private void Awake()
+    {
+        weaponTrigger = GetComponentInChildren<WeaponDamageTrigger>();
+    }
+
     public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
     {
         anim = GetComponent<Animator>();
@@ -50,7 +58,6 @@ public class AgentWeapon : MonoBehaviour
 
         ApplyWeaponStats(itemCurrentState);
 
-        // Atualiza o booleano para indicar que há uma arma equipada
         HasWeapon = true;
     }
 
@@ -76,7 +83,6 @@ public class AgentWeapon : MonoBehaviour
     {
         if (weapon == null || itemCurrentState == null) return;
 
-        // Reduz 1 ponto de durabilidade
         for (int i = 0; i < itemCurrentState.Count; i++)
         {
             if (itemCurrentState[i].itemParameter.ParameterName == "Durabilidade")
@@ -91,7 +97,6 @@ public class AgentWeapon : MonoBehaviour
             }
         }
 
-        // Atualiza visual da descrição no inventário (se ele estiver aberto)
         Object.FindFirstObjectByType<InventoryController>()?.ForceUpdateDescription(weapon, itemCurrentState);
     }
 
@@ -105,7 +110,7 @@ public class AgentWeapon : MonoBehaviour
                 return param.value;
         }
 
-        return 0; // Sem dano
+        return 0; 
     }
 
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
@@ -145,8 +150,12 @@ public class AgentWeapon : MonoBehaviour
     {
         weapon = null;
         itemCurrentState = null;
-
-        // Atualiza o booleano para indicar que não há arma equipada
         HasWeapon = false;
+    }
+
+    // Chamado no início da animação de ataque
+    public void ResetWeaponHitList()
+    {
+        weaponTrigger?.ResetHits();
     }
 }

@@ -727,7 +727,7 @@ MonoBehaviour:
   sliderLife: {fileID: 5740058912457600206}
   isSpawned: 0
   enemyPrefab: {fileID: 4794974069567636239, guid: b01f798bd81989e4c9435913be4b6f41, type: 3}
-  enemyQuantity: 3
+  enemyQuantity: 1
   spawnInterval: 10
   spawnQuantity: 3
 --- !u!65 &2770317803024512772
