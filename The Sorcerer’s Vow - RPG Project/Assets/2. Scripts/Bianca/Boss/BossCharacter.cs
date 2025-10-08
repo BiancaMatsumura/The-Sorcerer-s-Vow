@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using _2._Scripts.Core.Domain.Character.Base;
 using UnityEngine.UI;
 
@@ -15,35 +16,49 @@ public class BossCharacter : BaseCharacter
 
     [Header("Multiplicadores da Segunda Vida")]
     public float secondLifeAttackMultiplier = 1.5f;
-    public float secondLifeDefenseMultiplier = 0.8f; // recebe menos dano
+    public float secondLifeDefenseMultiplier = 0.8f;
     public float secondLifeSpeedMultiplier = 1.2f;
 
     [Header("Referências")]
-    [SerializeField] private BossController bossController; // controla ataques/animações
-    //private Animator anim;
+    [SerializeField] private BossController bossController;
+    [SerializeField] private NavMeshAgent agent;
+    private BossAI bossAI;
 
     public override void Start()
     {
         base.Start();
         mainCamera = Camera.main.transform;
         currentLives = totalLives;
+        
         if (bossController == null) bossController = GetComponent<BossController>();
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (bossAI == null) bossAI = GetComponent<BossAI>();
 
         if (sliderLife != null)
         {
             sliderLife.maxValue = maxHealth;
             sliderLife.value = currentHealth;
         }
+
+        // Configura NavMeshAgent
+        if (agent != null)
+        {
+            agent.speed = Speed;
+        }
     }
 
     public override void Update()
     {
-        sliderLife.value = currentHealth;
-
-        // Faz o slider olhar para a câmera
-        if (sliderLife != null && mainCamera != null)
+        if (sliderLife != null)
         {
-            sliderLife.transform.LookAt(mainCamera);
+            sliderLife.value = currentHealth;
+
+            // Faz o slider olhar para a câmera
+            if (mainCamera != null)
+            {
+                sliderLife.transform.LookAt(mainCamera);
+                sliderLife.transform.Rotate(0f, 180f, 0f);
+            }
         }
     }
 
@@ -51,9 +66,7 @@ public class BossCharacter : BaseCharacter
     {
         if (isDead) return;
 
-        // Aplica defesa do boss (pode vir da BaseCharacter)
         float finalDamage = Mathf.Max(damage - DefensePower, 1f);
-
         currentHealth -= finalDamage;
 
         if (sliderLife != null)
@@ -67,14 +80,13 @@ public class BossCharacter : BaseCharacter
         }
     }
 
-
     public override void Die()
     {
         currentLives--;
 
         if (currentLives > 0)
         {
-            Debug.Log($"Boss perdeu uma vida! Restam {currentLives}.");
+            Debug.Log($"Boss perdeu uma vida! Restam {currentLives}. Entrando na FASE 2!");
 
             // "revive" com vida cheia
             currentHealth = maxHealth;
@@ -84,29 +96,60 @@ public class BossCharacter : BaseCharacter
             DefensePower *= secondLifeDefenseMultiplier;
             Speed = Mathf.RoundToInt(Speed * secondLifeSpeedMultiplier);
 
+            // Atualiza velocidade do NavMeshAgent
+            if (agent != null)
+            {
+                agent.speed = Speed;
+            }
+
             // Ativa mais mecânicas na segunda vida
             if (bossController != null)
             {
-                bossController.actionCooldown = 1.5f; // fica mais rápido
+                bossController.actionCooldown = 1.5f;
             }
 
-            // Animação especial de transição de fase
-            /*if (anim != null)
+            // Atualiza UI
+            if (sliderLife != null)
             {
-                anim.SetTrigger("PhaseChange");
-            }*/
+                sliderLife.maxValue = maxHealth;
+                sliderLife.value = currentHealth;
+            }
+
+            Debug.Log($"Boss ficou mais forte! Attack: {AttackPower}, Defense: {DefensePower}, Speed: {Speed}");
         }
         else
         {
             Debug.Log("Boss derrotado de vez!");
             isDead = true;
 
-            /* if (anim != null)
-             {
-                 anim.SetTrigger("Die");
-             }*/
+            // Para movimento
+            if (agent != null)
+            {
+                agent.isStopped = true;
+                agent.enabled = false;
+            }
 
-            // aqui você pode disparar cutscene, drop, vitória, etc.
+            // Notifica a IA
+            if (bossAI != null)
+            {
+                bossAI.ForceDeath();
+            }
+
+            // Inicia coroutine de destruição
+            StartCoroutine(DestroyAfterDeath());
         }
+    }
+
+    IEnumerator DestroyAfterDeath()
+    {
+        // Aqui você pode adicionar animação de morte
+        // animator.Play("Die");
+        
+        yield return new WaitForSeconds(5f);
+        
+        // Aqui você pode disparar eventos de vitória, drops, etc.
+        Debug.Log("Boss foi destruído!");
+        
+        Destroy(gameObject);
     }
 }

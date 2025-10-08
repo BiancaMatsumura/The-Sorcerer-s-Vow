@@ -110,7 +110,7 @@ public class AgentWeapon : MonoBehaviour
                 return param.value;
         }
 
-        return 0; 
+        return 0;
     }
 
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
