@@ -9,6 +9,9 @@ public class ThirdPersonController : MonoBehaviour
     public float gravity = 9.8f;
     public float airKickMomentumMultiplier = 1.2f;
 
+    [Header("Audios")]
+    public AudioSource punchSound;
+
     float jumpElapsedTime = 0;
 
     bool isStasis = false;
@@ -43,6 +46,7 @@ public class ThirdPersonController : MonoBehaviour
     private Vector3 externalForce = Vector3.zero;
     [SerializeField] private float externalForceDecay = 2f; // quanto mais alto, mais rápido a força some
 
+    
 
     void Start()
     {
@@ -268,6 +272,8 @@ public class ThirdPersonController : MonoBehaviour
                 break;
             case 2:
                 animator.SetTrigger("Punch");
+                if (punchSound != null)
+                    punchSound.Play();
                 playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate);
                 break;
             case 3:

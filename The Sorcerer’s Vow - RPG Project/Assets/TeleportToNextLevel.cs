@@ -18,7 +18,7 @@ public class TeleportToNextLevel : MonoBehaviour
     {
         if (other.CompareTag("Player") && lastQuest != null && lastQuest.isCompleted)
         {
-            fade.nextSceneName = "Zigurat_Fase1"; // ou o nome correto da próxima cena
+            fade.nextSceneName = "BossTest"; // ou o nome correto da próxima cena
             fade.StartFade();
         }
     }
