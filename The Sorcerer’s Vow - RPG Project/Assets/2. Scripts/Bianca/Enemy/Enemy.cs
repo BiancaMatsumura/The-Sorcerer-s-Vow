@@ -15,6 +15,7 @@ public class Enemy : BaseCharacter
 {
     [Header("UI")]
     [SerializeField] private Slider sliderLife;
+    private Transform mainCamera;
 
     [Header("AI Settings")]
     public EnemyState currentState;
@@ -53,8 +54,19 @@ public class Enemy : BaseCharacter
     public override void Start()
     {
 
+        mainCamera = Camera.main.transform;
 
         base.Start();
+
+        // Se não tiver pontos setados manualmente, busca no manager
+        if (patrolPoints == null || patrolPoints.Length == 0)
+        {
+            PatrolManager manager = FindFirstObjectByType<PatrolManager>();
+            if (manager != null)
+            {
+                patrolPoints = manager.GetPatrolPoints();
+            }
+        }
 
         sliderLife.maxValue = maxHealth;
         sliderLife.value = currentHealth;
@@ -88,6 +100,12 @@ public class Enemy : BaseCharacter
         base.Update();
 
         sliderLife.value = currentHealth;
+
+        if (sliderLife.gameObject.activeSelf && target != null)
+        {
+            sliderLife.transform.LookAt(mainCamera);
+            sliderLife.transform.Rotate(0f, 180f, 0f);
+        }
 
         if (!IsDead)
         {
@@ -176,6 +194,14 @@ public class Enemy : BaseCharacter
             GoToNextPatrolPoint();
         }
     }
+    public void SetPatrolPoints(Transform[] points)
+    {
+        patrolPoints = points;
+
+        if (patrolPoints.Length > 0 && agent != null)
+            GoToNextPatrolPoint();
+    }
+
 
     private void GoToNextPatrolPoint()
     {
@@ -230,11 +256,17 @@ public class Enemy : BaseCharacter
 
     private void UpdateAnimator()
     {
+        if (animator == null || agent == null) return;
 
-        animator.SetFloat("Speed", agent.speed);
+        // velocidade atual (m/s)
+        float currentVelocity = agent.velocity.magnitude;
+
+        // aplica no Animator com damping (suaviza a transição)
+        animator.SetFloat("Speed", currentVelocity, 0.1f, Time.deltaTime);
 
         animator.SetBool("IsAttacking", currentState == EnemyState.Battle);
     }
+
 
 
 
@@ -252,6 +284,7 @@ public class Enemy : BaseCharacter
     IEnumerator DestroyAfterDeath()
     {
         yield return new WaitForSeconds(5f);
+
         Destroy(gameObject);
     }
 }

@@ -10,6 +10,7 @@ TagManager:
   - Waypoint
   - Enemy
   - SaveUi
+  - Boss
   layers:
   - Default
   - TransparentFX
