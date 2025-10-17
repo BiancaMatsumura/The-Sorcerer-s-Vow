@@ -564,7 +564,7 @@ MonoBehaviour:
     m_Value: 0
   m_CloudPreset:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 4
   cumulusMap:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -608,8 +608,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.15
-        value: 1
+        time: 0.87333524
+        value: 0.96606827
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -709,7 +709,7 @@ MonoBehaviour:
     m_Value: 0.5
   densityMultiplier:
     m_OverrideState: 1
-    m_Value: 0.4
+    m_Value: 0.42
   shapeFactor:
     m_OverrideState: 1
     m_Value: 0.9
@@ -1421,10 +1421,10 @@ MonoBehaviour:
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 1
-    m_Value: 0.4660715
+    m_Value: 3.1580238
   upperHemisphereLuxColor:
     m_OverrideState: 1
-    m_Value: {x: 0.18750614, y: 0.29181972, z: 0.5}
+    m_Value: {x: 0.29084003, y: 0.2467877, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 1
     m_Value: 20000
@@ -1439,7 +1439,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 8253d41e6e8b11a4cbe77a4f8f82934d, type: 3}
+    m_Value: {fileID: 8900000, guid: 54a8efa5d71f15c4b9bd2df8ff091a3f, type: 3}
   distortionMode:
     m_OverrideState: 1
     m_Value: 0
@@ -1561,7 +1561,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.34
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -1970,10 +1970,10 @@ MonoBehaviour:
     m_Value: 0
   limitMin:
     m_OverrideState: 1
-    m_Value: -1
+    m_Value: -5
   limitMax:
     m_OverrideState: 1
-    m_Value: 14
+    m_Value: 15
   curveMap:
     m_OverrideState: 1
     m_Value:
@@ -2131,7 +2131,7 @@ MonoBehaviour:
     m_Value: 1
   enabled:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   colorMode:
     m_OverrideState: 1
     m_Value: 1
@@ -2140,10 +2140,10 @@ MonoBehaviour:
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 1, g: 0.6677754, b: 0.2471698, a: 1}
   maxFogDistance:
     m_OverrideState: 1
-    m_Value: 5000
+    m_Value: 4215
   mipFogMaxMip:
     m_OverrideState: 1
     m_Value: 0.5
@@ -2155,19 +2155,19 @@ MonoBehaviour:
     m_Value: 1000
   baseHeight:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -78.2
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 4278
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 400
+    m_Value: 439
   enableVolumetricFog:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   albedo:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.7433963, g: 0.7433963, b: 0.7433963, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 1
     m_Value: 1
