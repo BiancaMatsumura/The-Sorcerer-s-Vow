@@ -22,13 +22,14 @@ public class BossController : MonoBehaviour
     [Header("Controle manual")]
     public BossState currentState = BossState.Idle;
     public float actionCooldown = 2f;
-    private bool isBusy = false;
+    private bool isBusy = false; 
 
     private BossCharacter boss;
 
+    public Collider[] Bcollider;
     void Start()
     {
-        
+     
         //if (anim == null) anim = GetComponent<Animator>();
         boss = GetComponent<BossCharacter>();
     }
@@ -97,5 +98,14 @@ public class BossController : MonoBehaviour
     public void SetState(BossState newState)
     {
         currentState = newState;
+    }
+
+    public void ActiveCollider() 
+    {
+        foreach(var Col in Bcollider) {  Col.enabled = true; }    
+    }
+    public void DesactiveCollider()
+    {
+        foreach (var Col in Bcollider) { Col.enabled = false; }
     }
 }

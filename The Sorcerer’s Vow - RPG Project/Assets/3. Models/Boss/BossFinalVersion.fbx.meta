@@ -76,11 +76,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: SwordSmash
-      takeName: SwordSmash
+      name: Walk (1)
+      takeName: Walk
       internalID: 3574773866889642080
       firstFrame: 0
-      lastFrame: 23
+      lastFrame: 21
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
