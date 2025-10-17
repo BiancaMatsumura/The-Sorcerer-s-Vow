@@ -245,7 +245,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  chaseRange: 10
+  chaseRange: 25
   attackRange: 2.5
   target: {fileID: 0}
   attackCooldown: 2

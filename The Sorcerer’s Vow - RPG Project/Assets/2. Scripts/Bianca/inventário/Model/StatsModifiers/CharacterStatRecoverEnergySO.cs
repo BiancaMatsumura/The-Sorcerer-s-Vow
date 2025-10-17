@@ -10,7 +10,7 @@ public class CharacterStatRecoverEnergySO : CharacterStatusModifierSO
         PlayerCharacter player = character.GetComponent<PlayerCharacter>();
         if (player != null)
         {
-            player.RecoverEnergy(val);
+            //.RecoverEnergy(val);
         }
         else
         {

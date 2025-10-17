@@ -151,7 +151,7 @@ public class ThirdPersonController : MonoBehaviour
         float velocityAdittion = 0;
 
         // Sprint
-        isSprinting = inputSprint && cc.velocity.magnitude > 0.9f && playerCharacter.currentEnergy > 0;
+        isSprinting = inputSprint && cc.velocity.magnitude > 0.9f;
         if (isSprinting) velocityAdittion = sprintAdittion;
         if (isCrouching) velocityAdittion = -(baseSpeed * 0.50f);
 
@@ -214,18 +214,6 @@ public class ThirdPersonController : MonoBehaviour
         // --- REDUZIR FORÇA EXTERNA GRADUALMENTE ---
         externalForce = Vector3.Lerp(externalForce, Vector3.zero, Time.deltaTime * externalForceDecay);
 
-        // Energia
-        if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
-        {
-            float energyDrainPerSecond = playerCharacter.energyReductionRate;
-            playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
-        }
-        if (!isSprinting && playerCharacter.currentEnergy < playerCharacter.maxEnergy)
-        {
-            float energyRecoveryPerSecond = playerCharacter.energyRecoveryRate;
-            playerCharacter.RecoverEnergy(energyRecoveryPerSecond * Time.deltaTime);
-        }
-        if (playerCharacter.currentEnergy <= 0) isSprinting = false;
     }
     public void AddExternalForce(Vector3 force)
     {
@@ -246,8 +234,6 @@ public class ThirdPersonController : MonoBehaviour
 
     void BattleSistem(int var)
     {
-        if (playerCharacter.currentEnergy <= 0)
-            return;
 
         if (isStasis && !cc.isGrounded)
             return;
@@ -268,17 +254,14 @@ public class ThirdPersonController : MonoBehaviour
         {
             case 1:
                 animator.SetTrigger("Kick");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 2);
                 break;
             case 2:
                 animator.SetTrigger("Punch");
                 if (punchSound != null)
                     punchSound.Play();
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate);
                 break;
             case 3:
                 animator.SetTrigger("Power");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 4);
                 break;
         }
     }
