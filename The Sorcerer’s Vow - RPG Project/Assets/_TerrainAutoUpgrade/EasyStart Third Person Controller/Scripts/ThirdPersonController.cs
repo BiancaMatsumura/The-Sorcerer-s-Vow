@@ -29,7 +29,6 @@ public class ThirdPersonController : MonoBehaviour
     float lastHorizontalInput;
     float lastVerticalInput;
 
-    public GameObject BOLADEFOGO;
     public Transform spawnTarget;
     public BoxCollider[] collider;
 
@@ -46,20 +45,28 @@ public class ThirdPersonController : MonoBehaviour
     private Vector3 externalForce = Vector3.zero;
     [SerializeField] private float externalForceDecay = 2f; // quanto mais alto, mais rápido a força some
 
-    
+
 
     void Start()
     {
+        Time.timeScale = 1f; // Garantir que o tempo esteja normal no início
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         playerCharacter = GetComponent<PlayerCharacter>();
+
+
+        CameraController.isInventoryOpen = false;
+        dialogueManager = FindFirstObjectByType<DialogueManager>();
+
 
         if (animator == null)
             Debug.LogWarning("Hey buddy, you don't have the Animator component in your player. Without it, the animations won't work.");
     }
 
+
     void Update()
     {
+
         bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
 
         // Se o diálogo estiver ativo ou qualquer UI (inventário/loja), bloqueia entrada
@@ -135,10 +142,6 @@ public class ThirdPersonController : MonoBehaviour
         {
             BattleSistem(2);
         }
-        if (Input.GetKey(KeyCode.F) && !isCrouching)
-        {
-            BattleSistem(3);
-        }
     }
 
 
@@ -151,7 +154,7 @@ public class ThirdPersonController : MonoBehaviour
         float velocityAdittion = 0;
 
         // Sprint
-        isSprinting = inputSprint && cc.velocity.magnitude > 0.9f && playerCharacter.currentEnergy > 0;
+        isSprinting = inputSprint && cc.velocity.magnitude > 0.9f;
         if (isSprinting) velocityAdittion = sprintAdittion;
         if (isCrouching) velocityAdittion = -(baseSpeed * 0.50f);
 
@@ -214,18 +217,6 @@ public class ThirdPersonController : MonoBehaviour
         // --- REDUZIR FORÇA EXTERNA GRADUALMENTE ---
         externalForce = Vector3.Lerp(externalForce, Vector3.zero, Time.deltaTime * externalForceDecay);
 
-        // Energia
-        if (isSprinting && cc.isGrounded && playerCharacter.currentEnergy > 0)
-        {
-            float energyDrainPerSecond = playerCharacter.energyReductionRate;
-            playerCharacter.ReduceEnergy(energyDrainPerSecond * Time.deltaTime);
-        }
-        if (!isSprinting && playerCharacter.currentEnergy < playerCharacter.maxEnergy)
-        {
-            float energyRecoveryPerSecond = playerCharacter.energyRecoveryRate;
-            playerCharacter.RecoverEnergy(energyRecoveryPerSecond * Time.deltaTime);
-        }
-        if (playerCharacter.currentEnergy <= 0) isSprinting = false;
     }
     public void AddExternalForce(Vector3 force)
     {
@@ -246,8 +237,6 @@ public class ThirdPersonController : MonoBehaviour
 
     void BattleSistem(int var)
     {
-        if (playerCharacter.currentEnergy <= 0)
-            return;
 
         if (isStasis && !cc.isGrounded)
             return;
@@ -268,17 +257,11 @@ public class ThirdPersonController : MonoBehaviour
         {
             case 1:
                 animator.SetTrigger("Kick");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 2);
                 break;
             case 2:
                 animator.SetTrigger("Punch");
                 if (punchSound != null)
                     punchSound.Play();
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate);
-                break;
-            case 3:
-                animator.SetTrigger("Power");
-                playerCharacter.ReduceEnergy(playerCharacter.energyReductionRate * 4);
                 break;
         }
     }
@@ -293,28 +276,6 @@ public class ThirdPersonController : MonoBehaviour
     {
         foreach (var col in collider)
             col.enabled = false;
-    }
-
-    void FireActive()
-    {
-        GameObject ball = Instantiate(BOLADEFOGO, spawnTarget.position, Quaternion.identity);
-
-        float ballSpeed = 4.0f;
-        Vector3 direction = transform.forward;
-        direction.y = 0;
-        direction.Normalize();
-
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = direction * ballSpeed;
-        }
-
-        var proj = ball.GetComponent<ProjectileDamage>();
-        if (proj != null)
-        {
-            proj.SetDamage(playerCharacter.AttackPower);
-        }
     }
 
     public bool IsSprinting()

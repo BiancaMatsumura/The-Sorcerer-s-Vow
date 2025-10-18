@@ -13,7 +13,7 @@ public class TotenSpawnEnemy : MonoBehaviour
     [SerializeField] private Slider sliderLife;
 
     private Animator anim;
-    private bool isDead = false;
+    public bool isDead = false;
 
     public bool isSpawned = false;
 

@@ -6,6 +6,7 @@ public class BossMovement_Simples : MonoBehaviour
     [Header("Referências")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
+    [SerializeField] private Animator animator;
 
     [Header("Configuração")]
     [SerializeField] private float minDistance = 3f;
@@ -20,6 +21,8 @@ public class BossMovement_Simples : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+
         if (agent == null) agent = GetComponent<NavMeshAgent>();
         if (player == null) player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
@@ -44,6 +47,7 @@ public class BossMovement_Simples : MonoBehaviour
     {
         if (!canMove || player == null || agent == null)
         {
+            animator.SetBool("isWalking", false);
             //Debug.LogWarning($"Boss parado - canMove: {canMove}, player: {player != null}, agent: {agent != null}");
             return;
         }
@@ -55,9 +59,11 @@ public class BossMovement_Simples : MonoBehaviour
         // Se está muito longe, vai até o player (correndo)
         if (distance > maxDistance)
         {
+            
             agent.isStopped = false;
             agent.speed = chaseSpeed; // mais rápido quando longe
             agent.SetDestination(player.position);
+            animator.SetBool("isWalking", true);
             //Debug.Log($"<color=green>Boss PERSEGUINDO (longe) - Speed: {agent.speed}</color>");
         }
         // Se está muito perto, recua
@@ -68,6 +74,7 @@ public class BossMovement_Simples : MonoBehaviour
             Vector3 retreatDirection = (transform.position - player.position).normalized;
             Vector3 retreatPosition = transform.position + retreatDirection * 3f;
             agent.SetDestination(retreatPosition);
+            animator.SetBool("isWalking", true);
             //Debug.Log($"<color=yellow>Boss RECUANDO - Speed: {agent.speed}</color>");
         }
         // Se está na distância ideal, fica se movendo ao redor
@@ -76,6 +83,7 @@ public class BossMovement_Simples : MonoBehaviour
             agent.isStopped = false;
             agent.speed = walkSpeed; // velocidade normal
             agent.SetDestination(player.position);
+            animator.SetBool("isWalking", true);
             //Debug.Log($"<color=blue>Boss CIRCULANDO - Speed: {agent.speed}</color>");
         }
 
@@ -115,7 +123,9 @@ public class BossMovement_Simples : MonoBehaviour
     // Método para parar movimento temporariamente (usado pela IA durante ataques)
     public void StopMovement(float duration)
     {
+
         canMove = false;
+        animator.SetBool("isWalking", false);
         Invoke(nameof(ResumeMovement), duration);
     }
 

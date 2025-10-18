@@ -15,20 +15,21 @@ public class BossController : MonoBehaviour
 {
 
     [Header("Referências")]
-    //[SerializeField] private Animator anim;
+    [SerializeField] private Animator animator;
     [SerializeField] private SpawnToten spawnTotem; // script que instancia os totens
     [SerializeField] private BossWindZone windZone; // script do vento
 
     [Header("Controle manual")]
     public BossState currentState = BossState.Idle;
     public float actionCooldown = 2f;
-    private bool isBusy = false;
+    private bool isBusy = false; 
 
     private BossCharacter boss;
 
+    public Collider[] Bcollider;
     void Start()
     {
-        
+     
         //if (anim == null) anim = GetComponent<Animator>();
         boss = GetComponent<BossCharacter>();
     }
@@ -46,10 +47,6 @@ public class BossController : MonoBehaviour
                 StartCoroutine(HandleState());
         }
 
-        /*if (Input.GetMouseButtonDown(0)) // clique esquerdo
-        {
-            boss.GetComponent<BossCharacter>().ReduceHealth(5f);
-        }*/
     }
 
     IEnumerator HandleState()
@@ -64,16 +61,19 @@ public class BossController : MonoBehaviour
 
             case BossState.AttackNormal:
                 Debug.Log("Boss faz ataque normal!");
-                //anim?.SetTrigger("AttackNormal");
+                animator.SetBool("isChoosingAttack", true);
+                animator.Play("SwordInc");
                 break;
 
             case BossState.AttackArea:
                 Debug.Log("Boss faz ataque em área!");
-                //anim?.SetTrigger("AttackArea");
+                animator.SetBool("isChoosingAttack", false);
+                animator.Play("SwordInc");
                 break;
 
             case BossState.SpawnTotem:
                 Debug.Log("Boss invoca totem!");
+                animator.Play("Invocar");
                 spawnTotem?.Spawn();
                 break;
 
@@ -82,7 +82,9 @@ public class BossController : MonoBehaviour
                 if (windZone != null)
                 {
                     windZone.ActivateWindZone();
+                    animator.Play("Vento 0");
                     yield return new WaitForSeconds(5f);
+                    animator.SetBool("isWindFinished", true);
                     windZone.isActive = false;
                 }
                 break;
@@ -96,5 +98,14 @@ public class BossController : MonoBehaviour
     public void SetState(BossState newState)
     {
         currentState = newState;
+    }
+
+    public void ActiveCollider() 
+    {
+        foreach(var Col in Bcollider) {  Col.enabled = true; }    
+    }
+    public void DesactiveCollider()
+    {
+        foreach (var Col in Bcollider) { Col.enabled = false; }
     }
 }

@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 5b61c790045d02140a25e5a034f15455, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,9 +96,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 622622132274056601}
   serializedVersion: 4
-  m_Mass: 50
+  m_Mass: 16.4
   m_Drag: 0
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.74
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 5632303068538973339}
   - component: {fileID: 5109689536575499429}
   - component: {fileID: 3250169012927817011}
-  - component: {fileID: 5724818353369913209}
+  - component: {fileID: 7347471109367596500}
   m_Layer: 0
   m_Name: SmoothSandstone (1)
   m_TagString: Untagged
@@ -238,7 +238,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 5b61c790045d02140a25e5a034f15455, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -270,7 +270,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 50
   m_Drag: 0
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.92
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -287,8 +287,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &5724818353369913209
-CapsuleCollider:
+--- !u!135 &7347471109367596500
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -305,11 +305,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.0017088086
-  m_Height: 0.17088085
-  m_Direction: 2
-  m_Center: {x: 0, y: -4.6522123e-13, z: 0.0031919417}
+  serializedVersion: 3
+  m_Radius: 0.0016512211
+  m_Center: {x: -0.00004017544, y: 0.0001237588, z: -0.0003425002}
 --- !u!1 &6691887354502701168
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,7 +815,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 5b61c790045d02140a25e5a034f15455, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -847,9 +845,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9149983612408497548}
   serializedVersion: 4
-  m_Mass: 50
+  m_Mass: 109.8
   m_Drag: 0
-  m_AngularDrag: 0.1
+  m_AngularDrag: 1.47
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -885,5 +883,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.0029975472
-  m_Center: {x: 0, y: 2.830091e-18, z: -0.045663897}
+  m_Radius: 0.0025906523
+  m_Center: {x: 0, y: 4.204603e-18, z: -0.05108432}

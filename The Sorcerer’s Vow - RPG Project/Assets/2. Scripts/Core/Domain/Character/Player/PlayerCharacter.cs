@@ -11,16 +11,9 @@ namespace _2._Scripts.Core.Domain.Character.Player
     [Serializable]
     public class PlayerCharacter : BaseCharacter
     {
-
-        public float maxEnergy;
-        public float currentEnergy;
-        public float energyReductionRate = 5f;
-        public float energyRecoveryRate = 5f;
         private Animator _animator;
 
         [SerializeField] private Slider sliderLife;
-        [SerializeField] private Slider sliderEnergy;
-
         [SerializeField] private GameObject gameOverUI;
 
 
@@ -42,11 +35,6 @@ namespace _2._Scripts.Core.Domain.Character.Player
             sliderLife.maxValue = maxHealth;
             sliderLife.value = currentHealth;
 
-
-            currentEnergy = maxEnergy;
-            sliderEnergy.maxValue = maxEnergy;
-            sliderEnergy.value = currentEnergy;
-
             _animator = GetComponent<Animator>();
 
             SaveLoadProgressManager.LoadAllSaveDataFromFile();
@@ -60,28 +48,8 @@ namespace _2._Scripts.Core.Domain.Character.Player
         {
             base.Update();
             sliderLife.value = currentHealth;
-            sliderEnergy.value = currentEnergy;
             HandleFallDamage();
 
-
-
-
-            if (currentEnergy < maxEnergy)
-            {
-                bool isNotSprinting = true;
-
-                // Checa se o personagem não está correndo
-                var controller = GetComponent<ThirdPersonController>();
-                if (controller != null)
-                    isNotSprinting = !controller.IsSprinting();
-
-                if (isNotSprinting)
-                {
-                    currentEnergy += energyRecoveryRate * Time.deltaTime;
-                    if (currentEnergy > maxEnergy)
-                        currentEnergy = maxEnergy;
-                }
-            }
 
             if (isDead)
             {
@@ -156,17 +124,6 @@ namespace _2._Scripts.Core.Domain.Character.Player
             characterController.Move(position - transform.position);
         }
 
-        public void ReduceEnergy(float amount)
-        {
-            currentEnergy -= amount;
-            if (currentEnergy < 0) currentEnergy = 0;
-        }
-
-        public void RecoverEnergy(float amount)
-        {
-            currentEnergy += amount;
-            if (currentEnergy < 0) currentEnergy = 0;
-        }
 
         public InventoryController InventoryController => inventoryController;
     }

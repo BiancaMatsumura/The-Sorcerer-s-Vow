@@ -19,6 +19,7 @@ public class BossAI_Simples : MonoBehaviour
     [SerializeField] private BossMovement_Simples movement;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
+    [SerializeField]private Animator animator;
 
     [Header("Configuração de Detecção")]
     [SerializeField] private float detectionRange = 15f;
@@ -40,6 +41,8 @@ public class BossAI_Simples : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+
         if (bossCharacter == null) bossCharacter = GetComponent<BossCharacter>();
         if (bossController == null) bossController = GetComponent<BossController>();
         if (movement == null) movement = GetComponent<BossMovement_Simples>();
@@ -182,10 +185,12 @@ public class BossAI_Simples : MonoBehaviour
         {
             case 0:
                 bossController.SetState(BossState.AttackNormal);
+
                 if (debugMode) Debug.Log("<color=yellow>Boss: Ataque Normal</color>");
                 break;
             case 1:
                 bossController.SetState(BossState.AttackArea);
+
                 if (debugMode) Debug.Log("<color=yellow>Boss: Ataque em Área</color>");
                 break;
             case 2:
@@ -193,7 +198,7 @@ public class BossAI_Simples : MonoBehaviour
                 if (debugMode) Debug.Log("<color=yellow>Boss: Invocar Totem</color>");
                 break;
             case 3:
-                bossController.SetState(BossState.Wind);
+                bossController.SetState(BossState.Wind);   
                 if (debugMode) Debug.Log("<color=yellow>Boss: Ataque de Vento</color>");
                 break;
         }

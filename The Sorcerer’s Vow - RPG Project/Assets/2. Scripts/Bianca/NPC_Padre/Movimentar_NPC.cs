@@ -18,6 +18,15 @@ public class Movimentar_NPC : MonoBehaviour
     public float runAfterSeconds = 5f;
     public float waypointReachDistance = 1f;
 
+    [Header("Detecção do Player")]
+    public Transform player; // arraste o player na Unity
+    public float activationDistance = 5f; // distância mínima para NPC começar a se mover
+
+    [Header("UI")]
+    public GameObject interactionUI;
+    private Transform mainCamera;
+    public bool isActiveUI = false;
+
     private int currentWaypointIndex = 0;
     private int currentWaypointIndex02 = 0;
 
@@ -35,31 +44,53 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void Awake()
     {
+        mainCamera = Camera.main.transform;
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         ConfigureAgent();
     }
 
+    private bool IsPlayerClose()
+    {
+        if (player == null) return false;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        return distanceToPlayer <= activationDistance;
+    }
+
+
     private void Update()
     {
-        if (!isMoving && !hasStartedMovement && questTrigger01 != null && questTrigger01.isCompleted)
+        if (mainCamera != null)
+        {
+            if (interactionUI != null)
+            {
+                interactionUI.transform.LookAt(mainCamera);
+                interactionUI.transform.Rotate(0f, 180f, 0f);
+            }
+
+        }
+
+        // Só inicia movimento se player estiver perto
+        if (!isMoving && !hasStartedMovement && questTrigger01 != null && questTrigger01.isCompleted && IsPlayerClose())
         {
             StartMovement();
             hasStartedMovement = true;
         }
 
+        // SEMPRE atualiza se está em movimento (independente da distância)
         if (isMoving)
         {
             UpdateMovement();
         }
 
-        // Inicia movimento para waypoints02 após completar questTrigger03
-        if (!isMovingToWaypoints02 && !hasStartedMovement02 && questTrigger03 != null && questTrigger03.isCompleted)
+        // Waypoints02
+        if (!isMovingToWaypoints02 && !hasStartedMovement02 && questTrigger03 != null && questTrigger03.isCompleted && IsPlayerClose())
         {
             StartMovement02();
             hasStartedMovement02 = true;
         }
 
+        // SEMPRE atualiza se está em movimento (independente da distância)
         if (isMovingToWaypoints02)
         {
             UpdateMovement02();
@@ -77,6 +108,7 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void StartMovement()
     {
+        interactionUI.SetActive(true);
         isMoving = true;
         isRunning = false;
         currentWaypointIndex = 0;
@@ -107,6 +139,8 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void StopMovement()
     {
+        interactionUI.SetActive(false);
+
         isMoving = false;
         isRunning = false;
 
@@ -206,6 +240,25 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void UpdateSpeedAndAnimation()
     {
+        // Se o player estiver longe, PAUSA o agente
+        if (!IsPlayerClose())
+        {
+            if (!agent.isStopped)
+            {
+                agent.isStopped = true;
+            }
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
+            return;
+        }
+
+        // Se o player voltou perto, RETOMA o movimento
+        if (agent.isStopped)
+        {
+            agent.isStopped = false;
+        }
+
+        // Verifica se deve correr
         if (!isRunning && Time.time - movementStartTime >= runAfterSeconds)
         {
             isRunning = true;
@@ -217,6 +270,7 @@ public class Movimentar_NPC : MonoBehaviour
         animator.SetBool("isWalking", isMovingNow && !isRunning);
         animator.SetBool("isRunning", isMovingNow && isRunning);
     }
+
 
     private void OnDrawGizmos()
     {
