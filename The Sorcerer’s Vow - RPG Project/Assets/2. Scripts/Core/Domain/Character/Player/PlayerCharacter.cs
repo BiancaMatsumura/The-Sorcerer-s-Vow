@@ -14,8 +14,6 @@ namespace _2._Scripts.Core.Domain.Character.Player
         private Animator _animator;
 
         [SerializeField] private Slider sliderLife;
-        [SerializeField] private Slider sliderEnergy;
-
         [SerializeField] private GameObject gameOverUI;
 
 

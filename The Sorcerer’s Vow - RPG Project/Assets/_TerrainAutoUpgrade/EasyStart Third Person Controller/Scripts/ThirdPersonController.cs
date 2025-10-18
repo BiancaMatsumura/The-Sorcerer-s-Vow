@@ -29,7 +29,6 @@ public class ThirdPersonController : MonoBehaviour
     float lastHorizontalInput;
     float lastVerticalInput;
 
-    public GameObject BOLADEFOGO;
     public Transform spawnTarget;
     public BoxCollider[] collider;
 
@@ -60,6 +59,7 @@ public class ThirdPersonController : MonoBehaviour
 
     void Update()
     {
+
         bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
 
         // Se o diálogo estiver ativo ou qualquer UI (inventário/loja), bloqueia entrada
@@ -134,10 +134,6 @@ public class ThirdPersonController : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && !isJumping && !isCrouching)
         {
             BattleSistem(2);
-        }
-        if (Input.GetKey(KeyCode.F) && !isCrouching)
-        {
-            BattleSistem(3);
         }
     }
 
@@ -260,9 +256,6 @@ public class ThirdPersonController : MonoBehaviour
                 if (punchSound != null)
                     punchSound.Play();
                 break;
-            case 3:
-                animator.SetTrigger("Power");
-                break;
         }
     }
 
@@ -276,28 +269,6 @@ public class ThirdPersonController : MonoBehaviour
     {
         foreach (var col in collider)
             col.enabled = false;
-    }
-
-    void FireActive()
-    {
-        GameObject ball = Instantiate(BOLADEFOGO, spawnTarget.position, Quaternion.identity);
-
-        float ballSpeed = 4.0f;
-        Vector3 direction = transform.forward;
-        direction.y = 0;
-        direction.Normalize();
-
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = direction * ballSpeed;
-        }
-
-        var proj = ball.GetComponent<ProjectileDamage>();
-        if (proj != null)
-        {
-            proj.SetDamage(playerCharacter.AttackPower);
-        }
     }
 
     public bool IsSprinting()
