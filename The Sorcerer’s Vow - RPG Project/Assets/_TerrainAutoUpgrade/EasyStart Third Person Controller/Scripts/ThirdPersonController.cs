@@ -45,17 +45,24 @@ public class ThirdPersonController : MonoBehaviour
     private Vector3 externalForce = Vector3.zero;
     [SerializeField] private float externalForceDecay = 2f; // quanto mais alto, mais rápido a força some
 
-    
+
 
     void Start()
     {
+        Time.timeScale = 1f; // Garantir que o tempo esteja normal no início
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         playerCharacter = GetComponent<PlayerCharacter>();
 
+
+        CameraController.isInventoryOpen = false;
+        dialogueManager = FindFirstObjectByType<DialogueManager>();
+
+
         if (animator == null)
             Debug.LogWarning("Hey buddy, you don't have the Animator component in your player. Without it, the animations won't work.");
     }
+
 
     void Update()
     {

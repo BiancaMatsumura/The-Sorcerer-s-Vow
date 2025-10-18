@@ -24,17 +24,14 @@ public class PauseMenu : MonoBehaviour
     }
 
 
-    public GameObject exitConfirmationUI; // Arraste o painel de confirmação no Inspector
-
     public void ShowExitConfirmation()
     {
         pauseMenuUI.SetActive(false); // Esconde o menu de pausa
-        exitConfirmationUI.SetActive(true); // Mostra a tela de confirmação
+
     }
 
     public void CancelExit()
     {
-        exitConfirmationUI.SetActive(false); // Esconde a tela de confirmação
         pauseMenuUI.SetActive(true); // Volta para o menu de pausa
     }
 

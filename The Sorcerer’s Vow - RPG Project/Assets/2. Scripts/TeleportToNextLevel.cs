@@ -16,7 +16,7 @@ public class TeleportToNextLevel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && lastQuest != null && lastQuest.isCompleted)
+        if (other.CompareTag("Player")&& lastQuest != null && lastQuest.isCompleted)
         {
             fade.nextSceneName = "BossTest"; // ou o nome correto da próxima cena
             fade.StartFade();
