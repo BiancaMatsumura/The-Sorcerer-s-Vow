@@ -21,14 +21,29 @@ public class Item3D : MonoBehaviour
     public Quest quesCheck;
     private InventoryController inventoryController;
 
+    [SerializeField] private GameObject interectionUI;
+    private Transform mainCamera;
+
     private Animation anim;
     private void Awake()
-    {   
+    {
+        mainCamera = Camera.main.transform;
         anim = GetComponent<Animation>();
         inventoryController = Object.FindAnyObjectByType<InventoryController>();
     }
 
 
+    private void Update()
+    {
+        if (interectionUI != null)
+        {
+            if (mainCamera != null)
+            {
+                interectionUI.transform.LookAt(mainCamera);
+                interectionUI.transform.Rotate(0f, 180f, 0f);
+            }
+        }
+    }
     public void DestroyItem()
     {
         if (!CanPickup())
