@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     private bool isPaused = false;
 
+    public GameObject configMenuUI;
+
     [SerializeField]
     private GameObject[] otherCanvas;
     void Update()
@@ -21,13 +23,6 @@ public class PauseMenu : MonoBehaviour
             else
                 PauseGame();
         }
-    }
-
-
-    public void ShowExitConfirmation()
-    {
-        pauseMenuUI.SetActive(false); // Esconde o menu de pausa
-
     }
 
     public void CancelExit()
@@ -71,10 +66,12 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         foreach (var UI in otherCanvas)
         {
-            UI.SetActive(true); 
+            UI.SetActive(true);
         }
+        configMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
+
 
         // 🔹 Esconder o cursor e bloquear ele no centro (para FPS ou jogos sem mouse)
         Cursor.visible = false;
