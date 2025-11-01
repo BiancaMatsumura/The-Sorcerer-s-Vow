@@ -18,20 +18,21 @@ public class Item3D : MonoBehaviour
     [SerializeField]
     private QuestData linkedQuest;
 
-    public Quest quesCheck;
     private InventoryController inventoryController;
 
     [SerializeField] private GameObject interectionUI;
     private Transform mainCamera;
 
     private Animation anim;
+
+    private bool isCollected = false;
+
     private void Awake()
     {
         mainCamera = Camera.main.transform;
         anim = GetComponent<Animation>();
         inventoryController = Object.FindAnyObjectByType<InventoryController>();
     }
-
 
     private void Update()
     {
@@ -44,35 +45,61 @@ public class Item3D : MonoBehaviour
             }
         }
     }
+
     public void DestroyItem()
     {
+        if (isCollected)
+        {
+            Debug.Log("[Item3D] Item já foi coletado!");
+            return;
+        }
+
         if (!CanPickup())
         {
+            Debug.Log("[Item3D] ❌ Quest ainda não pode ser completada (dependências pendentes).");
+            return;
+        }
+
+        if (inventoryController == null)
+        {
+            Debug.LogError("[Item3D] InventoryController não encontrado!");
             return;
         }
 
         if (inventoryController.InventoryData.CanAddItem(InventoryItem, Quantity))
         {
+            isCollected = true;
             GetComponent<Collider>().enabled = false;
+
+            Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
+
+            // ✅ ADICIONA ITEM AO INVENTÁRIO IMEDIATAMENTE
+            inventoryController.InventoryData.AddItem(InventoryItem, Quantity);
+            Debug.Log($"[Item3D] Item '{InventoryItem.Name}' adicionado ao inventário");
+
             StartCoroutine(AnimateItemPickup());
         }
         else
         {
-            Debug.Log("Não é possível coletar: inventário cheio.");
+            Debug.Log("[Item3D] ❌ Não é possível coletar: inventário cheio.");
         }
-
     }
-
-
 
     private IEnumerator AnimateItemPickup()
     {
-        audioSource.Play();
+        // Toca som de coleta
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
+
+        // Para animação idle se houver
         if (anim != null)
         {
             anim.Stop();
         }
-        
+
+        // Animação de encolher
         Vector3 startScale = transform.localScale;
         Vector3 endScale = Vector3.zero;
         float currentTime = 0;
@@ -84,28 +111,48 @@ public class Item3D : MonoBehaviour
             yield return null;
         }
 
-        if (quesCheck != null)
+        // ✅ NOTIFICA O SISTEMA DE QUEST
+        if (linkedQuest != null)
         {
-            quesCheck.CheckQuest();
+            var questSystem = Object.FindAnyObjectByType<QuestSystem>();
+            if (questSystem != null)
+            {
+                Debug.Log($"[Item3D] 🔔 Notificando QuestSystem: Item coletado para quest '{linkedQuest.questName}'");
+                questSystem.NotifyItemCollected(linkedQuest);
+            }
+            else
+            {
+                Debug.LogWarning("[Item3D] QuestSystem não encontrado na cena!");
+            }
+        }
+        else
+        {
+            Debug.Log("[Item3D] Item não está vinculado a nenhuma quest");
         }
 
-        yield return new WaitForSeconds(2.2f);
+        // Aguarda um pouco antes de destruir
+        yield return new WaitForSeconds(0.5f);
 
-        var questSystem = Object.FindAnyObjectByType<QuestSystem>();
-        if (questSystem != null && linkedQuest != null)
-        {
-            questSystem.NotifyItemCollected(linkedQuest);
-        }
-
+        Debug.Log($"[Item3D] Destruindo GameObject do item '{InventoryItem.Name}'");
         Destroy(gameObject);
     }
 
     public bool CanPickup()
     {
         var questSystem = Object.FindAnyObjectByType<QuestSystem>();
-        if (linkedQuest == null || questSystem == null)
-            return true;
 
-        return questSystem.CanCompleteQuest(linkedQuest);
+        // Se não há quest vinculada, sempre pode coletar
+        if (linkedQuest == null || questSystem == null)
+        {
+            Debug.Log($"[Item3D] Item '{InventoryItem.Name}' pode ser coletado (sem quest vinculada)");
+            return true;
+        }
+
+        // Verifica se a quest pode ser completada (dependências satisfeitas)
+        bool canComplete = questSystem.CanCompleteQuest(linkedQuest);
+
+        Debug.Log($"[Item3D] Verificando se pode coletar '{InventoryItem.Name}' para quest '{linkedQuest.questName}': {canComplete}");
+
+        return canComplete;
     }
 }

@@ -1,24 +1,31 @@
 using UnityEngine;
+using DialogueEditor;
 
+[RequireComponent(typeof(Collider))]
 public class DialogueTrigger : MonoBehaviour
 {
-    private Quest quest;
+    [Header("Configurações de Diálogo")]
+    public NPCConversation conversation;
+    public Quest linkedQuest;
 
-    private void Awake()
+    [Header("UI de Interação")]
+    public GameObject interactionUI; // ex: um texto "Pressione E para conversar"
+
+    private bool playerInRange;
+
+    private void Start()
     {
-        quest = GetComponentInParent<Quest>();
-        if (quest == null)
-        {
-            Debug.LogWarning("DialogueTrigger não encontrou Quest no pai!");
-        }
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("DialogueTrigger: Player entrou no range.");
-            quest?.OnPlayerEnterRange();
+            playerInRange = true;
+            if (interactionUI != null)
+                interactionUI.SetActive(true);
         }
     }
 
@@ -26,8 +33,11 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("DialogueTrigger: Player saiu do range.");
-            quest?.OnPlayerExitRange();
+            playerInRange = false;
+            if (interactionUI != null)
+                interactionUI.SetActive(false);
         }
     }
+
+   
 }
