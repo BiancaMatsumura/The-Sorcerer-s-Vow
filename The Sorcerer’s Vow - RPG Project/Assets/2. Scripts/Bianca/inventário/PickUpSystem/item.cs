@@ -25,10 +25,12 @@ public class Item3D : MonoBehaviour
 
     private Animation anim;
 
+    public ParticleSystem ParticleDesable;
+
     private bool isCollected = false;
 
     private void Awake()
-    {
+    {   
         mainCamera = Camera.main.transform;
         anim = GetComponent<Animation>();
         inventoryController = Object.FindAnyObjectByType<InventoryController>();
@@ -73,6 +75,7 @@ public class Item3D : MonoBehaviour
 
             Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
 
+            ParticleDesable.Clear();
             // ✅ ADICIONA ITEM AO INVENTÁRIO IMEDIATAMENTE
             inventoryController.InventoryData.AddItem(InventoryItem, Quantity);
             Debug.Log($"[Item3D] Item '{InventoryItem.Name}' adicionado ao inventário");

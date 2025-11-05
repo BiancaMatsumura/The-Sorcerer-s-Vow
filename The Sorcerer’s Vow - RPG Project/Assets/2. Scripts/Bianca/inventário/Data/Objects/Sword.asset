@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Sword
   <Description>k__BackingField: Cuts Everthing!
-  <WorldPrefab>k__BackingField: {fileID: 2513955448080095352, guid: 6826d5faef29d5541b34ab77d3f62d8c, type: 3}
+  <WorldPrefab>k__BackingField: {fileID: 2087957635965957397, guid: 29a4bf465c9dff143921870a2817b701, type: 3}
   category: 1
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1

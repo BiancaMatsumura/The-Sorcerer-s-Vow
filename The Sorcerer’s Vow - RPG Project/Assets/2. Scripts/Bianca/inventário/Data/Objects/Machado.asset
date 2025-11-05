@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Machado
   <Description>k__BackingField: "\xC9 um machado po"
-  <WorldPrefab>k__BackingField: {fileID: 3147106857730458554, guid: 90894c9ca60203247b3b4bda463d3e26, type: 3}
+  <WorldPrefab>k__BackingField: {fileID: 5915234785924373981, guid: 96c856f868ce16c47a0dc11f9f7a2471, type: 3}
   category: 1
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
