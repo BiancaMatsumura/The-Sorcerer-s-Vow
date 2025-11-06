@@ -1217,7 +1217,7 @@ MonoBehaviour:
     m_Value: 0
   fadeDistance:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 3.11
   fadeInDistance:
     m_OverrideState: 1
     m_Value: 0
@@ -1226,7 +1226,7 @@ MonoBehaviour:
     m_Value: 0.2
   thicknessScale:
     m_OverrideState: 1
-    m_Value: 0.15
+    m_Value: 0.185
   m_SampleCount:
     m_OverrideState: 1
     m_Value: 10
@@ -1409,7 +1409,7 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 26
   skyIntensityMode:
     m_OverrideState: 1
     m_Value: 0
@@ -2161,7 +2161,7 @@ MonoBehaviour:
     m_Value: 4278
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 439
+    m_Value: 116.5
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -2557,7 +2557,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.293
   smoothness:
     m_OverrideState: 1
     m_Value: 0.2
