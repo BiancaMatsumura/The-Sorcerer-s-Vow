@@ -75,7 +75,10 @@ public class Item3D : MonoBehaviour
 
             Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
 
-            ParticleDesable.Clear();
+            if(ParticleDesable!= null)
+            {
+                ParticleDesable.Clear();
+            }   
             // ✅ ADICIONA ITEM AO INVENTÁRIO IMEDIATAMENTE
             inventoryController.InventoryData.AddItem(InventoryItem, Quantity);
             Debug.Log($"[Item3D] Item '{InventoryItem.Name}' adicionado ao inventário");

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Apple
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Apple
+  <ItemID>k__BackingField: 1
   <Description>k__BackingField: 'You can eat it!
 
     +5 pv'
@@ -25,4 +26,5 @@ MonoBehaviour:
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
     val: 5
+    duration: 0
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
