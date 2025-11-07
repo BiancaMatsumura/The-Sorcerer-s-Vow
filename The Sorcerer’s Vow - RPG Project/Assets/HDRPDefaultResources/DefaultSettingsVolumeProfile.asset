@@ -520,7 +520,7 @@ MonoBehaviour:
   active: 1
   enable:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   cloudTiling:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1}
@@ -608,8 +608,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.87333524
-        value: 0.96606827
+        time: 0.5266708
+        value: 1.0455322
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -643,8 +643,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.1
-        value: 0.9
+        time: 0.7233368
+        value: 0.97180784
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -678,14 +678,14 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.25
-        value: 0.4
-        inSlope: 0
-        outSlope: 0
+        time: 0.4999966
+        value: 0.13760738
+        inSlope: 1.3079593
+        outSlope: 1.3079593
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.15333918
       - serializedVersion: 3
         time: 1
         value: 0
@@ -709,10 +709,10 @@ MonoBehaviour:
     m_Value: 0.5
   densityMultiplier:
     m_OverrideState: 1
-    m_Value: 0.42
+    m_Value: 0.08
   shapeFactor:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0.76
   shapeScale:
     m_OverrideState: 1
     m_Value: 5
@@ -1309,7 +1309,6 @@ MonoBehaviour:
   - {fileID: 4981354747274665315}
   - {fileID: 5305602202033311358}
   - {fileID: 8795683481998908862}
-  - {fileID: 7821257370958658840}
   - {fileID: -3186467791405439035}
   - {fileID: 1656894850660147658}
   - {fileID: -3301171243924848934}
@@ -1415,15 +1414,15 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11
+    m_Value: 8.94
   multiplier:
     m_OverrideState: 1
     m_Value: 1
   upperHemisphereLuxValue:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 3.1580238
   upperHemisphereLuxColor:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 0.29084003, y: 0.2467877, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 1
@@ -1438,7 +1437,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   hdriSky:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 8900000, guid: 54a8efa5d71f15c4b9bd2df8ff091a3f, type: 3}
   distortionMode:
     m_OverrideState: 1
@@ -1561,7 +1560,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.13
+    m_Value: 0.31
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -2501,7 +2500,7 @@ MonoBehaviour:
     m_Value: 0.15
   cascadeShadowSplit2:
     m_OverrideState: 1
-    m_Value: 0.3
+    m_Value: 0.87421775
   cascadeShadowBorder0:
     m_OverrideState: 1
     m_Value: 0.06905067
@@ -2531,46 +2530,6 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   sampleCount:
-    m_OverrideState: 1
-    m_Value: 1
---- !u!114 &7821257370958658840
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c1be1b6c95cd2e41b27903b9270817f, type: 3}
-  m_Name: Vignette
-  m_EditorClassIdentifier: 
-  active: 1
-  mode:
-    m_OverrideState: 1
-    m_Value: 0
-  color:
-    m_OverrideState: 1
-    m_Value: {r: 0, g: 0, b: 0, a: 1}
-  center:
-    m_OverrideState: 1
-    m_Value: {x: 0.5, y: 0.5}
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0
-  smoothness:
-    m_OverrideState: 1
-    m_Value: 0.2
-  roundness:
-    m_OverrideState: 1
-    m_Value: 1
-  rounded:
-    m_OverrideState: 1
-    m_Value: 0
-  mask:
-    m_OverrideState: 1
-    m_Value: {fileID: 0}
-  opacity:
     m_OverrideState: 1
     m_Value: 1
 --- !u!114 &7908608796179063007
