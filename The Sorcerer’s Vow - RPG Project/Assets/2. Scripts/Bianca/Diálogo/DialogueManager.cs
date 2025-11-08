@@ -1,5 +1,6 @@
 using UnityEngine;
 using DialogueEditor;
+using Bianca.QuestSystem;
 
 [RequireComponent(typeof(Collider))]
 public class DialogueManager : MonoBehaviour

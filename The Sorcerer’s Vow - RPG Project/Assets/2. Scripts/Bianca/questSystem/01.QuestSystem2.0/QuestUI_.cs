@@ -1,50 +1,94 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using QuestSystem;
 
 public class QuestUI_ : MonoBehaviour
 {
-    public Transform questListContent;
-    public GameObject questEntryPrefab;
-    public GameObject questobjectivePrefab;
+    [Header("Referências de UI")]
+    [SerializeField] private GameObject questUIPanel;
+    [SerializeField] private Transform questListContent;
+    [SerializeField] private GameObject questEntryPrefab;
+    [SerializeField] private GameObject questObjectivePrefab;
 
-    public Quest_ questTest;
-    public int testQuestAmount;
-    public List<QuestProgress> testQuests = new();
+    [Header("Referência do Sistema de Quests")]
+    [SerializeField] private QuestManager questManager; // Arraste o QuestManager da cena
 
-    void Start()
+
+    void Update()
     {
-        for (int i = 0; i < testQuestAmount; i++)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-
-            testQuests.Add(new QuestProgress(questTest));
+            questUIPanel.SetActive(!questUIPanel.activeSelf);
         }
+    }
+    private void OnEnable()
+    {
+        // Atualiza a UI sempre que uma quest for concluída
+        QuestEvents.OnQuestCompleted += OnQuestCompleted;
+    }
 
+    private void OnDisable()
+    {
+        QuestEvents.OnQuestCompleted -= OnQuestCompleted;
+    }
+
+    private void Start()
+    {
         UpdateQuestUI();
     }
-    
+
+    private void OnQuestCompleted(Quest quest)
+    {
+        Debug.Log($"UI: Atualizando após concluir {quest.QuestName}");
+        UpdateQuestUI();
+    }
+
     public void UpdateQuestUI()
     {
+        // Limpa a lista atual
         foreach (Transform child in questListContent)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (var quest in testQuests)
+        // Garante que o QuestManager está válido
+        if (questManager == null || questManager.Quests == null)
         {
+            Debug.LogWarning("QuestManager ou lista de Quests não atribuída.");
+            return;
+        }
+
+        // Exibe todas as quests
+        foreach (var questPair in questManager.Quests)
+        {
+            Quest quest = questPair.Value;
+
+            // Cria o item da quest
             GameObject entry = Instantiate(questEntryPrefab, questListContent);
             TMP_Text questTitle = entry.transform.Find("QuestName").GetComponent<TMP_Text>();
             Transform objectiveList = entry.transform.Find("ObjectiveList");
 
-            questTitle.text = quest.quest.questName;
+            // Título da quest
+            string statusText = quest.QuestStatus.ToString();
+            questTitle.text = $"{quest.QuestName} <color=#888888>({statusText})</color>";
 
-            foreach (var objective in quest.objectives)
+            // Lista de componentes (objetivos)
+            foreach (QuestComponent component in quest.QuestComponents)
             {
-                GameObject objTextGO = Instantiate(questobjectivePrefab, objectiveList);
+                GameObject objTextGO = Instantiate(questObjectivePrefab, objectiveList);
                 TMP_Text objText = objTextGO.GetComponent<TMP_Text>();
-                objText.text = $"{objective.description}: {objective.currentAmount}/{objective.requiredAmount}";
+
+                // Exibe o nome e o tipo do componente
+                string compName = component.ComponentName;
+                string compType = component.ComponentType.ToString();
+
+                string status = (quest.QuestStatus == QuestStatus.Completed ||
+                                 (component is QC_DialogueQuest dq && dq != null))
+                                 ? "✔" : "•";
+
+                objText.text = $"{status} {compName} <color=#888888>({compType})</color>";
             }
         }
     }
-
 }

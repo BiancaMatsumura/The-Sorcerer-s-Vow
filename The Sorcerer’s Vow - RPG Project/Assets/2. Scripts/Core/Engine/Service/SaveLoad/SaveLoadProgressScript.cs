@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Bianca.QuestSystem;
 
 namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {

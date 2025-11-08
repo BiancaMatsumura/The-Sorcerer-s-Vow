@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using Bianca.QuestSystem;
 public class UIPopup : MonoBehaviour
 {   
     private PickUpSystem _pickupSystem;
@@ -21,7 +22,7 @@ public class UIPopup : MonoBehaviour
 
     }
 
-    //ao destruir será adiconado um item deste gameobject a lista, assim impedindo que o popup seja mostrado varias vezes pelo mesmo item 
+    //ao destruir serï¿½ adiconado um item deste gameobject a lista, assim impedindo que o popup seja mostrado varias vezes pelo mesmo item 
     private void OnDestroy()
     {
         //if (!IsCollected(inventory, item.InventoryItem)) // Se o jogador ja tiver colletado descontinua o codigo
@@ -44,11 +45,11 @@ public class UIPopup : MonoBehaviour
 
             else { return false; }
         }
-        Debug.LogError("Não foi detectado nenhum item");
+        Debug.LogError("Nï¿½o foi detectado nenhum item");
         return false;
     }
 
-    //Mostra o popup e troca as informações pro novo item
+    //Mostra o popup e troca as informaï¿½ï¿½es pro novo item
     public void ShowPopup() 
     {   
         TextMesh TXT = BASE.GetComponent<TextMesh>();

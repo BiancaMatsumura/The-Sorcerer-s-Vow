@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
+using QuestSystem;
 
 public enum EnemyState
 {
@@ -13,6 +14,8 @@ public enum EnemyState
 
 public class Enemy : BaseCharacter
 {
+    public int enemyID;
+
     [Header("UI")]
     [SerializeField] private Slider sliderLife;
     private Transform mainCamera;
@@ -131,10 +134,13 @@ public class Enemy : BaseCharacter
     }
     public override void ReduceHealth(float damage)
     {
+        if (IsDead) return; // já está morto, ignora novo dano
+
         if (!IsDead)
         {
             animator.Play("HitAnimation");
         }
+
         base.ReduceHealth(damage);
     }
     private void UpdateState()
@@ -273,11 +279,15 @@ public class Enemy : BaseCharacter
 
     public override void Die()
     {
+        if (IsDead)
+            return;
         IsDead = true;
         agent.enabled = false;
         animator.Play("Die");
         currentHealth = 0;
         StartCoroutine(DestroyAfterDeath());
+        Debug.Log($"QuestEvents: Triggering EnemyKilled for enemyID {enemyID}");
+        QuestEvents.TriggerEnemyKilled(enemyID);
 
     }
 
