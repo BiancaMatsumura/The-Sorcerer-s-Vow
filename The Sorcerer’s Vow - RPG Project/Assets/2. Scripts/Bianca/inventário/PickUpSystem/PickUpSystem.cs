@@ -11,6 +11,7 @@ public class PickUpSystem : MonoBehaviour
     [SerializeField] private GameObject pickUpUI;
     [SerializeField] private TextMeshProUGUI nameItemUI;
     [SerializeField] private Image spriteItemUI;
+    [SerializeField] private TextMeshProUGUI itemquantity;
     public Animation introanimation;
 
     private void OnTriggerEnter(Collider other)
@@ -18,7 +19,7 @@ public class PickUpSystem : MonoBehaviour
 
         Item3D item = other.GetComponent<Item3D>();
         if (item != null)
-        { 
+        {
             if (!item.CanPickup())
             {
                 return; // Exit without picking up
@@ -26,6 +27,7 @@ public class PickUpSystem : MonoBehaviour
 
             nameItemUI.text = item.InventoryItem.Name;
             spriteItemUI.sprite = item.InventoryItem.ItemImage;
+            itemquantity.text = item.Quantity.ToString();
             ShowPickUpUI();
 
             int remainder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
@@ -42,17 +44,13 @@ public class PickUpSystem : MonoBehaviour
     {
         if (pickUpUI != null)
         {
-            introanimation.Play();
+
             pickUpUI.SetActive(true);
-            Invoke("HidePickUpUI", 3f);
+            introanimation.Rewind();
+ 
+
         }
     }
-    private void HidePickUpUI()
-    {
-        if (pickUpUI != null)
-        {
-            pickUpUI.SetActive(false);
-        }
-    }
+
 
 }

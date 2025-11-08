@@ -13,6 +13,7 @@ public class EquippableItemSO : ItemSO, IDestroyableItem, IItemAction
 
     public string animName;
     public int animIndex;
+    [field: SerializeField] public Color Cor;
 
     public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
     {

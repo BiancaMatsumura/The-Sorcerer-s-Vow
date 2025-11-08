@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Coin
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Moeda
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Uma moeda brilhante!
   <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   category: 0
@@ -21,4 +22,4 @@ MonoBehaviour:
   <ItemImage>k__BackingField: {fileID: -839995448, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData: []
-  <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: dcbc2dc7b65a2254a99412bc5bf6cfc5, type: 3}

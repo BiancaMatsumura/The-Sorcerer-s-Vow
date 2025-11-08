@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bf02686e725ca44aa0c8b533c96278d, type: 3}
-  m_Name: Apple
+  m_Name: Healing Potion
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Apple
+  <Name>k__BackingField: Healing Potion
   <ItemID>k__BackingField: 1
-  <Description>k__BackingField: 'You can eat it!
-
-    +5 pv'
+  <Description>k__BackingField: "Restore your health \n+5 pv"
   <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   category: 3
   <IsStackable>k__BackingField: 1
   <MaxStackSize>k__BackingField: 99
-  <ItemImage>k__BackingField: {fileID: 50824074, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: -2127134153, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
