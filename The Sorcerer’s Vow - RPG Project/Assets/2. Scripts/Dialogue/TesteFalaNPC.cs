@@ -9,7 +9,7 @@ public class TesteFalaNPC : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player está próximo!");
-            DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
+            //DialogueGameEvents.Instace.PlayerEnteredDialogueRange(dialogData);
         }
     }
 
@@ -18,7 +18,7 @@ public class TesteFalaNPC : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player se afastou!"); 
-            DialogueGameEvents.Instace.PlayerExitedDialogueRange();
+            DialogueGameEvents.Instance.PlayerExitedDialogueRange();
         }
     }
 }

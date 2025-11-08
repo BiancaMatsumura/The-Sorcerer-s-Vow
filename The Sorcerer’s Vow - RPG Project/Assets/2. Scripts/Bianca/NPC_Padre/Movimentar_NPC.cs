@@ -5,12 +5,22 @@ using UnityEngine.AI;
 
 public class Movimentar_NPC : MonoBehaviour
 {
-    [Header("Waypoints e Missão")]
+    [Header("Waypoints")]
     public Transform[] waypoints01;
     public Transform[] waypoints02;
-    public QuestData questTrigger01;
-    public QuestData questTrigger02;
-    public QuestData questTrigger03;
+
+    [Header("Missões que controlam movimento")]
+    public Quest_ questToStartMovement;     // Quando esta estiver completa, inicia movimento 1
+    public Quest_ questToStartMovement02;   // Quando esta estiver completa, inicia movimento 2
+
+
+    private enum QuestState
+    {
+        NotStarted,
+        InProgress,
+        Completed
+    }
+    private QuestState questState = QuestState.NotStarted;
 
     [Header("Configurações de Movimento")]
     public float walkSpeed = 2f;
@@ -60,42 +70,51 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void Update()
     {
-        if (mainCamera != null)
+        if (mainCamera != null && interactionUI != null)
         {
-            if (interactionUI != null)
-            {
-                interactionUI.transform.LookAt(mainCamera);
-                interactionUI.transform.Rotate(0f, 180f, 0f);
-            }
-
+            interactionUI.transform.LookAt(mainCamera);
+            interactionUI.transform.Rotate(0f, 180f, 0f);
         }
 
-        // Só inicia movimento se player estiver perto
-        if (!isMoving && !hasStartedMovement && questTrigger01 != null && questTrigger01.isCompleted && IsPlayerClose())
+        // MOVIMENTO 1
+        if (!isMoving && !hasStartedMovement && questToStartMovement != null && IsQuestCompleted(questToStartMovement) && IsPlayerClose())
         {
             StartMovement();
             hasStartedMovement = true;
         }
 
-        // SEMPRE atualiza se está em movimento (independente da distância)
         if (isMoving)
-        {
             UpdateMovement();
-        }
 
-        // Waypoints02
-        if (!isMovingToWaypoints02 && !hasStartedMovement02 && questTrigger03 != null && questTrigger03.isCompleted && IsPlayerClose())
+        // MOVIMENTO 2
+        if (!isMovingToWaypoints02 && !hasStartedMovement02 && questToStartMovement02 != null && IsQuestCompleted(questToStartMovement02) && IsPlayerClose())
         {
             StartMovement02();
             hasStartedMovement02 = true;
         }
 
-        // SEMPRE atualiza se está em movimento (independente da distância)
         if (isMovingToWaypoints02)
-        {
             UpdateMovement02();
-        }
     }
+
+
+    private bool IsQuestCompleted(Quest_ quest)
+    {
+        if (quest == null || QuestController.Instance == null)
+            return false;
+
+        var progress = QuestController.Instance.activeQuests.Find(q => q.quest.questID == quest.questID);
+        return progress != null && progress.IsQuestCompleted;
+    }
+
+    private bool IsQuestActive(Quest_ quest)
+    {
+        if (quest == null || QuestController.Instance == null)
+            return false;
+
+        return QuestController.Instance.IsQuestActive(quest.questID);
+    }
+
 
 
     private void ConfigureAgent()
@@ -153,14 +172,6 @@ public class Movimentar_NPC : MonoBehaviour
 
         Debug.Log($"NPC parou no último waypoint01: {waypoints01[waypoints01.Length - 1].name}");
 
-        if (questTrigger02 != null)
-        {
-            QuestSystem questSystem = FindObjectOfType<QuestSystem>();
-            if (questSystem != null)
-            {
-                questSystem.ActivateQuest(questTrigger02);
-            }
-        }
     }
 
     private void StartMovement02()

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: "Ess\xEAnciaRaio"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "Ess\xEAncia Raio"
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: "Ess\xEAncia de Raio"
   <WorldPrefab>k__BackingField: {fileID: 0}
   category: 4
@@ -22,3 +23,6 @@ MonoBehaviour:
   <DefaultParametersList>k__BackingField: []
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 4
+  animName: 
+  animIndex: 0
+  Cor: {r: 1, g: 0.92589796, b: 0, a: 0.6117647}
