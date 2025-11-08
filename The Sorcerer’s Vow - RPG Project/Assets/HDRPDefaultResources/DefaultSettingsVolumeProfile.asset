@@ -1217,7 +1217,7 @@ MonoBehaviour:
     m_Value: 0
   fadeDistance:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 3.11
   fadeInDistance:
     m_OverrideState: 1
     m_Value: 0
@@ -1226,7 +1226,7 @@ MonoBehaviour:
     m_Value: 0.2
   thicknessScale:
     m_OverrideState: 1
-    m_Value: 0.15
+    m_Value: 0.185
   m_SampleCount:
     m_OverrideState: 1
     m_Value: 10
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 26
   skyIntensityMode:
     m_OverrideState: 1
     m_Value: 0
@@ -2160,7 +2160,7 @@ MonoBehaviour:
     m_Value: 4278
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 439
+    m_Value: 116.5
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -2530,6 +2530,46 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   sampleCount:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &7821257370958658840
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c1be1b6c95cd2e41b27903b9270817f, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  mode:
+    m_OverrideState: 1
+    m_Value: 0
+  color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.293
+  smoothness:
+    m_OverrideState: 1
+    m_Value: 0.2
+  roundness:
+    m_OverrideState: 1
+    m_Value: 1
+  rounded:
+    m_OverrideState: 1
+    m_Value: 0
+  mask:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+  opacity:
     m_OverrideState: 1
     m_Value: 1
 --- !u!114 &7908608796179063007

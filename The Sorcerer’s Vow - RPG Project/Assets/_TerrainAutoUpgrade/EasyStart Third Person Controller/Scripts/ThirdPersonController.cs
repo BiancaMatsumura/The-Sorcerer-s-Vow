@@ -39,7 +39,7 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField]
     private PlayerCharacter playerCharacter;
     [SerializeField]
-    private DialogueManager dialogueManager;
+    //private DialogueManager dialogueManager;
 
     // --- FORÇA EXTERNA (vento/campo magnético) ---
     private Vector3 externalForce = Vector3.zero;
@@ -56,7 +56,7 @@ public class ThirdPersonController : MonoBehaviour
 
 
         CameraController.isInventoryOpen = false;
-        dialogueManager = FindFirstObjectByType<DialogueManager>();
+        //dialogueManager = FindFirstObjectByType<DialogueManager>();
 
 
         if (animator == null)
@@ -66,10 +66,10 @@ public class ThirdPersonController : MonoBehaviour
 
     void Update()
     {
+        // ✅ Bloqueia o player se o diálogo estiver ativo ou o inventário aberto
+        bool dialogueActive = DialogueEditor.ConversationManager.Instance != null &&
+                              DialogueEditor.ConversationManager.Instance.IsConversationActive;
 
-        bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
-
-        // Se o diálogo estiver ativo ou qualquer UI (inventário/loja), bloqueia entrada
         if (dialogueActive || CameraController.isInventoryOpen)
         {
             inputHorizontal = 0;
@@ -77,8 +77,9 @@ public class ThirdPersonController : MonoBehaviour
             inputJump = false;
             inputSprint = false;
             inputCrouch = false;
-            return;
+            return; // Sai do Update, impedindo movimento/ataque
         }
+
 
         inputHorizontal = Input.GetAxis("Horizontal");
         inputVertical = Input.GetAxis("Vertical");
@@ -92,6 +93,7 @@ public class ThirdPersonController : MonoBehaviour
             lastVerticalInput = inputVertical;
 
         bool shouldApplyStasis = isStasis && !(isAirKicking || (currentAttackType == 1 && !cc.isGrounded));
+        Debug.Log($"Status Player: {shouldApplyStasis}");
 
         if (shouldApplyStasis)
         {
@@ -147,7 +149,9 @@ public class ThirdPersonController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool dialogueActive = dialogueManager != null && dialogueManager.IsDialogueActive();
+        bool dialogueActive = DialogueEditor.ConversationManager.Instance != null &&
+                      DialogueEditor.ConversationManager.Instance.IsConversationActive;
+
         if (dialogueActive) return;
 
         float baseSpeed = playerCharacter.Speed;

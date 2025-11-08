@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: "Ess\xEAncia\xC1gua"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "Ess\xEAncia \xC1gua"
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: "Ess\xEAncia de \xC1gua"
   <WorldPrefab>k__BackingField: {fileID: 0}
   category: 4
@@ -22,3 +23,6 @@ MonoBehaviour:
   <DefaultParametersList>k__BackingField: []
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
   <slotType>k__BackingField: 4
+  animName: 
+  animIndex: 0
+  Cor: {r: 0.057249546, g: 0, b: 1, a: 0.6117647}

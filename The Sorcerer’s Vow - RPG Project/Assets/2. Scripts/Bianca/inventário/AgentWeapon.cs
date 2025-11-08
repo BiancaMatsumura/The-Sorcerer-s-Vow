@@ -1,6 +1,8 @@
 using Inventory.Model;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AgentWeapon : MonoBehaviour
 {
@@ -16,10 +18,9 @@ public class AgentWeapon : MonoBehaviour
     public EquippableItemSO CurrentWeapon => weapon;
     public EquippableItemSO CurrentIngredient => equippedIngredient;
     public Transform handTransform;
-    Animator anim;
+    
 
     private GameObject equippedWeaponObject;
-
     private float danoAtual;
     private float durabilidadeAtual;
 
@@ -31,6 +32,14 @@ public class AgentWeapon : MonoBehaviour
 
     // Referência ao trigger de dano
     private WeaponDamageTrigger weaponTrigger;
+    //Feedback
+    private Color CorDaUi;
+    public Image[] Sprite;
+    public Animation[] Uianimation;
+    public AudioSource[] audioClips;
+    Animator anim;
+    public Image Item_Image;
+    public Sprite DefaultSprite;
 
     private void Awake()
     {
@@ -43,6 +52,8 @@ public class AgentWeapon : MonoBehaviour
 
         anim.SetInteger("Weapon", weaponItemSO.animIndex);
         anim.Play(weaponItemSO.animName);
+
+        
 
         if (equippedWeaponObject != null)
             Destroy(equippedWeaponObject);
@@ -59,6 +70,13 @@ public class AgentWeapon : MonoBehaviour
         ApplyWeaponStats(itemCurrentState);
 
         HasWeapon = true;
+
+        Item_Image.sprite = weaponItemSO.ItemImage;
+
+        if (HasWeapon == false) 
+        {
+            Item_Image.sprite = DefaultSprite;
+        }
     }
 
     private void ApplyWeaponStats(List<ItemParameter> parameters)
@@ -117,10 +135,14 @@ public class AgentWeapon : MonoBehaviour
     {
         if (equippedIngredient != null)
             inventoryData.AddItem(equippedIngredient, 1, ingredientCurrentState);
-
+        
         equippedIngredient = ingredientItemSO;
         ingredientCurrentState = new List<ItemParameter>(itemState);
         ModifyParameters(ingredientCurrentState);
+        Sprite[0].color = equippedIngredient.Cor;
+        Sprite[1].color = equippedIngredient.Cor;
+        Uianimation[0].Play();
+        audioClips[0].Play();
     }
 
     private void ModifyParameters(List<ItemParameter> parameters)
@@ -157,5 +179,12 @@ public class AgentWeapon : MonoBehaviour
     public void ResetWeaponHitList()
     {
         weaponTrigger?.ResetHits();
+    }
+
+
+    public void SwordSFX() 
+    { 
+    
+    
     }
 }

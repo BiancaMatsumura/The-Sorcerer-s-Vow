@@ -15,6 +15,6 @@ MonoBehaviour:
   questName: "- Colete sua primeira Ess\xEAncia"
   questDependencies:
   - {fileID: 11400000, guid: fa704a938e2c48349b8a920b5aaee4a5, type: 2}
-  isCompleted: 1
+  isCompleted: 0
   isDiscovered: 1
   questType: 0

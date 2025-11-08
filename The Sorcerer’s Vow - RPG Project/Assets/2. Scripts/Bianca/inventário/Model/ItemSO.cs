@@ -27,6 +27,10 @@ public enum Frutos
     {     
         [field: SerializeField]
         public string Name { get; set; }
+        [field: SerializeField]
+        public string ItemID { get; set; }
+
+
 
         [field: SerializeField]
         [field: TextArea]
