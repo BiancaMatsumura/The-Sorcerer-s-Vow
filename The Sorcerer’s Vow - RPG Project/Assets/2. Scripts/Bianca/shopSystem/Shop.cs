@@ -38,7 +38,7 @@ namespace ShopSystem
                     RemoveCurrency(itemToBuy.price * purchasedQuantity);
                     Debug.Log($"Comprou {purchasedQuantity}x {itemToBuy.item.name}");
 
-                    
+
                 }
                 else
                 {
@@ -85,13 +85,17 @@ namespace ShopSystem
         private int GetCurrencyAmount()
         {
             var inventoryState = playerInventory.GetCurrentInventoryState();
-            foreach (var item in inventoryState)
+            int total = 0;
+
+            foreach (var item in inventoryState.Values)
             {
-                if (item.Value.item == currencyItem)
-                    return item.Value.quantity;
+                if (item.item == currencyItem)
+                    total += item.quantity;
             }
-            return 0;
+
+            return total;
         }
+
 
         private void RemoveCurrency(int amount)
         {

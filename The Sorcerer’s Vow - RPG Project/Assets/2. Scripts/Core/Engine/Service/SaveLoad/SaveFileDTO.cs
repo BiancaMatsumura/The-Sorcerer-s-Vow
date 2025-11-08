@@ -1,6 +1,7 @@
 ﻿using System;
 using _2._Scripts.Core.Domain.Character.Player;
 using _2._Scripts.Core.Engine.Service.SaveLoad.Structure;
+using Bianca.QuestSystem;
 
 namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {

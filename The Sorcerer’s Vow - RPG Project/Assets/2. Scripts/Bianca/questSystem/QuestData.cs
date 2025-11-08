@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Bianca.QuestSystem;  
 
 [CreateAssetMenu(fileName = "NewQuest", menuName = "Quests/Quest")]
 public class QuestData : ScriptableObject
