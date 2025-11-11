@@ -10359,7 +10359,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6ebdff061ebeb234dad6f2a9c5b46c41, type: 2}
     - target: {fileID: 1758062679589249832, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1806510656362554600, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
       propertyPath: audioSource
@@ -10457,6 +10457,9 @@ PrefabInstance:
     - {fileID: 1806510656362554600, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
     - {fileID: 5864762217438236334, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
     - {fileID: 6921002430812247472, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
+    - {fileID: 1758062679589249832, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
+    - {fileID: 3056714178612004001, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
+    - {fileID: 6930666557880117542, guid: cf239ee260e796a4bb97da8f91a6d52b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -25345,7 +25348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -375.85, y: 41.700012}
+  m_AnchoredPosition: {x: -375.8501, y: 41.69995}
   m_SizeDelta: {x: 131.75061, y: 116.34009}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1231453300
