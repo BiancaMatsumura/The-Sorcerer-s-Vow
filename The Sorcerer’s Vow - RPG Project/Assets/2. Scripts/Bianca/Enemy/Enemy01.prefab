@@ -235,6 +235,7 @@ MonoBehaviour:
   AttackPower: 5
   DefensePower: 0
   isDead: 0
+  enemyID: 0
   sliderLife: {fileID: 5559422302185444584}
   currentState: 0
   patrolPoints:
@@ -491,10 +492,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -196759158259442355, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cd3688eb282ee245a04e6fd607f9a6a, type: 2}
     - target: {fileID: 919132149155446097, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
       propertyPath: m_Name
       value: Idle
       objectReference: {fileID: 0}
+    - target: {fileID: 2337022591408882924, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cd3688eb282ee245a04e6fd607f9a6a, type: 2}
+    - target: {fileID: 2579655297301885846, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cd3688eb282ee245a04e6fd607f9a6a, type: 2}
+    - target: {fileID: 5238321125460863198, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cd3688eb282ee245a04e6fd607f9a6a, type: 2}
     - target: {fileID: 5866666021909216657, guid: dbcc4663eafcf284abaf867d82f3a975, type: 3}
       propertyPath: m_Enabled
       value: 0
