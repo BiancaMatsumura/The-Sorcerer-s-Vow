@@ -18,6 +18,7 @@ public class CraftingTrigger : MonoBehaviour
     private Transform mainCamera;
     private bool isIn = false;
     public Animator PlayerAnimator;
+    public Animation UIanimator;
 
     void Start()
     {
@@ -103,6 +104,7 @@ public class CraftingTrigger : MonoBehaviour
                 if (PlayerAnimator != null)
                 {
                     PlayerAnimator.Play("CraftAnimation");
+                    UIanimator.Play("FillUIMagic");
                 }
                 
 

@@ -1,7 +1,9 @@
 using Inventory.Model;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UI;
 
 public class AgentWeapon : MonoBehaviour
@@ -40,10 +42,14 @@ public class AgentWeapon : MonoBehaviour
     Animator anim;
     public Image Item_Image;
     public Sprite DefaultSprite;
+    public GameObject MATERIAL;
+    public Material Magic;
 
     private void Awake()
     {
         weaponTrigger = GetComponentInChildren<WeaponDamageTrigger>();
+      
+        
     }
 
     public void SetWeapon(EquippableItemSO weaponItemSO, List<ItemParameter> itemState)
@@ -141,8 +147,10 @@ public class AgentWeapon : MonoBehaviour
         ModifyParameters(ingredientCurrentState);
         Sprite[0].color = equippedIngredient.Cor;
         Sprite[1].color = equippedIngredient.Cor;
-        Uianimation[0].Play();
-        audioClips[0].Play();
+        Uianimation[0].Play("Craft");
+        audioClips[0].Play();  
+        Magic.SetColor("_Color", AjustarHDR(equippedIngredient.Cor));    
+        MagicVFX();
     }
 
     private void ModifyParameters(List<ItemParameter> parameters)
@@ -182,9 +190,20 @@ public class AgentWeapon : MonoBehaviour
     }
 
 
-    public void SwordSFX() 
-    { 
-    
-    
+    public void MagicVFX() 
+    {
+        Magic.SetFloat("_EmissivePower", 10f);
+        Invoke("DeleteMagic", 3f);
+    }
+    public void DeleteMagic()
+    {
+        Magic.SetFloat("_EmissivePower", 0f);
+        Magic.SetColor("Color", default);
+    }
+    Color AjustarHDR(Color corBase)
+    {
+        Color corHDR = corBase * 10000f ; // aumenta intensidade (HDR)
+        corHDR.a = 1f;               // força alpha máximo
+        return corHDR;
     }
 }
