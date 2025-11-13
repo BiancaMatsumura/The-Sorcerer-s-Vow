@@ -14,7 +14,6 @@ public class QuestUI_ : MonoBehaviour
     [Header("Referência do Sistema de Quests")]
     [SerializeField] private QuestManager questManager; // Arraste o QuestManager da cena
 
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -22,15 +21,27 @@ public class QuestUI_ : MonoBehaviour
             questUIPanel.SetActive(!questUIPanel.activeSelf);
         }
     }
+    private void Awake()
+    {
+        QuestEvents.OnQuestCompleted += OnQuestCompleted;
+    }
+
+
     private void OnEnable()
     {
-        // Atualiza a UI sempre que uma quest for concluída
+        // Atualiza a UI sempre que algo relevante acontecer
         QuestEvents.OnQuestCompleted += OnQuestCompleted;
+        QuestEvents.OnItemCollected += OnQuestProgressChanged;
+        QuestEvents.OnEnemyKilled += OnQuestProgressChanged;
+        QuestEvents.OnDialogueLineSpoken += OnQuestProgressChanged;
     }
 
     private void OnDisable()
     {
         QuestEvents.OnQuestCompleted -= OnQuestCompleted;
+        QuestEvents.OnItemCollected -= OnQuestProgressChanged;
+        QuestEvents.OnEnemyKilled -= OnQuestProgressChanged;
+        QuestEvents.OnDialogueLineSpoken -= OnQuestProgressChanged;
     }
 
     private void Start()
@@ -40,7 +51,14 @@ public class QuestUI_ : MonoBehaviour
 
     private void OnQuestCompleted(Quest quest)
     {
+        questListContent.gameObject.SetActive(true);
         Debug.Log($"UI: Atualizando após concluir {quest.QuestName}");
+        UpdateQuestUI();
+    }
+
+    private void OnQuestProgressChanged(int _)
+    {
+        // Atualiza UI sempre que houver progresso (item, inimigo, diálogo)
         UpdateQuestUI();
     }
 
@@ -79,13 +97,13 @@ public class QuestUI_ : MonoBehaviour
                 GameObject objTextGO = Instantiate(questObjectivePrefab, objectiveList);
                 TMP_Text objText = objTextGO.GetComponent<TMP_Text>();
 
-                // Exibe o nome e o tipo do componente
                 string compName = component.ComponentName;
                 string compType = component.ComponentType.ToString();
 
-                string status = (quest.QuestStatus == QuestStatus.Completed ||
-                                 (component is QC_DialogueQuest dq && dq != null))
-                                 ? "✔" : "•";
+                // Checa se está completo
+                string status = (quest.QuestStatus == QuestStatus.Completed)
+                    ? "✔"
+                    : "•";
 
                 objText.text = $"{status} {compName} <color=#888888>({compType})</color>";
             }

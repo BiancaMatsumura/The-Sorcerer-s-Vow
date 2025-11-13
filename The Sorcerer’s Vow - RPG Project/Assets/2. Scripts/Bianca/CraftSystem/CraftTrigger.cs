@@ -1,7 +1,7 @@
 using UnityEngine;
 using Inventory.Model;
 using System.Collections.Generic;
-using Bianca.QuestSystem;
+using QuestSystem;
 
 public class CraftingTrigger : MonoBehaviour
 {

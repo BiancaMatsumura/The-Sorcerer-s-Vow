@@ -93,6 +93,21 @@ namespace QuestSystem
             }
         }
 
-        
+        public void Complete()
+        {
+            // Se já estiver concluída, não faz nada
+            if (QuestStatus == QuestStatus.Completed)
+                return;
+
+            // Marca como concluída
+            QuestStatus = QuestStatus.Completed;
+
+            // Dispara o evento de conclusão
+            OnQuestCompleted?.Invoke(this);
+
+            Debug.Log($"🏁 Quest '{QuestName}' foi completada manualmente!");
+        }
+
+
     }
 }

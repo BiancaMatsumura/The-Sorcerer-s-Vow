@@ -8,7 +8,8 @@ namespace QuestSystem
         private int _itemCount;
         private int _itemAmountNeeded;
 
-        public QC_ItemCollected(string name, string description, int itemID, int itemAmountNeeded) : base(name, description)
+        public QC_ItemCollected(string name, string description, int itemID, int itemAmountNeeded) 
+            : base(name, description)
         {
             _itemID = itemID;
             _itemAmountNeeded = itemAmountNeeded;
@@ -51,6 +52,7 @@ namespace QuestSystem
             if (_itemCount < _itemAmountNeeded)
                 return;
 
+            // Marca o componente como completo
             MarkCompleted();
             TriggerComponentCompleted(this);
         }

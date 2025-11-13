@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using QuestSystem;
 
 public class Movimentar_NPC : MonoBehaviour
 {
@@ -10,17 +10,8 @@ public class Movimentar_NPC : MonoBehaviour
     public Transform[] waypoints02;
 
     [Header("Missões que controlam movimento")]
-    public Quest_ questToStartMovement;     // Quando esta estiver completa, inicia movimento 1
-    public Quest_ questToStartMovement02;   // Quando esta estiver completa, inicia movimento 2
-
-
-    private enum QuestState
-    {
-        NotStarted,
-        InProgress,
-        Completed
-    }
-    private QuestState questState = QuestState.NotStarted;
+    public SO_Quest questToStartMovement;     // Quando estiver completa, inicia movimento 1
+    public SO_Quest questToStartMovement02;   // Quando estiver completa, inicia movimento 2
 
     [Header("Configurações de Movimento")]
     public float walkSpeed = 2f;
@@ -29,8 +20,8 @@ public class Movimentar_NPC : MonoBehaviour
     public float waypointReachDistance = 1f;
 
     [Header("Detecção do Player")]
-    public Transform player; // arraste o player na Unity
-    public float activationDistance = 5f; // distância mínima para NPC começar a se mover
+    public Transform player;
+    public float activationDistance = 5f;
 
     [Header("UI")]
     public GameObject interactionUI;
@@ -52,12 +43,18 @@ public class Movimentar_NPC : MonoBehaviour
     private Animator animator;
     private NavMeshAgent agent;
 
+    private QuestManager questManager;
+
     private void Awake()
     {
-        mainCamera = Camera.main.transform;
+        mainCamera = Camera.main?.transform;
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         ConfigureAgent();
+
+        questManager = FindAnyObjectByType<QuestManager>();
+        if (questManager == null)
+            Debug.LogError("[Movimentar_NPC] ❌ QuestManager não encontrado!");
     }
 
     private bool IsPlayerClose()
@@ -67,9 +64,9 @@ public class Movimentar_NPC : MonoBehaviour
         return distanceToPlayer <= activationDistance;
     }
 
-
     private void Update()
     {
+        // Mantém a UI virada para a câmera
         if (mainCamera != null && interactionUI != null)
         {
             interactionUI.transform.LookAt(mainCamera);
@@ -97,25 +94,18 @@ public class Movimentar_NPC : MonoBehaviour
             UpdateMovement02();
     }
 
-
-    private bool IsQuestCompleted(Quest_ quest)
+    // ✅ Agora usa o QuestManager para checar se a missão foi completada
+    private bool IsQuestCompleted(SO_Quest quest)
     {
-        if (quest == null || QuestController.Instance == null)
+        if (quest == null || questManager == null)
             return false;
 
-        var progress = QuestController.Instance.activeQuests.Find(q => q.quest.questID == quest.questID);
-        return progress != null && progress.IsQuestCompleted;
-    }
-
-    private bool IsQuestActive(Quest_ quest)
-    {
-        if (quest == null || QuestController.Instance == null)
+        var activeQuest = questManager.GetQuestByID(quest.id);
+        if (activeQuest == null)
             return false;
 
-        return QuestController.Instance.IsQuestActive(quest.questID);
+        return activeQuest.QuestStatus == QuestStatus.Completed;
     }
-
-
 
     private void ConfigureAgent()
     {
@@ -127,7 +117,9 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void StartMovement()
     {
-        interactionUI.SetActive(true);
+        if (interactionUI != null)
+            interactionUI.SetActive(true);
+
         isMoving = true;
         isRunning = false;
         currentWaypointIndex = 0;
@@ -146,19 +138,16 @@ public class Movimentar_NPC : MonoBehaviour
             currentWaypointIndex++;
 
             if (currentWaypointIndex >= waypoints01.Length)
-            {
                 StopMovement();
-            }
             else
-            {
                 SetDestinationToCurrentWaypoint(waypoints01, currentWaypointIndex);
-            }
         }
     }
 
     private void StopMovement()
     {
-        interactionUI.SetActive(false);
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
 
         isMoving = false;
         isRunning = false;
@@ -171,7 +160,6 @@ public class Movimentar_NPC : MonoBehaviour
         animator.SetBool("isRunning", false);
 
         Debug.Log($"NPC parou no último waypoint01: {waypoints01[waypoints01.Length - 1].name}");
-
     }
 
     private void StartMovement02()
@@ -194,13 +182,9 @@ public class Movimentar_NPC : MonoBehaviour
             currentWaypointIndex02++;
 
             if (currentWaypointIndex02 >= waypoints02.Length)
-            {
                 StopMovement02();
-            }
             else
-            {
                 SetDestinationToCurrentWaypoint(waypoints02, currentWaypointIndex02);
-            }
         }
     }
 
@@ -251,25 +235,17 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void UpdateSpeedAndAnimation()
     {
-        // Se o player estiver longe, PAUSA o agente
         if (!IsPlayerClose())
         {
-            if (!agent.isStopped)
-            {
-                agent.isStopped = true;
-            }
+            agent.isStopped = true;
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
             return;
         }
 
-        // Se o player voltou perto, RETOMA o movimento
         if (agent.isStopped)
-        {
             agent.isStopped = false;
-        }
 
-        // Verifica se deve correr
         if (!isRunning && Time.time - movementStartTime >= runAfterSeconds)
         {
             isRunning = true;
@@ -277,11 +253,9 @@ public class Movimentar_NPC : MonoBehaviour
         }
 
         bool isMovingNow = agent.velocity.magnitude > 0.1f;
-
         animator.SetBool("isWalking", isMovingNow && !isRunning);
         animator.SetBool("isRunning", isMovingNow && isRunning);
     }
-
 
     private void OnDrawGizmos()
     {
