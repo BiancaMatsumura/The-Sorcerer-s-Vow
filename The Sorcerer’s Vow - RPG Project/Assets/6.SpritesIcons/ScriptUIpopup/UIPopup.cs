@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
-using Bianca.QuestSystem;
+using QuestSystem;
 public class UIPopup : MonoBehaviour
 {   
     private PickUpSystem _pickupSystem;

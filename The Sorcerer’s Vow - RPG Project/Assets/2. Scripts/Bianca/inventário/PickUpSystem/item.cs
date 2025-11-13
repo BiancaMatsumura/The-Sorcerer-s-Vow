@@ -3,51 +3,47 @@ using UnityEngine;
 using Inventory.Model;
 using QuestSystem;
 
-namespace Bianca.QuestSystem
+namespace QuestSystem
 {
     public class Item3D : MonoBehaviour
     {
-        [field: SerializeField]
-        public ItemSO InventoryItem { get; private set; }
+        [field: SerializeField] public ItemSO InventoryItem { get; private set; }
+        [field: SerializeField] public int Quantity { get; set; } = 1;
 
-        [field: SerializeField]
-        public int Quantity { get; set; } = 1;
+        [Header("Vinculação de Missão")]
+        [SerializeField] private int questID; // ← ID da quest que libera a coleta
+        public SO_Quest quest;
 
+        [Header("Efeitos e UI")]
         public AudioSource audioSource;
+        [SerializeField] private ParticleSystem particleDisable;
+        [SerializeField] private GameObject interactionUI;
+        [SerializeField] private Animation anim;
 
-        [SerializeField]
-        private float duration = 0.3f;
-
-        [SerializeField]
-        private QuestData linkedQuest;
+        [Header("Animação")]
+        [SerializeField] private float duration = 0.3f;
 
         private InventoryController inventoryController;
-
-        [SerializeField] private GameObject interectionUI;
         private Transform mainCamera;
-
-        private Animation anim;
-
-        public ParticleSystem ParticleDesable;
-
         private bool isCollected = false;
 
         private void Awake()
         {
-            mainCamera = Camera.main.transform;
-            anim = GetComponent<Animation>();
+            mainCamera = Camera.main?.transform;
+            anim ??= GetComponent<Animation>();
             inventoryController = Object.FindAnyObjectByType<InventoryController>();
+
+            if (inventoryController == null)
+                Debug.LogError("[Item3D] ❌ InventoryController não encontrado!");
         }
 
         private void Update()
         {
-            if (interectionUI != null)
+            // Faz o texto/ícone de interação sempre olhar para a câmera
+            if (interactionUI != null && mainCamera != null)
             {
-                if (mainCamera != null)
-                {
-                    interectionUI.transform.LookAt(mainCamera);
-                    interectionUI.transform.Rotate(0f, 180f, 0f);
-                }
+                interactionUI.transform.LookAt(mainCamera);
+                interactionUI.transform.Rotate(0f, 180f, 0f);
             }
         }
 
@@ -56,59 +52,78 @@ namespace Bianca.QuestSystem
             if (isCollected)
                 return;
 
-            isCollected = true; // trava logo no início
-
-            if (!CanPickup())
-            {
-                Debug.Log("[Item3D] ❌ Quest ainda não pode ser completada (dependências pendentes).");
-                return;
-            }
-
             if (inventoryController == null)
+                return;
+
+            var inventory = inventoryController.InventoryData;
+            if (inventory == null)
             {
-                Debug.LogError("[Item3D] InventoryController não encontrado!");
+                Debug.LogError("[Item3D] ❌ InventoryData não encontrado!");
                 return;
             }
 
-            if (inventoryController.InventoryData.CanAddItem(InventoryItem, Quantity))
+            if (inventory.CanAddItem(InventoryItem, Quantity))
             {
                 isCollected = true;
                 GetComponent<Collider>().enabled = false;
 
                 Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
 
-                if (ParticleDesable != null)
+                if (quest != null)
                 {
-                    ParticleDesable.Clear();
+                    // Tenta encontrar o QuestManager ativo na cena
+                    var questManager = Object.FindAnyObjectByType<QuestManager>();
+
+                    if (questManager != null)
+                    {
+                        // Busca a quest ativa correspondente ao ScriptableObject vinculado
+                        var activeQuest = questManager.GetQuestByID(quest.id);
+
+                        if (activeQuest != null)
+                        {
+                            // Marca a missão como completa
+                            activeQuest.QuestStatus = QuestStatus.Completed;
+
+                            // Dispara o evento de missão concluída
+                            QuestEvents.TriggerQuestCompleted(activeQuest);
+
+                            Debug.Log($"[Item3D] 🧩 Missão '{activeQuest.QuestName}' concluída via coleta do item '{InventoryItem.Name}'.");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[Item3D] Nenhuma missão ativa encontrada com o ID {quest.id}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[Item3D] Nenhum QuestManager encontrado na cena.");
+                    }
                 }
-                // ✅ ADICIONA ITEM AO INVENTÁRIO IMEDIATAMENTE
-                inventoryController.InventoryData.AddItem(InventoryItem, Quantity);
-                QuestEvents.TriggerItemCollected(InventoryItem.ID);
+
+
+
+                if (particleDisable != null)
+                    particleDisable.Clear();
+
+                inventory.AddItem(InventoryItem, Quantity);
                 Debug.Log($"[Item3D] Item '{InventoryItem.Name}' adicionado ao inventário");
 
                 StartCoroutine(AnimateItemPickup());
             }
             else
             {
-                Debug.Log("[Item3D] ❌ Não é possível coletar: inventário cheio.");
+                Debug.Log($"[Item3D] ❌ Inventário cheio — não foi possível coletar '{InventoryItem.Name}'.");
             }
         }
 
         private IEnumerator AnimateItemPickup()
         {
-            // Toca som de coleta
             if (audioSource != null)
-            {
                 audioSource.Play();
-            }
 
-            // Para animação idle se houver
             if (anim != null)
-            {
                 anim.Stop();
-            }
 
-            // Animação de encolher
             Vector3 startScale = transform.localScale;
             Vector3 endScale = Vector3.zero;
             float currentTime = 0;
@@ -120,49 +135,38 @@ namespace Bianca.QuestSystem
                 yield return null;
             }
 
-            // ✅ NOTIFICA O SISTEMA DE QUEST
-            if (linkedQuest != null)
-            {
-                var questSystem = Object.FindAnyObjectByType<QuestSystem>();
-                if (questSystem != null)
-                {
-                    Debug.Log($"[Item3D] 🔔 Notificando QuestSystem: Item coletado para quest '{linkedQuest.questName}'");
-                    questSystem.NotifyItemCollected(linkedQuest);
-                }
-                else
-                {
-                    Debug.LogWarning("[Item3D] QuestSystem não encontrado na cena!");
-                }
-            }
-            else
-            {
-                Debug.Log("[Item3D] Item não está vinculado a nenhuma quest");
-            }
-
-            // Aguarda um pouco antes de destruir
             yield return new WaitForSeconds(0.5f);
 
-            Debug.Log($"[Item3D] Destruindo GameObject do item '{InventoryItem.Name}'");
+            Debug.Log($"[Item3D] 🧹 Destruindo GameObject do item '{InventoryItem.Name}'");
             Destroy(gameObject);
         }
 
+        // ✅ Somente pode pegar se a missão vinculada estiver ativa
         public bool CanPickup()
         {
-            var questSystem = Object.FindAnyObjectByType<QuestSystem>();
+            // Se não há missão vinculada, pode pegar normalmente
+            if (questID <= 0)
+                return true;
 
-            // Se não há quest vinculada, sempre pode coletar
-            if (linkedQuest == null || questSystem == null)
+            var qm = Object.FindAnyObjectByType<QuestManager>();
+            if (qm == null)
             {
-                Debug.Log($"[Item3D] Item '{InventoryItem.Name}' pode ser coletado (sem quest vinculada)");
+                Debug.LogWarning("[Item3D] QuestManager não encontrado — liberando coleta.");
                 return true;
             }
 
-            // Verifica se a quest pode ser completada (dependências satisfeitas)
-            bool canComplete = questSystem.CanCompleteQuest(linkedQuest);
+            var quest = qm.GetQuestByID(questID);
+            if (quest == null)
+            {
+                Debug.LogWarning($"[Item3D] Nenhuma quest encontrada com ID {questID}");
+                return false;
+            }
 
-            Debug.Log($"[Item3D] Verificando se pode coletar '{InventoryItem.Name}' para quest '{linkedQuest.questName}': {canComplete}");
+            bool canPickup = quest.QuestStatus == QuestStatus.Active;
 
-            return canComplete;
+            Debug.Log($"[Item3D] Checando se pode pegar '{InventoryItem.Name}' — Quest '{quest.QuestName}' está {quest.QuestStatus}. Pode pegar: {canPickup}");
+
+            return canPickup;
         }
     }
 }

@@ -2,18 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using QuestSystem;
 
 namespace Inventory.Model
 {
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "Inventory/InventorySO")]
     public class InventorySO : ScriptableObject
     {
-        [SerializeField]
-        public List<InventoryItem> inventoryItems;
-
-        [field: SerializeField]
-        public int Size { get; private set; } = 50;
+        [SerializeField] public List<InventoryItem> inventoryItems;
+        [field: SerializeField] public int Size { get; private set; } = 50;
 
         public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
 
@@ -21,45 +18,54 @@ namespace Inventory.Model
         {
             inventoryItems = new List<InventoryItem>();
             for (int i = 0; i < Size; i++)
-            {
                 inventoryItems.Add(InventoryItem.GetEmptyItem());
-            }
-        }
-        public void SetItemState(int index, List<ItemParameter> newState)
-        {
-            if (index >= 0 && index < inventoryItems.Count)
-            {
-                var item = inventoryItems[index];
-                item.itemState = new List<ItemParameter>(newState);
-                inventoryItems[index] = item;
-                OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
-            }
         }
 
-
+        #region === ADICIONAR ITEM ===
         public int AddItem(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
-            if (item.IsStackable == false)
+            if (item == null || quantity <= 0)
+                return quantity;
+
+            int initialQuantity = quantity;
+
+            // Itens não empilháveis: adiciona 1 por slot
+            if (!item.IsStackable)
             {
-                while (quantity > 0 && IsInventoryFull() == false)
+                while (quantity > 0 && !IsInventoryFull())
                 {
                     quantity -= AddItemToFirstFreeSlot(item, 1, itemState);
                 }
-                InformAboutChange();
-                return quantity;
             }
-            quantity = AddStackableItem(item, quantity);
-            InformAboutChange();
+            else
+            {
+                // Itens empilháveis: tenta adicionar no mesmo stack ou cria novos
+                quantity = AddStackableItem(item, quantity);
+            }
+
+            // ✅ Atualiza apenas se algo foi adicionado
+            if (quantity < initialQuantity)
+            {
+                QuestEvents.TriggerItemCollected(item.ID);
+                InformAboutChange();
+            }
+
             return quantity;
         }
 
+        public void AddItem(InventoryItem inventoryItem)
+        {
+            AddItem(inventoryItem.item, inventoryItem.quantity, inventoryItem.itemState);
+        }
+
+
         private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
-            InventoryItem newItem = new InventoryItem
+            var newItem = new InventoryItem
             {
                 item = item,
                 quantity = quantity,
-                itemState = new List<ItemParameter>(itemState == null ? item.DefaultParametersList : itemState)
+                itemState = new List<ItemParameter>(itemState ?? item.DefaultParametersList)
             };
 
             for (int i = 0; i < inventoryItems.Count; i++)
@@ -74,18 +80,9 @@ namespace Inventory.Model
             return 0;
         }
 
-
-        private bool IsInventoryFull()
-            => inventoryItems.Where(item => item.IsEmpty).Any() == false;
-
-        public bool InventoryIsFull()
-        {
-            return IsInventoryFull();
-        }
-
-
         private int AddStackableItem(ItemSO item, int quantity)
         {
+            // 🔹 Primeiro tenta preencher stacks existentes
             for (int i = 0; i < inventoryItems.Count; i++)
             {
                 if (inventoryItems[i].IsEmpty)
@@ -93,96 +90,93 @@ namespace Inventory.Model
 
                 if (inventoryItems[i].item.ID == item.ID)
                 {
-                    int amountPossibleToTake = inventoryItems[i].item.MaxStackSize - inventoryItems[i].quantity;
+                    int space = item.MaxStackSize - inventoryItems[i].quantity;
+                    int amountToAdd = Mathf.Min(quantity, space);
 
-                    if (quantity > amountPossibleToTake)
+                    if (amountToAdd > 0)
                     {
-                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].item.MaxStackSize);
-                        quantity -= amountPossibleToTake;
-                    }
-                    else
-                    {
-                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity + quantity);
-                        InformAboutChange();
-                        return 0;
+                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity + amountToAdd);
+                        quantity -= amountToAdd;
+
+                        if (quantity <= 0)
+                            return 0;
                     }
                 }
             }
 
-            while (quantity > 0)
+            // 🔹 Se ainda sobrou, cria novos stacks
+            while (quantity > 0 && !IsInventoryFull())
             {
-                if (IsInventoryFull())
-                {
-
-                    break;
-                }
-
-                int newQuantity = Mathf.Clamp(quantity, 0, item.MaxStackSize);
-                quantity -= newQuantity;
-                AddItemToFirstFreeSlot(item, newQuantity);
+                int amountToAdd = Mathf.Min(quantity, item.MaxStackSize);
+                AddItemToFirstFreeSlot(item, amountToAdd);
+                quantity -= amountToAdd;
             }
 
             return quantity;
         }
 
-
-        public void RemoveItem(int itemIndex, int amount)
+        public bool InventoryIsFull()
         {
-            if (inventoryItems.Count > itemIndex)
+            foreach (var item in inventoryItems)
             {
-                if (inventoryItems[itemIndex].IsEmpty)
-                    return;
-                int reminder = inventoryItems[itemIndex].quantity - amount;
-                if (reminder <= 0)
-                    inventoryItems[itemIndex] = InventoryItem.GetEmptyItem();
-                else
-                    inventoryItems[itemIndex] = inventoryItems[itemIndex]
-                        .ChangeQuantity(reminder);
-
-                InformAboutChange();
+                if (item.IsEmpty)
+                    return false;
             }
+            return true;
         }
 
-        public void AddItem(InventoryItem item)
+        public void SetItemState(int index, List<ItemParameter> newState)
         {
-            AddItem(item.item, item.quantity);
-        }
+            if (index < 0 || index >= inventoryItems.Count)
+                return;
 
-        public Dictionary<int, InventoryItem> GetCurrentInventoryState()
-        {
-            Dictionary<int, InventoryItem> returnValue =
-                new Dictionary<int, InventoryItem>();
+            InventoryItem item = inventoryItems[index];
+            if (item.IsEmpty)
+                return;
 
-            for (int i = 0; i < inventoryItems.Count; i++)
-            {
-                if (inventoryItems[i].IsEmpty)
-                    continue;
-                returnValue[i] = inventoryItems[i];
-            }
-            return returnValue;
-        }
-
-        public InventoryItem GetItemAt(int itemIndex)
-        {
-            return inventoryItems[itemIndex];
-        }
-
-        public void SwapItems(int itemIndex_1, int itemIndex_2)
-        {
-            InventoryItem item1 = inventoryItems[itemIndex_1];
-            inventoryItems[itemIndex_1] = inventoryItems[itemIndex_2];
-            inventoryItems[itemIndex_2] = item1;
-            InformAboutChange();
-        }
-
-        private void InformAboutChange()
-        {
+            item.itemState = newState;
+            inventoryItems[index] = item;
             OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
         }
 
-        public bool HasItem(ItemSO questRequiredItem)
+        #endregion
+
+        #region === REMOVER ITEM ===
+        public void RemoveItem(int index, int amount)
         {
-            return inventoryItems.Any(slot => !slot.IsEmpty && slot.item == questRequiredItem && slot.quantity > 0);
+            if (index < 0 || index >= inventoryItems.Count)
+                return;
+
+            if (inventoryItems[index].IsEmpty)
+                return;
+
+            int remainder = inventoryItems[index].quantity - amount;
+
+            if (remainder <= 0)
+                inventoryItems[index] = InventoryItem.GetEmptyItem();
+            else
+                inventoryItems[index] = inventoryItems[index].ChangeQuantity(remainder);
+
+            InformAboutChange();
+        }
+        #endregion
+
+        #region === OPERAÇÕES GERAIS ===
+        public void SwapItems(int indexA, int indexB)
+        {
+            if (indexA == indexB || indexA < 0 || indexB < 0 || indexA >= inventoryItems.Count || indexB >= inventoryItems.Count)
+                return;
+
+            (inventoryItems[indexA], inventoryItems[indexB]) = (inventoryItems[indexB], inventoryItems[indexA]);
+            InformAboutChange();
+        }
+
+        public bool HasItem(ItemSO requiredItem)
+        {
+            return inventoryItems.Any(slot =>
+                !slot.IsEmpty &&
+                slot.item == requiredItem &&
+                slot.quantity > 0);
         }
 
         public bool CanAddItem(ItemSO item, int quantity)
@@ -194,17 +188,44 @@ namespace Inventory.Model
             }
             else
             {
-                // Verifica se há espaço para stackar ou slots vazios
                 foreach (var invItem in inventoryItems)
                 {
-                    if (invItem.IsEmpty) return true;
-                    if (invItem.item == item && invItem.quantity < item.MaxStackSize) return true;
+                    if (invItem.IsEmpty)
+                        return true;
+
+                    if (invItem.item == item && invItem.quantity < item.MaxStackSize)
+                        return true;
                 }
                 return false;
             }
         }
 
+        private bool IsInventoryFull() =>
+            !inventoryItems.Any(i => i.IsEmpty);
 
+        private void InformAboutChange() =>
+            OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
+        #endregion
+
+        #region === ESTADO DO INVENTÁRIO ===
+        public Dictionary<int, InventoryItem> GetCurrentInventoryState()
+        {
+            var dict = new Dictionary<int, InventoryItem>();
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                if (!inventoryItems[i].IsEmpty)
+                    dict[i] = inventoryItems[i];
+            }
+            return dict;
+        }
+
+        public InventoryItem GetItemAt(int index)
+        {
+            if (index < 0 || index >= inventoryItems.Count)
+                return InventoryItem.GetEmptyItem();
+            return inventoryItems[index];
+        }
+        #endregion
     }
 
     [Serializable]
@@ -219,20 +240,17 @@ namespace Inventory.Model
         {
             return new InventoryItem
             {
-                item = this.item,
+                item = item,
                 quantity = newQuantity,
-                itemState = new List<ItemParameter>(this.itemState)
+                itemState = new List<ItemParameter>(itemState)
             };
         }
 
-        public static InventoryItem GetEmptyItem()
-            => new InventoryItem
-            {
-                item = null,
-                quantity = 0,
-                itemState = new List<ItemParameter>()
-            };
+        public static InventoryItem GetEmptyItem() => new InventoryItem
+        {
+            item = null,
+            quantity = 0,
+            itemState = new List<ItemParameter>()
+        };
     }
-
 }
-

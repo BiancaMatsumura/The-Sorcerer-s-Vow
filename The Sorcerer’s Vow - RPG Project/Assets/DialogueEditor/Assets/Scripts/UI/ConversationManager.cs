@@ -97,7 +97,12 @@ namespace DialogueEditor
 
             m_uiOptions = new List<UIConversationButton>();
 
-            NpcIcon.sprite = BlankSprite;
+            if (NpcIcon != null && BlankSprite != null)
+            {
+                NpcIcon.sprite = BlankSprite;
+            }
+
+
             DialogueText.text = "";
             TurnOffUI();
         }

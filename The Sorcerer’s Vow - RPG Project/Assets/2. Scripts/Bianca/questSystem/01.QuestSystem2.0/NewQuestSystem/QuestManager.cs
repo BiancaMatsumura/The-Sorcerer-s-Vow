@@ -6,7 +6,6 @@ namespace QuestSystem
     public class QuestManager : MonoBehaviour
     {
         [SerializeField] private List<SO_Quest> questsToLoad = new List<SO_Quest>();
-
         public Dictionary<int, Quest> Quests;
 
         private static QuestManager instance;
@@ -24,7 +23,8 @@ namespace QuestSystem
 
         private void Start()
         {
-            StartQuest(0); // Inicia a quest com ID 1 ao começar o jogo
+            // Inicia a primeira quest manualmente (ex: tutorial)
+            StartQuest(0);
         }
 
         public Quest GetQuestByID(int id)
@@ -37,41 +37,52 @@ namespace QuestSystem
         public bool StartQuest(int id)
         {
             if (!Quests.ContainsKey(id)) return false;
-            if (Quests[id].QuestStatus != QuestStatus.Inactive) return false;
 
-            Quests[id].Activate();
-            Quests[id].OnQuestCompleted += QuestCompleted;
+            Quest quest = Quests[id];
+            if (quest.QuestStatus != QuestStatus.Inactive) return false;
 
-            Debug.unityLogger.Log($"{Quests[id].QuestName} has been started");
+            quest.Activate();
+            quest.OnQuestCompleted += QuestCompleted;
+
+            Debug.Log($"▶ Iniciando quest: {quest.QuestName}");
             return true;
         }
 
         public void QuestCompleted(Quest quest)
         {
-            Debug.unityLogger.Log($"{quest.QuestName} has been completed");
+            Debug.Log($"🏁 Quest concluída: {quest.QuestName}");
+
+            // Desinscreve o evento de conclusão
             quest.OnQuestCompleted -= QuestCompleted;
 
+            // Dispara evento global de conclusão
             QuestEvents.TriggerQuestCompleted(quest);
 
             // 🔥 Ativa as próximas quests encadeadas
             SO_Quest questSO = questsToLoad.Find(q => q.id == quest.QuestID);
             if (questSO != null && questSO.nextQuests != null)
             {
-                foreach (var next in questSO.nextQuests)
+                foreach (var nextSO in questSO.nextQuests)
                 {
-                    if (next != null)
+                    if (nextSO == null) continue;
+
+                    if (Quests.TryGetValue(nextSO.id, out Quest nextQuest))
                     {
-                        if (Quests.TryGetValue(next.id, out Quest nextQuest))
+                        if (nextQuest.QuestStatus == QuestStatus.Inactive)
                         {
-                            if (nextQuest.QuestStatus == QuestStatus.Inactive)
-                            {
-                                StartQuest(nextQuest.QuestID);
-                                Debug.Log($"➡ Próxima quest '{nextQuest.QuestName}' foi ativada automaticamente!");
-                            }
+                            // Espera 1 frame antes de ativar (evita conflito de evento antigo)
+                            StartCoroutine(ActivateNextQuestDelayed(nextQuest));
                         }
                     }
                 }
             }
+        }
+
+        private System.Collections.IEnumerator ActivateNextQuestDelayed(Quest nextQuest)
+        {
+            yield return null; // aguarda 1 frame
+            StartQuest(nextQuest.QuestID);
+            Debug.Log($"➡ Próxima quest '{nextQuest.QuestName}' ativada automaticamente!");
         }
 
         private void InitializeQuests()
@@ -80,14 +91,14 @@ namespace QuestSystem
 
             Quests = new Dictionary<int, Quest>();
 
-            for (var i = 0; i < questsToLoad.Count; i++)
+            foreach (var questToLoad in questsToLoad)
             {
-                SO_Quest questToLoad = questsToLoad[i];
                 Quest quest = new Quest(questToLoad.questName, questToLoad.id, questToLoad.components);
                 Quests.Add(quest.QuestID, quest);
-
-                Debug.unityLogger.Log($"{quest.QuestName} has been initialized");
+                Debug.Log($"📦 Quest '{quest.QuestName}' inicializada");
             }
         }
+
+        
     }
 }
