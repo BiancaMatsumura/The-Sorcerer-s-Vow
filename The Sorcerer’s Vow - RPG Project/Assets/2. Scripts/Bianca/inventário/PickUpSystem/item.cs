@@ -11,7 +11,8 @@ namespace QuestSystem
         [field: SerializeField] public int Quantity { get; set; } = 1;
 
         [Header("Vinculação de Missão")]
-        [SerializeField] private int questID; // ← ID da quest que libera a coleta
+        [SerializeField] private int questID; // Missão que libera a coleta quando está ATIVA
+        [SerializeField] private int dependencyQuestID; // ⭐ NOVO — Missão que precisa estar COMPLETA
         public SO_Quest quest;
 
         [Header("Efeitos e UI")]
@@ -39,7 +40,6 @@ namespace QuestSystem
 
         private void Update()
         {
-            // Faz o texto/ícone de interação sempre olhar para a câmera
             if (interactionUI != null && mainCamera != null)
             {
                 interactionUI.transform.LookAt(mainCamera);
@@ -47,18 +47,51 @@ namespace QuestSystem
             }
         }
 
+        public bool CanPickup()
+        {
+            var qm = Object.FindAnyObjectByType<QuestManager>();
+            if (qm == null)
+            {
+                Debug.LogWarning("[Item3D] QuestManager não encontrado — permitindo coleta.");
+                return true;
+            }
+
+            // Se não há dependência, libera
+            if (dependencyQuestID <= 0)
+                return true;
+
+            var depQuest = qm.GetQuestByID(dependencyQuestID);
+
+            if (depQuest == null)
+            {
+                Debug.LogWarning($"[Item3D] Missão dependência {dependencyQuestID} não encontrada.");
+                return false;
+            }
+
+            bool canPickup = depQuest.QuestStatus == QuestStatus.Completed;
+
+            if (!canPickup)
+            {
+                Debug.Log($"[Item3D] BLOQUEADO: item '{InventoryItem.Name}' depende da missão {depQuest.QuestName} COMPLETA.");
+            }
+
+            return canPickup;
+        }
+
+
         public void DestroyItem()
         {
-            if (isCollected)
-                return;
-
-            if (inventoryController == null)
+            if (isCollected || inventoryController == null)
                 return;
 
             var inventory = inventoryController.InventoryData;
             if (inventory == null)
+                return;
+
+            // ❗ Se não pode pegar, não coleta
+            if (!CanPickup())
             {
-                Debug.LogError("[Item3D] ❌ InventoryData não encontrado!");
+                Debug.Log($"[Item3D] ❌ Coleta bloqueada para '{InventoryItem.Name}' devido às regras de missão.");
                 return;
             }
 
@@ -67,52 +100,27 @@ namespace QuestSystem
                 isCollected = true;
                 GetComponent<Collider>().enabled = false;
 
-                Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
+                Debug.Log($"[Item3D] Coletando item: {InventoryItem.Name}");
 
+                // --- Completa missão vinculada opcionalmente ---
                 if (quest != null)
                 {
-                    // Tenta encontrar o QuestManager ativo na cena
                     var questManager = Object.FindAnyObjectByType<QuestManager>();
+                    var activeQuest = questManager?.GetQuestByID(quest.id);
 
-                    if (questManager != null)
+                    if (activeQuest != null)
                     {
-                        // Busca a quest ativa correspondente ao ScriptableObject vinculado
-                        var activeQuest = questManager.GetQuestByID(quest.id);
-
-                        if (activeQuest != null)
-                        {
-                            // Marca a missão como completa
-                            activeQuest.QuestStatus = QuestStatus.Completed;
-
-                            // Dispara o evento de missão concluída
-                            QuestEvents.TriggerQuestCompleted(activeQuest);
-
-                            Debug.Log($"[Item3D] 🧩 Missão '{activeQuest.QuestName}' concluída via coleta do item '{InventoryItem.Name}'.");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[Item3D] Nenhuma missão ativa encontrada com o ID {quest.id}");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("[Item3D] Nenhum QuestManager encontrado na cena.");
+                        activeQuest.QuestStatus = QuestStatus.Completed;
+                        QuestEvents.TriggerQuestCompleted(activeQuest);
                     }
                 }
-
-
 
                 if (particleDisable != null)
                     particleDisable.Clear();
 
                 inventory.AddItem(InventoryItem, Quantity);
-                Debug.Log($"[Item3D] Item '{InventoryItem.Name}' adicionado ao inventário");
 
                 StartCoroutine(AnimateItemPickup());
-            }
-            else
-            {
-                Debug.Log($"[Item3D] ❌ Inventário cheio — não foi possível coletar '{InventoryItem.Name}'.");
             }
         }
 
@@ -136,37 +144,7 @@ namespace QuestSystem
             }
 
             yield return new WaitForSeconds(0.5f);
-
-            Debug.Log($"[Item3D] 🧹 Destruindo GameObject do item '{InventoryItem.Name}'");
             Destroy(gameObject);
-        }
-
-        // ✅ Somente pode pegar se a missão vinculada estiver ativa
-        public bool CanPickup()
-        {
-            // Se não há missão vinculada, pode pegar normalmente
-            if (questID <= 0)
-                return true;
-
-            var qm = Object.FindAnyObjectByType<QuestManager>();
-            if (qm == null)
-            {
-                Debug.LogWarning("[Item3D] QuestManager não encontrado — liberando coleta.");
-                return true;
-            }
-
-            var quest = qm.GetQuestByID(questID);
-            if (quest == null)
-            {
-                Debug.LogWarning($"[Item3D] Nenhuma quest encontrada com ID {questID}");
-                return false;
-            }
-
-            bool canPickup = quest.QuestStatus == QuestStatus.Active;
-
-            Debug.Log($"[Item3D] Checando se pode pegar '{InventoryItem.Name}' — Quest '{quest.QuestName}' está {quest.QuestStatus}. Pode pegar: {canPickup}");
-
-            return canPickup;
         }
     }
 }

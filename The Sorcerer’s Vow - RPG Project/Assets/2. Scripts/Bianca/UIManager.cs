@@ -8,12 +8,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIInventoryPage inventoryUI;
     [SerializeField] private UIShopPage shopUI;
     [SerializeField] private InventorySO inventoryData;
+    [SerializeField] private QuestUI_ questUI;
 
     private Shop activeShop;
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ToggleQuest();
+        }
+    }
+
     public void ToggleInventory()
     {
-        // Fecha Shop se estiver aberto
         if (shopUI.gameObject.activeSelf)
             CloseShop();
 
@@ -25,7 +33,6 @@ public class UIManager : MonoBehaviour
             Cursor.visible = true;
             CameraController.isInventoryOpen = true;
 
-            // Atualiza o inventário
             foreach (var kvp in inventoryData.GetCurrentInventoryState())
             {
                 inventoryUI.UpdateData(
@@ -38,17 +45,12 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            inventoryUI.Hide();
-            Time.timeScale = 1f;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            CameraController.isInventoryOpen = false;
+            CloseInventory();
         }
     }
 
     public void ToggleShop(Shop shop)
     {
-        // Fecha Inventário se estiver aberto
         if (inventoryUI.isActiveAndEnabled)
             inventoryUI.Hide();
 
@@ -69,9 +71,54 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ToggleQuest()
+    {
+        if (questUI == null)
+            return;
+
+        bool isPanelActive = questUI.gameObject.activeSelf;
+
+        if (isPanelActive)
+        {
+            CloseQuestPanel();
+            return;
+        }
+
+        if (inventoryUI.isActiveAndEnabled)
+            CloseInventory();
+
+        if (shopUI.gameObject.activeSelf)
+            CloseShop();
+
+        questUI.Show();
+
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        CameraController.isInventoryOpen = true;
+    }
+
     public void CloseShop()
     {
         shopUI.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CameraController.isInventoryOpen = false;
+    }
+
+    public void CloseInventory()
+    {
+        inventoryUI.Hide();
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CameraController.isInventoryOpen = false;
+    }
+
+    public void CloseQuestPanel()
+    {
+        questUI.Hide();
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

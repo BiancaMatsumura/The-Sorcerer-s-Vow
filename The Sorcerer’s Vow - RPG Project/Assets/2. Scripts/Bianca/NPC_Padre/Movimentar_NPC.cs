@@ -28,6 +28,9 @@ public class Movimentar_NPC : MonoBehaviour
     private Transform mainCamera;
     public bool isActiveUI = false;
 
+    private bool requirePlayerForMovement = false;
+
+
     private int currentWaypointIndex = 0;
     private int currentWaypointIndex02 = 0;
 
@@ -117,6 +120,8 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void StartMovement()
     {
+        requirePlayerForMovement = true;
+
         if (interactionUI != null)
             interactionUI.SetActive(true);
 
@@ -164,6 +169,8 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void StartMovement02()
     {
+        requirePlayerForMovement = false;
+
         isMovingToWaypoints02 = true;
         isRunning = false;
         currentWaypointIndex02 = 0;
@@ -235,7 +242,8 @@ public class Movimentar_NPC : MonoBehaviour
 
     private void UpdateSpeedAndAnimation()
     {
-        if (!IsPlayerClose())
+        // Se esse movimento exige player perto e o player não está perto -> pausa
+        if (requirePlayerForMovement && !IsPlayerClose())
         {
             agent.isStopped = true;
             animator.SetBool("isWalking", false);
@@ -256,6 +264,7 @@ public class Movimentar_NPC : MonoBehaviour
         animator.SetBool("isWalking", isMovingNow && !isRunning);
         animator.SetBool("isRunning", isMovingNow && isRunning);
     }
+
 
     private void OnDrawGizmos()
     {

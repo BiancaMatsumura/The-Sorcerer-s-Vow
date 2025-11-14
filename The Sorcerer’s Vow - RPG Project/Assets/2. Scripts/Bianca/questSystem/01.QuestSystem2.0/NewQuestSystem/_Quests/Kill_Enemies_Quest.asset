@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Kill_Enemies_Quest
   m_EditorClassIdentifier: 
   questName: Kill Enemies
-  id: 2
+  id: 7
   components:
   - {fileID: 11400000, guid: 7a5746d905c382a4293292f46f8caaaa, type: 2}
   nextQuests:
-  - {fileID: 11400000, guid: b7584247609f28d4a9bbe1451cc868ac, type: 2}
+  - {fileID: 0}

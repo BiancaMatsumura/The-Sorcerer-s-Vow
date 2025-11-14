@@ -13,12 +13,12 @@ public class DialogueManager : MonoBehaviour
         public NPCConversation beforeQuestConversation;
         public NPCConversation duringQuestConversation;
         public NPCConversation afterQuestConversation;
-        public bool startsQuestOnEnd;      // inicia quest ao finalizar o diálogo "antes"
-        public bool completesQuestOnEnd;   // completa quest ao finalizar o diálogo "durante"
+        public bool startsQuestOnEnd;
+        public bool completesQuestOnEnd;
     }
 
     [Header("Lista de Quests controladas por este NPC")]
-    public List<QuestDialogue> questDialogues = new();
+    public List<QuestDialogue> questDialogues = new List<QuestDialogue>();
 
     [Header("UI de interação")]
     public GameObject interactionUI;
@@ -27,10 +27,11 @@ public class DialogueManager : MonoBehaviour
     private bool playerInRange;
     private Transform mainCamera;
     private QuestDialogue activeQuestDialogue;
+    private NPCConversation currentConversation;
 
     private void Awake()
     {
-        questManager = FindFirstObjectByType<QuestManager>();
+        questManager = FindObjectOfType<QuestManager>(); // Corrigido
         if (questManager == null)
             Debug.LogError("❌ Nenhum QuestManager encontrado na cena!");
     }
@@ -41,7 +42,6 @@ public class DialogueManager : MonoBehaviour
         if (interactionUI != null)
             interactionUI.SetActive(false);
 
-        // Quando o diálogo termina, tenta iniciar/completar quest
         ConversationManager.OnConversationEnded += OnDialogueEnded;
     }
 
@@ -68,6 +68,7 @@ public class DialogueManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            Debug.Log("✅ Player entrou na zona de interação"); // Debug adicionado
             if (interactionUI != null)
                 interactionUI.SetActive(true);
         }
@@ -78,6 +79,7 @@ public class DialogueManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            Debug.Log("❌ Player saiu da zona de interação"); // Debug adicionado
             if (interactionUI != null)
                 interactionUI.SetActive(false);
         }
@@ -85,6 +87,8 @@ public class DialogueManager : MonoBehaviour
 
     private void StartDialogue()
     {
+        Debug.Log("🎭 Tentando iniciar diálogo..."); // Debug adicionado
+        
         activeQuestDialogue = GetRelevantQuestDialogue();
         if (activeQuestDialogue == null)
         {
@@ -98,6 +102,7 @@ public class DialogueManager : MonoBehaviour
         if (quest == null)
         {
             conversationToStart = activeQuestDialogue.beforeQuestConversation;
+            Debug.Log("📖 Iniciando diálogo BEFORE (quest não existe)");
         }
         else
         {
@@ -105,18 +110,22 @@ public class DialogueManager : MonoBehaviour
             {
                 case QuestStatus.Inactive:
                     conversationToStart = activeQuestDialogue.beforeQuestConversation;
+                    Debug.Log("📖 Iniciando diálogo BEFORE (quest inativa)");
                     break;
                 case QuestStatus.Active:
                     conversationToStart = activeQuestDialogue.duringQuestConversation;
+                    Debug.Log("📖 Iniciando diálogo DURING (quest ativa)");
                     break;
                 case QuestStatus.Completed:
                     conversationToStart = activeQuestDialogue.afterQuestConversation;
+                    Debug.Log("📖 Iniciando diálogo AFTER (quest completa)");
                     break;
             }
         }
 
         if (conversationToStart != null)
         {
+            currentConversation = conversationToStart;
             ConversationManager.Instance.StartConversation(conversationToStart);
             if (interactionUI != null)
                 interactionUI.SetActive(false);
@@ -132,40 +141,52 @@ public class DialogueManager : MonoBehaviour
         foreach (var qd in questDialogues)
         {
             Quest quest = questManager.GetQuestByID(qd.questID);
-
-            // Se a quest não existe ou não está completa, ainda é relevante
             if (quest == null || quest.QuestStatus != QuestStatus.Completed)
                 return qd;
         }
 
-        // Se todas as quests foram completadas, retorna a última
         if (questDialogues.Count > 0)
             return questDialogues[questDialogues.Count - 1];
 
         return null;
     }
 
-
     private void OnDialogueEnded()
     {
-        if (activeQuestDialogue == null) return;
+        Debug.Log("🎬 Diálogo terminou!"); // Debug adicionado
+        
+        if (activeQuestDialogue == null || currentConversation == null)
+        {
+            Debug.Log("⚠ Nenhuma quest ativa para processar");
+            return;
+        }
 
         Quest quest = questManager.GetQuestByID(activeQuestDialogue.questID);
 
-        // Caso a quest ainda não exista, pode iniciar
-        if (activeQuestDialogue.startsQuestOnEnd && (quest == null || quest.QuestStatus == QuestStatus.Inactive))
+        if (currentConversation == activeQuestDialogue.beforeQuestConversation)
         {
-            questManager.StartQuest(activeQuestDialogue.questID);
-            Debug.Log($"📜 Quest {activeQuestDialogue.questID} iniciada após diálogo!");
+            if (activeQuestDialogue.startsQuestOnEnd && (quest == null || quest.QuestStatus == QuestStatus.Inactive))
+            {
+                questManager.StartQuest(activeQuestDialogue.questID);
+                Debug.Log($"📜 Quest {activeQuestDialogue.questID} iniciada após diálogo BEFORE!");
+            }
         }
 
-        // Caso esteja ativa e o diálogo de "durante" finalize
-        if (activeQuestDialogue.completesQuestOnEnd && quest != null && quest.QuestStatus == QuestStatus.Active)
+        if (currentConversation == activeQuestDialogue.duringQuestConversation)
         {
-            quest.Complete();
-            Debug.Log($"🏁 Quest {activeQuestDialogue.questID} completada após diálogo!");
+            if (activeQuestDialogue.completesQuestOnEnd && quest != null && quest.QuestStatus == QuestStatus.Active)
+            {
+                quest.Complete();
+                Debug.Log($"🏁 Quest {activeQuestDialogue.questID} completada após diálogo DURING!");
+            }
         }
 
         activeQuestDialogue = null;
+        currentConversation = null;
+    }
+
+    public void StartDialogueExternal(NPCConversation conversationToStart)
+    {
+        ConversationManager.Instance.StartConversation(conversationToStart);
     }
 }

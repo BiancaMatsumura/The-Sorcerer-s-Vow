@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599ac2e331fa7c14a89185f71e3dbed0, type: 3}
   m_Name: Dialogo01
   m_EditorClassIdentifier: 
-  componentName: Dialogo
+  componentName: "Receba a sua Miss\xE3o!"
   questType: 2
-  description: 
-  dialogue: {fileID: 2504573815611092394, guid: b49d5f5f977ee3a439da1acd28a61cfb, type: 3}
+  description: "Primeira Miss\xE3o para iniciar a sua Jornada"
+  dialogue: {fileID: 6999984716772512859, guid: e7d554a0117887a44a38a04c7479c924, type: 3}

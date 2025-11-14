@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 599ac2e331fa7c14a89185f71e3dbed0, type: 3}
-  m_Name: Dialogo02
+  m_Name: Dialogo03
   m_EditorClassIdentifier: 
-  componentName: Dialogo 2
+  componentName: Dialogo 3
   questType: 2
   description: 
-  dialogue: {fileID: 2674327000016984888, guid: d81d90ca6b69ad847bf1768e8591e301, type: 3}
+  dialogue: {fileID: 4081022352951083382, guid: 58109ff6848ee8c40b0b7b8788c58002, type: 3}
