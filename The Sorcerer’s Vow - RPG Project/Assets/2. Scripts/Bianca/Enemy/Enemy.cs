@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
 using QuestSystem;
+using System.ComponentModel.Design;
 
 public enum EnemyState
 {
@@ -259,7 +260,14 @@ public class Enemy : BaseCharacter
 
     }
 
-
+    public void Desable1Collider() 
+    {
+        weaponCollider.enabled = false;
+    }
+    public void Active1Collider()
+    {
+        weaponCollider.enabled = true;
+    }
     private void UpdateAnimator()
     {
         if (animator == null || agent == null) return;

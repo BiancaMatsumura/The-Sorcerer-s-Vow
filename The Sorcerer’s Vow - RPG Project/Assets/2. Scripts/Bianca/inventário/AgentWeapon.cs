@@ -139,12 +139,14 @@ public class AgentWeapon : MonoBehaviour
 
     public void SetIngredient(EquippableItemSO ingredientItemSO, List<ItemParameter> itemState)
     {
+        anim = GetComponent<Animator>();
         if (equippedIngredient != null)
             inventoryData.AddItem(equippedIngredient, 1, ingredientCurrentState);
         
         equippedIngredient = ingredientItemSO;
         ingredientCurrentState = new List<ItemParameter>(itemState);
         ModifyParameters(ingredientCurrentState);
+        anim.Play("Essenciaa");
         Sprite[0].color = equippedIngredient.Cor;
         Sprite[1].color = equippedIngredient.Cor;
         Uianimation[0].Play("Craft");

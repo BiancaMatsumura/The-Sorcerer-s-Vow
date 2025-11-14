@@ -6,8 +6,8 @@ AudioContainerElement:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Punch_{2070047147640949140}
-  m_AudioClip: {fileID: 8300000, guid: 2cc2e9c23bf211e439cf93791a1490db, type: 3}
+  m_Name: PunchDouble_{2070047147640949140}
+  m_AudioClip: {fileID: 8300000, guid: 9cf562463c136094ba12c52e4f8976bf, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1307931743 &6418180475301049370
