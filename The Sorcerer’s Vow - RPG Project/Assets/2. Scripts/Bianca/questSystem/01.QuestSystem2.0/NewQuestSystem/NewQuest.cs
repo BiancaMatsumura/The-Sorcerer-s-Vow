@@ -54,7 +54,10 @@ namespace QuestSystem
                     qcTemp = _componentFactory[questComponent.questType](questComponent);
 
                 if (qcTemp == null)
-                    return;
+                {
+                    Debug.LogError($"[QUEST ERROR] '{QuestName}' tem um componente inválido ou sem factory configurada.");
+                    continue; // <-- ignora componente inválido mas NÃO cancela a quest inteira
+                }
 
                 QuestComponents.Add(qcTemp);
 

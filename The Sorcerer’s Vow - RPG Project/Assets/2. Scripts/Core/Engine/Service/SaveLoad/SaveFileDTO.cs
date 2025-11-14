@@ -2,6 +2,7 @@
 using _2._Scripts.Core.Domain.Character.Player;
 using _2._Scripts.Core.Engine.Service.SaveLoad.Structure;
 using Bianca.QuestSystem;
+using QuestSystem;
 
 namespace _2._Scripts.Core.Engine.Service.SaveLoad
 {
@@ -35,7 +36,7 @@ namespace _2._Scripts.Core.Engine.Service.SaveLoad
             playerCharacter.SetInitialPosition(PlayerData.Position);
             if (quest != null)
             {
-                quest.SetCurrentQuestIndex(CurrentQuestIndex);
+                //quest.SetCurrentQuestIndex(CurrentQuestIndex);
             }
         }
     }

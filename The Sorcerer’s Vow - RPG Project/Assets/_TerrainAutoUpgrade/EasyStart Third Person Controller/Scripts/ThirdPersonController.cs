@@ -93,7 +93,7 @@ public class ThirdPersonController : MonoBehaviour
             lastVerticalInput = inputVertical;
 
         bool shouldApplyStasis = isStasis && !(isAirKicking || (currentAttackType == 1 && !cc.isGrounded));
-        Debug.Log($"Status Player: {shouldApplyStasis}");
+        //Debug.Log($"Status Player: {shouldApplyStasis}");
 
         if (shouldApplyStasis)
         {

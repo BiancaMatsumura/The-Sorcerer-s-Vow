@@ -13,17 +13,21 @@ public class QuestUI_ : MonoBehaviour
 
     [Header("Referência do Sistema de Quests")]
     [SerializeField] private QuestManager questManager; // Arraste o QuestManager da cena
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            questUIPanel.SetActive(!questUIPanel.activeSelf);
-        }
-    }
+    
     private void Awake()
     {
         QuestEvents.OnQuestCompleted += OnQuestCompleted;
+    }
+
+    public void Show()
+    {
+        questUIPanel.SetActive(true);
+        UpdateQuestUI();
+    }
+
+    public void Hide()
+    {
+        questUIPanel.SetActive(false);
     }
 
 

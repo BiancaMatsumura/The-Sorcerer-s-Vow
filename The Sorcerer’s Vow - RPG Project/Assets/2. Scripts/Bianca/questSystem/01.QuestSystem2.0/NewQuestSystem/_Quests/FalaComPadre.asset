@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
   m_Name: FalaComPadre
   m_EditorClassIdentifier: 
-  questName: Falar com o Padre
+  questName: Falar com o Padre pela Primeira vez!
   id: 0
   components:
   - {fileID: 11400000, guid: 0d6c4897454187c4086f343982f98ae4, type: 2}
   nextQuests:
   - {fileID: 11400000, guid: c8e2f3b1eb1aa264f83c48b499fb234b, type: 2}
-  - {fileID: 11400000, guid: eb0b3d1a8c6efb946b0b0bede725229b, type: 2}
+  - {fileID: 11400000, guid: b7584247609f28d4a9bbe1451cc868ac, type: 2}

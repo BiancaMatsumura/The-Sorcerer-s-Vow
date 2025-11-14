@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
-  m_Name: FaleNovamente
+  m_Name: Coletar Craft
   m_EditorClassIdentifier: 
-  questName: Falar com o Padre
+  questName: Coletar Item Criado
   id: 3
   components:
-  - {fileID: 11400000, guid: 0d6c4897454187c4086f343982f98ae4, type: 2}
+  - {fileID: 11400000, guid: 28b5313b7f896c345aee369ba8b70326, type: 2}
   nextQuests:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: f0f76f91bae8bc545bc6bbbd5db888cc, type: 2}
+  - {fileID: 11400000, guid: 242654a7c444d0e47babfff21a08c8ec, type: 2}
+  - {fileID: 11400000, guid: eb0b3d1a8c6efb946b0b0bede725229b, type: 2}

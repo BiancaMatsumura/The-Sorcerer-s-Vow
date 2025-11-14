@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 599ac2e331fa7c14a89185f71e3dbed0, type: 3}
-  m_Name: Dialogo02
+  m_Script: {fileID: 11500000, guid: 52433f4bcafb3364c93e836d454f636f, type: 3}
+  m_Name: ColetarCraft
   m_EditorClassIdentifier: 
-  componentName: Dialogo 2
-  questType: 2
-  description: 
-  dialogue: {fileID: 2674327000016984888, guid: d81d90ca6b69ad847bf1768e8591e301, type: 3}
+  componentName: Coletar Craft
+  questType: 1
+  description: "Colete o item que voc\xEA acabou de criar!"
+  itemID: 98
+  itemAmountNeeded: 1
