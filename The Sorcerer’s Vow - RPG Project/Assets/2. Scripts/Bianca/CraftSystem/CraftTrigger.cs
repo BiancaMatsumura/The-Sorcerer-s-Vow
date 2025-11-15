@@ -19,10 +19,12 @@ public class CraftingTrigger : MonoBehaviour
     private bool isIn = false;
     public Animator PlayerAnimator;
     public Animation UIanimator;
+    private AudioSource CraftSound;
 
     void Start()
     {
         mainCamera = Camera.main.transform;
+        CraftSound = GetComponent<AudioSource>();
 
     }
 
@@ -105,6 +107,7 @@ public class CraftingTrigger : MonoBehaviour
                 {
                     PlayerAnimator.Play("CraftAnimation");
                     UIanimator.Play("FillUIMagic");
+                    CraftSound.Play();
                 }
                 
 

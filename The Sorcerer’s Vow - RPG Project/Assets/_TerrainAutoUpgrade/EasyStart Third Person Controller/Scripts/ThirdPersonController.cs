@@ -10,7 +10,8 @@ public class ThirdPersonController : MonoBehaviour
     public float airKickMomentumMultiplier = 1.2f;
 
     [Header("Audios")]
-    public AudioSource punchSound;
+    public AudioSource PlayerAudiosource;
+    public AudioClip[] Sounds;
 
     float jumpElapsedTime = 0;
 
@@ -264,8 +265,7 @@ public class ThirdPersonController : MonoBehaviour
                 break;
             case 2:
                 animator.SetTrigger("Punch");
-                if (punchSound != null)
-                    punchSound.Play();
+              
                 break;
         }
     }
@@ -286,7 +286,16 @@ public class ThirdPersonController : MonoBehaviour
     {
         return isSprinting;
     }
-
+    // da play no sfx dentro da animação
+    public void AnimationSfxPLAY(int soundInt) 
+    {
+        PlayerAudiosource.resource = Sounds[soundInt];
+        PlayerAudiosource.Play();
+    }
+    public void EventStais()
+    {
+        isStasis = true;
+    }
     public void EndAttack()
     {
         isStasis = false;
