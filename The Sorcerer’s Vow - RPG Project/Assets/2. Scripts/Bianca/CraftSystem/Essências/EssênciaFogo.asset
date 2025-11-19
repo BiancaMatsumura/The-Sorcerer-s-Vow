@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Ess\xEAnciaFogo"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "Ess\xEAncia Fogo"
-  <ItemID>k__BackingField: 
+  <ItemID>k__BackingField: 4
   <Description>k__BackingField: "Ess\xEAncia de Fogo"
   <WorldPrefab>k__BackingField: {fileID: 0}
   category: 4

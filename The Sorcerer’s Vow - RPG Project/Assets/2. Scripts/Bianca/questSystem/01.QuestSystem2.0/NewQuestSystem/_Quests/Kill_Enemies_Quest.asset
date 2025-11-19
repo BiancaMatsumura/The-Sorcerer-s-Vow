@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
   m_Name: Kill_Enemies_Quest
   m_EditorClassIdentifier: 
-  questName: Kill Enemies
+  questName: Mate 5 inimigos!
   id: 7
   components:
   - {fileID: 11400000, guid: 7a5746d905c382a4293292f46f8caaaa, type: 2}

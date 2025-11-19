@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
   m_Name: "Padre_Di\xE1logo02"
   m_EditorClassIdentifier: 
-  questName: "Receba Mais Instru\xE7\xF5es do Padre"
+  questName: "Receba Mais Instru\xE7\xF5es do Padre!"
   id: 2
   components:
   - {fileID: 11400000, guid: 17e80dedab3a03642850a23780518771, type: 2}
-  nextQuests: []
+  nextQuests:
+  - {fileID: 11400000, guid: e2820047aeae672429194f6a565d1bd7, type: 2}

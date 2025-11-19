@@ -12,7 +12,7 @@ namespace QuestSystem
 
         [Header("Vinculação de Missão")]
         [SerializeField] private int questID; // Missão que libera a coleta quando está ATIVA
-        [SerializeField] private int dependencyQuestID; // ⭐ NOVO — Missão que precisa estar COMPLETA
+        [SerializeField] private int dependencyQuestID; // ⭐ Missão que precisa estar COMPLETA
         public SO_Quest quest;
 
         [Header("Efeitos e UI")]
@@ -56,26 +56,43 @@ namespace QuestSystem
                 return true;
             }
 
-            // Se não há dependência, libera
-            if (dependencyQuestID <= 0)
-                return true;
-
-            var depQuest = qm.GetQuestByID(dependencyQuestID);
-
-            if (depQuest == null)
+            // ⭐ 1) Se há uma missão que deve estar ATIVA
+            if (questID > 0)
             {
-                Debug.LogWarning($"[Item3D] Missão dependência {dependencyQuestID} não encontrada.");
-                return false;
+                var requiredQuest = qm.GetQuestByID(questID);
+
+                if (requiredQuest == null)
+                {
+                    Debug.LogWarning($"[Item3D] Missão requerida {questID} não encontrada.");
+                    return false;
+                }
+
+                if (requiredQuest.QuestStatus != QuestStatus.Active)
+                {
+                    Debug.Log($"[Item3D] ❌ BLOQUEADO: item '{InventoryItem.Name}' só pode ser pego quando a missão '{requiredQuest.QuestName}' estiver ATIVA.");
+                    return false;
+                }
             }
 
-            bool canPickup = depQuest.QuestStatus == QuestStatus.Completed;
-
-            if (!canPickup)
+            // ⭐ 2) Se há missão dependência que precisa estar COMPLETA
+            if (dependencyQuestID > 0)
             {
-                Debug.Log($"[Item3D] BLOQUEADO: item '{InventoryItem.Name}' depende da missão {depQuest.QuestName} COMPLETA.");
+                var depQuest = qm.GetQuestByID(dependencyQuestID);
+
+                if (depQuest == null)
+                {
+                    Debug.LogWarning($"[Item3D] Missão dependência {dependencyQuestID} não encontrada.");
+                    return false;
+                }
+
+                if (depQuest.QuestStatus != QuestStatus.Completed)
+                {
+                    Debug.Log($"[Item3D] ❌ BLOQUEADO: item '{InventoryItem.Name}' depende da missão '{depQuest.QuestName}' COMPLETA.");
+                    return false;
+                }
             }
 
-            return canPickup;
+            return true;
         }
 
 
@@ -100,18 +117,22 @@ namespace QuestSystem
                 isCollected = true;
                 GetComponent<Collider>().enabled = false;
 
-                Debug.Log($"[Item3D] Coletando item: {InventoryItem.Name}");
+                Debug.Log($"[Item3D] ✅ Coletando item: {InventoryItem.Name}");
 
-                // --- Completa missão vinculada opcionalmente ---
+                // 🔥 CORRIGIDO: Usa o método Complete() ao invés de mudar o status diretamente
                 if (quest != null)
                 {
                     var questManager = Object.FindAnyObjectByType<QuestManager>();
                     var activeQuest = questManager?.GetQuestByID(quest.id);
 
-                    if (activeQuest != null)
+                    if (activeQuest != null && activeQuest.QuestStatus == QuestStatus.Active)
                     {
-                        activeQuest.QuestStatus = QuestStatus.Completed;
-                        QuestEvents.TriggerQuestCompleted(activeQuest);
+                        Debug.Log($"[Item3D] 🏁 Completando quest '{activeQuest.QuestName}' (ID: {quest.id})");
+                        activeQuest.Complete(); // ✅ Chama o método correto
+                    }
+                    else if (activeQuest != null)
+                    {
+                        Debug.LogWarning($"[Item3D] ⚠ Quest '{activeQuest.QuestName}' não está ativa (Status: {activeQuest.QuestStatus})");
                     }
                 }
 
@@ -121,6 +142,10 @@ namespace QuestSystem
                 inventory.AddItem(InventoryItem, Quantity);
 
                 StartCoroutine(AnimateItemPickup());
+            }
+            else
+            {
+                Debug.LogWarning($"[Item3D] ⚠ Inventário cheio! Não foi possível adicionar '{InventoryItem.Name}'");
             }
         }
 

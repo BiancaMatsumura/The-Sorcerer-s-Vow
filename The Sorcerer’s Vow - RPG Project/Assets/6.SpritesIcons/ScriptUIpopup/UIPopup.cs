@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using QuestSystem;
 public class UIPopup : MonoBehaviour
 {   

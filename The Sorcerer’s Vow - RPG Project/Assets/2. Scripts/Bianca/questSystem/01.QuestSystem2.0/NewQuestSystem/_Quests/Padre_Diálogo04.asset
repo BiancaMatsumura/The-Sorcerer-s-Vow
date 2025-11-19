@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
   m_Name: "Padre_Di\xE1logo04"
   m_EditorClassIdentifier: 
-  questName: "Conclua a sua jornada at\xE9 o ZIGURAT"
+  questName: O Padre te Espera em Frente a Loja no Vilarejo!
   id: 5
   components:
   - {fileID: 11400000, guid: 27f3affdba9cd7641bc3e9d46cea5d63, type: 2}
-  nextQuests: []
+  nextQuests:
+  - {fileID: 11400000, guid: f6cf5d5c7b2931944abe83fc765afbd0, type: 2}
+  - {fileID: 11400000, guid: eb0b3d1a8c6efb946b0b0bede725229b, type: 2}
