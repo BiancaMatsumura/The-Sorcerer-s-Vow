@@ -72,7 +72,7 @@ public class InventoryController : MonoBehaviour
                 item.Value.item.Category
             );
         }
-        
+
         if (inventoryData.InventoryIsFull())
         {
             HandleInventoryFull();
@@ -187,18 +187,64 @@ public class InventoryController : MonoBehaviour
 
     private string PrepareDescription(InventoryItem inventoryItem)
     {
+        // Segurança inicial
+        if (inventoryItem.item == null)
+        {
+            Debug.LogError("❌ ItemSO NULO no InventoryItem!");
+            return "(Item inválido)";
+        }
+
+        // Se não houver estado ou parâmetros, retorna só a descrição base
+        if (inventoryItem.itemState == null || inventoryItem.itemState.Count == 0)
+        {
+            Debug.LogWarning($"⚠️ itemState está vazio/nulo no item: {inventoryItem.item.Name}");
+            return inventoryItem.item.Description;
+        }
+
+        if (inventoryItem.item.DefaultParametersList == null || inventoryItem.item.DefaultParametersList.Count == 0)
+        {
+            Debug.LogWarning($"⚠️ DefaultParametersList está vazia/nula no item: {inventoryItem.item.Name}");
+            return inventoryItem.item.Description;
+        }
+
+        // -------------------------
+        // Descrição segura
+        // -------------------------
         StringBuilder sb = new StringBuilder();
         sb.Append(inventoryItem.item.Description);
         sb.AppendLine();
-        for (int i = 0; i < inventoryItem.itemState.Count; i++)
+
+        int minCount = Mathf.Min(inventoryItem.itemState.Count, inventoryItem.item.DefaultParametersList.Count);
+
+        for (int i = 0; i < minCount; i++)
         {
-            sb.Append($"{inventoryItem.itemState[i].itemParameter.ParameterName} " +
-                $": {inventoryItem.itemState[i].value} / " +
-                $"{inventoryItem.item.DefaultParametersList[i].value}");
+            var stateParam = inventoryItem.itemState[i];
+            var defaultParam = inventoryItem.item.DefaultParametersList[i];
+
+            // Verifica se itemParameter (que deve ser um objeto/referência) é nulo
+            if (stateParam.itemParameter == null)
+            {
+                Debug.LogError($"❌ itemState[{i}].itemParameter está NULO no item: {inventoryItem.item.Name}");
+                continue;
+            }
+
+            // Verifica se ParameterName é nulo ou vazio
+            string paramName = string.IsNullOrEmpty(stateParam.itemParameter.ParameterName)
+                ? "Parâmetro Desconhecido"
+                : stateParam.itemParameter.ParameterName;
+
+            string stateValue = stateParam.value.ToString();
+            string defaultValue = defaultParam.value.ToString();
+
+            // Monta a linha do parâmetro com segurança total
+            sb.Append($"{paramName}: {stateValue} / {defaultValue}");
             sb.AppendLine();
         }
+
         return sb.ToString();
     }
+
+
 
     public void Update()
     {
@@ -223,4 +269,94 @@ public class InventoryController : MonoBehaviour
     }
 
     public InventorySO InventoryData => inventoryData;
+
+    // ============================================================
+    // Adicione este método no seu InventoryController.cs
+    // ============================================================
+
+    /// <summary>
+    /// Corrige todos os itens existentes no inventário que têm itemParameter nulo.
+    /// Use no Inspector: Botão direito no componente > "Fix All Items Parameters"
+    /// </summary>
+    [ContextMenu("Fix All Items Parameters")]
+    private void FixAllItemsParameters()
+    {
+        int fixedCount = 0;
+
+        for (int i = 0; i < inventoryData.Size; i++)
+        {
+            var item = inventoryData.GetItemAt(i);
+
+            // Pula slots vazios
+            if (item.IsEmpty)
+                continue;
+
+            // Verifica se precisa correção
+            bool needsFix = false;
+
+            if (item.itemState == null || item.itemState.Count == 0)
+            {
+                needsFix = true;
+            }
+            else
+            {
+                foreach (var param in item.itemState)
+                {
+                    if (param.itemParameter == null)
+                    {
+                        needsFix = true;
+                        break;
+                    }
+                }
+            }
+
+            // Aplica correção se necessário
+            if (needsFix)
+            {
+                Debug.Log($"🔧 Corrigindo item: {item.item.Name} no slot {i}");
+
+                // Recria os parâmetros usando os defaults
+                List<ItemParameter> newState = new List<ItemParameter>();
+
+                if (item.item.DefaultParametersList != null)
+                {
+                    foreach (var defaultParam in item.item.DefaultParametersList)
+                    {
+                        newState.Add(new ItemParameter
+                        {
+                            itemParameter = defaultParam.itemParameter,
+                            value = defaultParam.value
+                        });
+                    }
+                }
+
+                inventoryData.SetItemState(i, newState);
+                fixedCount++;
+            }
+        }
+
+        if (fixedCount > 0)
+        {
+            Debug.Log($"✅ {fixedCount} item(ns) corrigido(s) com sucesso!");
+            // Força atualização da UI
+            Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+            UpdateInventoryUI(currentState);
+        }
+        else
+        {
+            Debug.Log("✅ Todos os itens já estão corretos!");
+        }
+    }
+
+    /// <summary>
+    /// Remove TODOS os itens do inventário (útil para testes)
+    /// </summary>
+    [ContextMenu("Clear All Items")]
+    private void ClearAllItems()
+    {
+        inventoryData.Initialize();
+        Dictionary<int, InventoryItem> currentState = inventoryData.GetCurrentInventoryState();
+        UpdateInventoryUI(currentState);
+        Debug.Log("🗑️ Inventário limpo!");
+    }
 }

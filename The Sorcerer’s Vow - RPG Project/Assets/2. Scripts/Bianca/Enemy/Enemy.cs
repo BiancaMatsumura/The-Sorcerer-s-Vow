@@ -43,7 +43,21 @@ public class Enemy : BaseCharacter
 
     public Collider weaponCollider;
 
+    private WeaponDamageTrigger weaponTrigger;
+
     private bool IsDead = false;
+
+    private void Awake()
+    {
+        weaponTrigger = GetComponentInChildren<WeaponDamageTrigger>();
+
+
+    }
+    public void ResetWeaponHitList()
+    {
+        weaponTrigger?.ResetHits();
+    }
+
 
     public void EnableCollider()
     {
@@ -260,7 +274,7 @@ public class Enemy : BaseCharacter
 
     }
 
-    public void Desable1Collider() 
+    public void Desable1Collider()
     {
         weaponCollider.enabled = false;
     }
@@ -305,4 +319,6 @@ public class Enemy : BaseCharacter
 
         Destroy(gameObject);
     }
+
+
 }

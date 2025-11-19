@@ -25,13 +25,7 @@ namespace QuestSystem
         {
             
             StartQuest(0);
-            StartQuest(1);
-            StartQuest(2);
-            StartQuest(3);
-            StartQuest(4);
-            StartQuest(5);
-            StartQuest(6);
-            StartQuest(7);
+           
         }
 
         public Quest GetQuestByID(int id)

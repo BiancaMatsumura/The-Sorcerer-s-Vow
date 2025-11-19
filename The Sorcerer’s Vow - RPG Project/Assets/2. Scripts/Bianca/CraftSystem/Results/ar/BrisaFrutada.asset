@@ -15,11 +15,11 @@ MonoBehaviour:
   <Name>k__BackingField: Brisa Frutada
   <ItemID>k__BackingField: 98
   <Description>k__BackingField: Aumente a sua Velocidade de Movimento em +5 por 10s
-  <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 191bd5986a8e5b44d803f7ee3a490076, type: 3}
+  <WorldPrefab>k__BackingField: {fileID: 7204375049555997592, guid: 410a685893c935a4d8c8f95a3d9ea3cf, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 9ec0166ac4ca0044d9badb4ba3c1166d, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 51232cde4437f8646b088391cc3a1ad9, type: 2}

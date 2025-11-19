@@ -19,9 +19,78 @@ namespace Inventory.Model
             inventoryItems = new List<InventoryItem>();
             for (int i = 0; i < Size; i++)
                 inventoryItems.Add(InventoryItem.GetEmptyItem());
+
+            // ✅ Corrige itens antigos já existentes (caso itemState esteja desatualizado)
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                var it = inventoryItems[i];
+                if (!it.IsEmpty)
+                {
+                    it.itemState = SyncStateWithDefaults(it.item, it.itemState);
+                    inventoryItems[i] = it;
+                }
+            }
         }
 
-        #region === ADICIONAR ITEM ===
+        // ============================================================
+        //   🔥 SYNC ESTADO DO ITEM COM OS DEFAULTS (CORRIGIDO!)
+        // ============================================================
+        private List<ItemParameter> SyncStateWithDefaults(ItemSO item, List<ItemParameter> state)
+        {
+            var defaults = item.DefaultParametersList;
+
+            // Item sem parâmetros
+            if (defaults == null || defaults.Count == 0)
+                return new List<ItemParameter>();
+
+            // Se state for nulo ou vazio, cria uma CÓPIA PROFUNDA dos defaults
+            if (state == null || state.Count == 0)
+            {
+                return CreateDeepCopyOfParameters(defaults);
+            }
+
+            // Se o tamanho for diferente, reconstrói com defaults
+            if (state.Count != defaults.Count)
+            {
+                return CreateDeepCopyOfParameters(defaults);
+            }
+
+            // ✅ VERIFICAÇÃO CRÍTICA: Se algum itemParameter está nulo, reconstrói tudo
+            for (int i = 0; i < state.Count; i++)
+            {
+                if (state[i].itemParameter == null)
+                {
+                    Debug.LogWarning($"⚠️ Detectado itemParameter nulo no item {item.Name}. Reconstruindo parâmetros.");
+                    return CreateDeepCopyOfParameters(defaults);
+                }
+            }
+
+            // Se está tudo certo, retorna cópia do state atual
+            return new List<ItemParameter>(state);
+        }
+
+        // ✅ MÉTODO AUXILIAR: Cria cópia profunda garantindo que itemParameter seja copiado
+        private List<ItemParameter> CreateDeepCopyOfParameters(List<ItemParameter> source)
+        {
+            if (source == null || source.Count == 0)
+                return new List<ItemParameter>();
+
+            List<ItemParameter> copy = new List<ItemParameter>();
+
+            foreach (var param in source)
+            {
+                copy.Add(new ItemParameter
+                {
+                    itemParameter = param.itemParameter, // Copia a referência do ScriptableObject
+                    value = param.value // Copia o valor
+                });
+            }
+
+            return copy;
+        }
+        // ============================================================
+        //                       ADICIONAR ITEM
+        // ============================================================
         public int AddItem(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
             if (item == null || quantity <= 0)
@@ -29,7 +98,6 @@ namespace Inventory.Model
 
             int initialQuantity = quantity;
 
-            // Itens não empilháveis: adiciona 1 por slot
             if (!item.IsStackable)
             {
                 while (quantity > 0 && !IsInventoryFull())
@@ -39,11 +107,9 @@ namespace Inventory.Model
             }
             else
             {
-                // Itens empilháveis: tenta adicionar no mesmo stack ou cria novos
                 quantity = AddStackableItem(item, quantity);
             }
 
-            // ✅ Atualiza apenas se algo foi adicionado
             if (quantity < initialQuantity)
             {
                 QuestEvents.TriggerItemCollected(item.ID);
@@ -58,14 +124,15 @@ namespace Inventory.Model
             AddItem(inventoryItem.item, inventoryItem.quantity, inventoryItem.itemState);
         }
 
-
         private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState = null)
         {
             var newItem = new InventoryItem
             {
                 item = item,
                 quantity = quantity,
-                itemState = new List<ItemParameter>(itemState ?? item.DefaultParametersList)
+
+                // ✅ SINCRONIZAÇÃO OBRIGATÓRIA
+                itemState = SyncStateWithDefaults(item, itemState)
             };
 
             for (int i = 0; i < inventoryItems.Count; i++)
@@ -82,7 +149,6 @@ namespace Inventory.Model
 
         private int AddStackableItem(ItemSO item, int quantity)
         {
-            // 🔹 Primeiro tenta preencher stacks existentes
             for (int i = 0; i < inventoryItems.Count; i++)
             {
                 if (inventoryItems[i].IsEmpty)
@@ -95,7 +161,9 @@ namespace Inventory.Model
 
                     if (amountToAdd > 0)
                     {
-                        inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity + amountToAdd);
+                        inventoryItems[i] = inventoryItems[i]
+                            .ChangeQuantity(inventoryItems[i].quantity + amountToAdd);
+
                         quantity -= amountToAdd;
 
                         if (quantity <= 0)
@@ -104,7 +172,6 @@ namespace Inventory.Model
                 }
             }
 
-            // 🔹 Se ainda sobrou, cria novos stacks
             while (quantity > 0 && !IsInventoryFull())
             {
                 int amountToAdd = Mathf.Min(quantity, item.MaxStackSize);
@@ -134,14 +201,16 @@ namespace Inventory.Model
             if (item.IsEmpty)
                 return;
 
-            item.itemState = newState;
+            // 🔥 Garante que seja compatível
+            item.itemState = SyncStateWithDefaults(item.item, newState);
+
             inventoryItems[index] = item;
             OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
         }
 
-        #endregion
-
-        #region === REMOVER ITEM ===
+        // ============================================================
+        //                       REMOVER ITEM
+        // ============================================================
         public void RemoveItem(int index, int amount)
         {
             if (index < 0 || index >= inventoryItems.Count)
@@ -159,12 +228,14 @@ namespace Inventory.Model
 
             InformAboutChange();
         }
-        #endregion
 
-        #region === OPERAÇÕES GERAIS ===
+        // ============================================================
+        //                       OPERAÇÕES
+        // ============================================================
         public void SwapItems(int indexA, int indexB)
         {
-            if (indexA == indexB || indexA < 0 || indexB < 0 || indexA >= inventoryItems.Count || indexB >= inventoryItems.Count)
+            if (indexA == indexB || indexA < 0 || indexB < 0
+                || indexA >= inventoryItems.Count || indexB >= inventoryItems.Count)
                 return;
 
             (inventoryItems[indexA], inventoryItems[indexB]) = (inventoryItems[indexB], inventoryItems[indexA]);
@@ -205,9 +276,7 @@ namespace Inventory.Model
 
         private void InformAboutChange() =>
             OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
-        #endregion
 
-        #region === ESTADO DO INVENTÁRIO ===
         public Dictionary<int, InventoryItem> GetCurrentInventoryState()
         {
             var dict = new Dictionary<int, InventoryItem>();
@@ -225,15 +294,18 @@ namespace Inventory.Model
                 return InventoryItem.GetEmptyItem();
             return inventoryItems[index];
         }
-        #endregion
     }
 
+    // ============================================================
+    //             STRUCT InventoryItem (sem alterações)
+    // ============================================================
     [Serializable]
     public struct InventoryItem
     {
         public int quantity;
         public ItemSO item;
         public List<ItemParameter> itemState;
+
         public bool IsEmpty => item == null;
 
         public InventoryItem ChangeQuantity(int newQuantity)

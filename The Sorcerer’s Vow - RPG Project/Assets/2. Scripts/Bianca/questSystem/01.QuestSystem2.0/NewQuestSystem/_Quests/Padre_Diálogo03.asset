@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6626b3a8e2b7a6249836ca3ad6570ef5, type: 3}
   m_Name: "Padre_Di\xE1logo03"
   m_EditorClassIdentifier: 
-  questName: Use os Frutos, Pratique e Explore
+  questName: Apresente o Fruto para o Padre
   id: 4
   components:
   - {fileID: 11400000, guid: f6f95708bd5a0aa46bae359a70d780a2, type: 2}

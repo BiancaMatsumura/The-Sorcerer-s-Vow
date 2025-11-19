@@ -18,6 +18,8 @@ public class TotenSpawnEnemy : MonoBehaviour
     public bool isSpawned = false;
 
     [SerializeField] private GameObject enemyPrefab;
+
+    public float delayToStart = 3f;
     private BoxCollider col;
 
     public int enemyQuantity = 3;
@@ -50,7 +52,7 @@ public class TotenSpawnEnemy : MonoBehaviour
             sliderLife.value = currentHealth;
         }
 
-        StartCoroutine(SpawnDelay(3));
+        StartCoroutine(SpawnDelay(delayToStart));
     }
 
     public void TakeDamage(float damage)
@@ -119,21 +121,7 @@ public class TotenSpawnEnemy : MonoBehaviour
 
         sliderLife.value = currentHealth;
 
-        if (Input.GetKeyDown(KeyCode.E) && !isSpawned)
-        {
-            if (!isSpawned)
-            {
-                StartCoroutine(SpawnRoutine());
-
-            }
-
-        }
-        if (Input.GetKeyDown(KeyCode.L) && !isSpawned)
-        {
-            anim.Play("destroyTotem01");
-
-        }
-
+        
     }
 
     IEnumerator SpawnRoutine()

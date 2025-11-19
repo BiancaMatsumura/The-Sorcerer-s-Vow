@@ -15,4 +15,4 @@ MonoBehaviour:
   componentName: Dialogo 4
   questType: 2
   description: 
-  dialogue: {fileID: 5474567969854926885, guid: ce956ee88831d41429fb61593c0d9e85, type: 3}
+  dialogue: {fileID: 3308513750001411477, guid: ce956ee88831d41429fb61593c0d9e85, type: 3}
