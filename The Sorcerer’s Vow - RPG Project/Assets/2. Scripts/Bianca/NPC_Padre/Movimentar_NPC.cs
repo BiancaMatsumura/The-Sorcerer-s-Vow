@@ -171,6 +171,9 @@ public class Movimentar_NPC : MonoBehaviour
     {
         requirePlayerForMovement = false;
 
+        if (interactionUI != null)
+            interactionUI.SetActive(true);
+
         isMovingToWaypoints02 = true;
         isRunning = false;
         currentWaypointIndex02 = 0;
@@ -199,6 +202,9 @@ public class Movimentar_NPC : MonoBehaviour
     {
         isMovingToWaypoints02 = false;
         isRunning = false;
+
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
 
         agent.isStopped = true;
         agent.velocity = Vector3.zero;

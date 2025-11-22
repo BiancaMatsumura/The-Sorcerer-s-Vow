@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 207523737167229516}
   - component: {fileID: 9108872390467157743}
   - component: {fileID: 3056831144417943209}
-  - component: {fileID: 5946525532353498830}
   m_Layer: 0
   m_Name: item01
   m_TagString: Untagged
@@ -125,25 +124,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <InventoryItem>k__BackingField: {fileID: 11400000, guid: ef89107bc222d674aa45a07120e45135, type: 2}
   <Quantity>k__BackingField: 1
+  questID: 0
+  dependencyQuestID: 0
+  quest: {fileID: 0}
   audioSource: {fileID: 0}
+  particleDisable: {fileID: 0}
+  interactionUI: {fileID: 0}
+  anim: {fileID: 0}
   duration: 0.3
-  meshFilter: {fileID: 231416053887106004}
-  meshRenderer: {fileID: 207523737167229516}
-  linkedQuest: {fileID: 11400000, guid: 667cb8917c28cc845a74f3f3db1e3008, type: 2}
---- !u!114 &5946525532353498830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428541532895077731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e129d7648c9b91f4684297f821fd63b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questData: {fileID: 11400000, guid: 667cb8917c28cc845a74f3f3db1e3008, type: 2}
-  textOutput: {fileID: 0}
 --- !u!1 &5392816986846719906
 GameObject:
   m_ObjectHideFlags: 0
