@@ -45,8 +45,7 @@ public class ThirdPersonController : MonoBehaviour
     // --- FORÇA EXTERNA (vento/campo magnético) ---
     private Vector3 externalForce = Vector3.zero;
     [SerializeField] private float externalForceDecay = 2f; // quanto mais alto, mais rápido a força some
-
-
+    private bool freezeMovementOneFrame = true;
 
     void Start()
     {
@@ -146,10 +145,22 @@ public class ThirdPersonController : MonoBehaviour
             BattleSistem(2);
         }
     }
+    public void FreezeNextFrame()
+    {
+        freezeMovementOneFrame = true;
+    }
+
 
 
     private void FixedUpdate()
     {
+
+        if (freezeMovementOneFrame)
+        {
+            freezeMovementOneFrame = false;
+            return; // impede qualquer movimento no primeiro frame
+        }
+
         bool dialogueActive = DialogueEditor.ConversationManager.Instance != null &&
                       DialogueEditor.ConversationManager.Instance.IsConversationActive;
 
@@ -265,7 +276,7 @@ public class ThirdPersonController : MonoBehaviour
                 break;
             case 2:
                 animator.SetTrigger("Punch");
-              
+
                 break;
         }
     }
@@ -287,7 +298,7 @@ public class ThirdPersonController : MonoBehaviour
         return isSprinting;
     }
     // da play no sfx dentro da animação
-    public void AnimationSfxPLAY(int soundInt) 
+    public void AnimationSfxPLAY(int soundInt)
     {
         PlayerAudiosource.resource = Sounds[soundInt];
         PlayerAudiosource.Play();

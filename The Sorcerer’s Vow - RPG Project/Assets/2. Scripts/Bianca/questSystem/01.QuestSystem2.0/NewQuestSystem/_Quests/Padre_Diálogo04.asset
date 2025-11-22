@@ -16,6 +16,4 @@ MonoBehaviour:
   id: 5
   components:
   - {fileID: 11400000, guid: 27f3affdba9cd7641bc3e9d46cea5d63, type: 2}
-  nextQuests:
-  - {fileID: 11400000, guid: f6cf5d5c7b2931944abe83fc765afbd0, type: 2}
-  - {fileID: 11400000, guid: eb0b3d1a8c6efb946b0b0bede725229b, type: 2}
+  nextQuests: []
