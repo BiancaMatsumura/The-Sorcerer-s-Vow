@@ -39,6 +39,7 @@ public class Enemy : BaseCharacter
     [Header("Movement Settings")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
+    public float KnokbackAmplifier = 1f;
 
 
     public Collider weaponCollider;
@@ -47,9 +48,12 @@ public class Enemy : BaseCharacter
 
     private bool IsDead = false;
 
+    private Rigidbody rb;
     private void Awake()
     {
         weaponTrigger = GetComponentInChildren<WeaponDamageTrigger>();
+        
+        rb = GetComponent<Rigidbody>();
 
 
     }
@@ -150,6 +154,8 @@ public class Enemy : BaseCharacter
     public override void ReduceHealth(float damage)
     {
         if (IsDead) return; // já está morto, ignora novo dano
+
+        rb.AddForce(target.transform.forward * KnokbackAmplifier, ForceMode.VelocityChange);
 
         if (!IsDead)
         {
@@ -256,6 +262,7 @@ public class Enemy : BaseCharacter
         agent.isStopped = true;
         agent.ResetPath();
         agent.stoppingDistance = attackRange - 1f; // ou 1f se quiser um pouco mais longe
+        
 
         transform.LookAt(target);
 

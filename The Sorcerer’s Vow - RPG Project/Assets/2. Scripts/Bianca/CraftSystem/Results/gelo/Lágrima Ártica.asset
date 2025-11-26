@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: "L\xE1grima \xC1rtica"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "L\xE1grima \xC1rtica"
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Reduza o Dano sofrido em 40% em 25s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: b0bbc8f624144834b8487374e98917a8, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 4ada4f288b2fbd74ba75ec4a61aabe62, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: b21198050166de2429e85b38b8b0ace1, type: 2}

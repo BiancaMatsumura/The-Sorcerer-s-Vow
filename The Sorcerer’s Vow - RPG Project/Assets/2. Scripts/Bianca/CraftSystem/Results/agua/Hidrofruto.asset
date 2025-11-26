@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Hidrofruto
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Hidrofruto
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Recupere +10 PV
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 5f836fff5a399324e8b25ea989034188, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 56498785, guid: 95c6f1e3f7a6e0b47a48a3613c955ece, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
     val: 10
+    duration: 0
   <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}

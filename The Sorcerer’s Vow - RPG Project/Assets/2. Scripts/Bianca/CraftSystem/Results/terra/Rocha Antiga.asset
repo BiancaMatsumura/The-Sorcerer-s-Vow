@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Rocha Antiga
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Rocha Antiga
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Esteja imune a Danos por 20s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 1992a9aa485d20742a1a0dfc08fabdaf, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 381bdf13d419edf4bafcd33470286c5b, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 6a4766d4994a1ee4b83cdf8bc7ea2df8, type: 2}

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Cristal do Inverno
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Cristal do Inverno
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Reduza o Dano sofrido em 30% em 20s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: a4404a766507e3f4b988ec730d6b1743, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 765a060c6263e684b987c002e44abbb4, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: b21198050166de2429e85b38b8b0ace1, type: 2}

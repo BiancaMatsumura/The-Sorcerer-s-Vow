@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: "Lava Frut\xEDfera"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "Lava Frut\xEDfera"
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Aumente o seu Dano em +25 por 25s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 11e2997ca61bdca469f9c9c57127a358, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: b61b8092bc65bc54e97f620b7dad9b86, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 007c59460114cca4e8d58e4d1dfce2f1, type: 2}

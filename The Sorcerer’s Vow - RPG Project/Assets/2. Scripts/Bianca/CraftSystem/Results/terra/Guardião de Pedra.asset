@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: "Guardi\xE3o de Pedra"
   m_EditorClassIdentifier: 
   <Name>k__BackingField: "Guardi\xE3o de Pedra"
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Esteja imune a Danos por 25s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: 3c6a6b2c635f60d4babfe94db1602301, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 197b5a185676b1c4c92028acbcf20066, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 6a4766d4994a1ee4b83cdf8bc7ea2df8, type: 2}
