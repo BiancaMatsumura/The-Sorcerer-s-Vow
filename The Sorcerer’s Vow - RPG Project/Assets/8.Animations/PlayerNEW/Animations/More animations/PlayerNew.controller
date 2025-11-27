@@ -20,9 +20,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.28061995
-  m_TransitionOffset: 0
-  m_ExitTime: 0.025125036
+  m_TransitionDuration: 0.07071722
+  m_TransitionOffset: 0.0043378333
+  m_ExitTime: 0.03452367
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -917,7 +917,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KickRetarget
-  m_Speed: 1.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 9069259446510436183}
@@ -1182,7 +1182,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1412249289044346293}
-    m_Position: {x: 90, y: 160, z: 0}
+    m_Position: {x: 100, y: 160, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2830993609170423865}
     m_Position: {x: 80, y: 0, z: 0}
@@ -1241,9 +1241,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.8076923
+  m_TransitionDuration: 0.18109646
+  m_TransitionOffset: 0.019663898
+  m_ExitTime: 0.64469
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

@@ -201,6 +201,7 @@ public class ThirdPersonController : MonoBehaviour
         }
         directionY -= gravity * Time.deltaTime;
 
+
         // Direção baseada na câmera
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
