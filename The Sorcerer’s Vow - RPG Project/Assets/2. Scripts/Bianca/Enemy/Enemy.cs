@@ -17,6 +17,10 @@ public class Enemy : BaseCharacter
 {
     public int enemyID;
 
+    [Header("Audios")]
+    public AudioSource EnemyAudiosource;
+    public AudioClip[] Sounds;
+
     [Header("UI")]
     [SerializeField] private Slider sliderLife;
     private Transform mainCamera;
@@ -210,8 +214,7 @@ public class Enemy : BaseCharacter
 
     }
 
-
-
+    
     private void Patrol()
     {
         if (patrolPoints.Length == 0) return;
@@ -289,6 +292,14 @@ public class Enemy : BaseCharacter
     {
         weaponCollider.enabled = true;
     }
+    private void AudioPlay(int Music)
+    {
+        EnemyAudiosource.resource = Sounds[Music];
+        EnemyAudiosource.Play();
+    
+
+    }
+
     private void UpdateAnimator()
     {
         if (animator == null || agent == null) return;

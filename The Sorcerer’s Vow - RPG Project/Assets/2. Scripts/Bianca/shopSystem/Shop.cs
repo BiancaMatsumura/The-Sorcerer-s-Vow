@@ -9,7 +9,9 @@ namespace ShopSystem
     {
         [SerializeField]
         public ShopSO ShopSO;
-
+        
+        public AudioSource AudioS;
+        public AudioClip[] AudioSounds;
         [SerializeField]
         private InventorySO playerInventory;
         [SerializeField]
@@ -35,6 +37,7 @@ namespace ShopSystem
 
                 if (purchasedQuantity > 0)
                 {
+                    AudioPlay(1);
                     RemoveCurrency(itemToBuy.price * purchasedQuantity);
                     Debug.Log($"Comprou {purchasedQuantity}x {itemToBuy.item.name}");
 
@@ -47,6 +50,7 @@ namespace ShopSystem
             }
             else
             {
+                AudioPlay(0);
                 Debug.Log("Dinheiro insuficiente para comprar este item.");
             }
         }
@@ -113,6 +117,13 @@ namespace ShopSystem
         private void AddCurrency(int amount)
         {
             playerInventory.AddItem(currencyItem, amount);
+        }
+        private void AudioPlay(int Music)
+        {
+            AudioS.resource = AudioSounds[Music];
+            AudioS.Play();
+
+
         }
     }
 }
