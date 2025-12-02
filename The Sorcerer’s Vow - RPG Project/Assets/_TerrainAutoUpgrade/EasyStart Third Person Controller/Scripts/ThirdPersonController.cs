@@ -40,7 +40,7 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField]
     private PlayerCharacter playerCharacter;
     [SerializeField]
-    //private DialogueManager dialogueManager;
+    //private DialogueManager dialogueManager 
 
     // --- FORÇA EXTERNA (vento/campo magnético) ---
     private Vector3 externalForce = Vector3.zero;
