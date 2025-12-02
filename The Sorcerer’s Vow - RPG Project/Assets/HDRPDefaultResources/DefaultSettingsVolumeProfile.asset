@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a79c9cffef5cc469553b1341c2ecdf, type: 3}
   m_Name: RecursiveRendering
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31394aa05878563408489d5c1688f3a0, type: 3}
   m_Name: PathTracing
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -1415,7 +1415,7 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11
+    m_Value: 11.36
   multiplier:
     m_OverrideState: 1
     m_Value: 1
@@ -1561,7 +1561,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.13
+    m_Value: 0
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -2140,10 +2140,10 @@ MonoBehaviour:
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.6677754, b: 0.2471698, a: 1}
+    m_Value: {r: 0.121141255, g: 0.011636567, b: 0.26814768, a: 1}
   maxFogDistance:
     m_OverrideState: 1
-    m_Value: 4215
+    m_Value: 414
   mipFogMaxMip:
     m_OverrideState: 1
     m_Value: 0.5
@@ -2155,22 +2155,22 @@ MonoBehaviour:
     m_Value: 1000
   baseHeight:
     m_OverrideState: 1
-    m_Value: -78.2
+    m_Value: 508.1
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 4278
+    m_Value: 1999
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 116.5
+    m_Value: 85.5
   enableVolumetricFog:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   albedo:
     m_OverrideState: 1
     m_Value: {r: 0.7433963, g: 0.7433963, b: 0.7433963, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.39
   depthExtent:
     m_OverrideState: 1
     m_Value: 64
