@@ -25,4 +25,4 @@ MonoBehaviour:
   - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
     val: 15
     duration: 0
-  <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: aeb9860f313c07343bd4334696e91217, type: 3}
