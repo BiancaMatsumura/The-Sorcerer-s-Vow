@@ -59,12 +59,12 @@ public class BossCharacter : BaseCharacter
         {
             sliderLife.value = currentHealth;
 
-            // Faz o slider olhar para a câmera
+            /*// Faz o slider olhar para a câmera
             if (mainCamera != null)
             {
                 sliderLife.transform.LookAt(mainCamera);
                 sliderLife.transform.Rotate(0f, 180f, 0f);
-            }
+            }*/
         }
     }
 

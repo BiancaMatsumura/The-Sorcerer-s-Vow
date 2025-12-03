@@ -301,6 +301,9 @@ public class ThirdPersonController : MonoBehaviour
     // da play no sfx dentro da animação
     public void AnimationSfxPLAY(int soundInt)
     {
+        //vai retornar se não tiver o audio source (tive que fazer isso pra testar)
+        if (PlayerAudiosource == null || Sounds.Length <= soundInt)
+            return;
         PlayerAudiosource.resource = Sounds[soundInt];
         PlayerAudiosource.Play();
     }
