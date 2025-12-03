@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Fruto de Rocha
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Fruto de Rocha
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: Esteja imune a Danos por 15s
   <WorldPrefab>k__BackingField: {fileID: 2835475748398644384, guid: ab3d4c87bd99f9c41bf781c9bea699dc, type: 3}
   category: 3
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
-  <ItemImage>k__BackingField: {fileID: -2089244626, guid: 96dd3f84d73f12f4196581c43cbdcd71, type: 3}
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 54b534f7a9b760c43b5f7a7dce1977d8, type: 3}
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: 6a4766d4994a1ee4b83cdf8bc7ea2df8, type: 2}

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Machado
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Machado
+  <ItemID>k__BackingField: 
   <Description>k__BackingField: "\xC9 um machado po"
-  <WorldPrefab>k__BackingField: {fileID: 5915234785924373981, guid: 96c856f868ce16c47a0dc11f9f7a2471, type: 3}
+  <WorldPrefab>k__BackingField: {fileID: 8485842724816337952, guid: cdb5884529df2fa4b90da0434bfa8bf6, type: 3}
   category: 1
   <IsStackable>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
@@ -28,3 +29,4 @@ MonoBehaviour:
   <slotType>k__BackingField: 1
   animName: axeStart
   animIndex: 2
+  Cor: {r: 0, g: 0, b: 0, a: 0}

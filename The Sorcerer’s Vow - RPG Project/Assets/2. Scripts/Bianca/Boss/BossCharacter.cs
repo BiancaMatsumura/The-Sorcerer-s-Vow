@@ -6,9 +6,15 @@ using UnityEngine.UI;
 
 public class BossCharacter : BaseCharacter
 {
+
+    
     [Header("UI")]
     [SerializeField] private Slider sliderLife;
     private Transform mainCamera;
+
+    [Header("Audios")]
+    public AudioSource BossAudiosource;
+    public AudioClip[] Sounds;
 
     [Header("Boss Configuração")]
     public int totalLives = 2;
@@ -53,12 +59,12 @@ public class BossCharacter : BaseCharacter
         {
             sliderLife.value = currentHealth;
 
-            // Faz o slider olhar para a câmera
+            /*// Faz o slider olhar para a câmera
             if (mainCamera != null)
             {
                 sliderLife.transform.LookAt(mainCamera);
                 sliderLife.transform.Rotate(0f, 180f, 0f);
-            }
+            }*/
         }
     }
 
@@ -66,9 +72,11 @@ public class BossCharacter : BaseCharacter
     {
         if (isDead) return;
 
+        AudioPlay(8);
+        
         float finalDamage = Mathf.Max(damage - DefensePower, 1f);
         currentHealth -= finalDamage;
-
+       
         if (sliderLife != null)
             sliderLife.value = currentHealth;
 
@@ -79,6 +87,16 @@ public class BossCharacter : BaseCharacter
             Die();
         }
     }
+    private void AudioPlay(int Music)
+    {
+        BossAudiosource.resource = Sounds[Music];
+        BossAudiosource.Play();
+
+
+    }
+    
+   
+    
 
     public override void Die()
     {

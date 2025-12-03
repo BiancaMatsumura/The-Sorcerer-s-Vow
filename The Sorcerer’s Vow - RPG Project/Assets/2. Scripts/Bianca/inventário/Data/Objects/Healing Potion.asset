@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Potion
   <ItemID>k__BackingField: 1
-  <Description>k__BackingField: "Restore your health \n+5 pv"
+  <Description>k__BackingField: "Restore your health \n+15 pv"
   <WorldPrefab>k__BackingField: {fileID: 1428541532895077731, guid: aef0a31bbce75c6439950e7f6b115463, type: 3}
   category: 3
   <IsStackable>k__BackingField: 1
@@ -23,6 +23,6 @@ MonoBehaviour:
   <DefaultParametersList>k__BackingField: []
   modifiersData:
   - statsModifier: {fileID: 11400000, guid: c481774e9ddc25d4b91c4b05154015b2, type: 2}
-    val: 5
+    val: 15
     duration: 0
-  <actionSFX>k__BackingField: {fileID: 8300000, guid: 32450aa15b96e0c409a118ddf5b254e3, type: 3}
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: aeb9860f313c07343bd4334696e91217, type: 3}

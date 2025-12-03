@@ -17,7 +17,7 @@ MonoBehaviour:
     price: 15
     minQuantity: 1
     maxQuantity: 5
-  - item: {fileID: 11400000, guid: b1bbce8788b78f34893e713d25ea9fc0, type: 2}
+  - item: {fileID: 11400000, guid: b48540d966ea73c4ca55ffc4c85d6b72, type: 2}
     price: 5
     minQuantity: 1
     maxQuantity: 10

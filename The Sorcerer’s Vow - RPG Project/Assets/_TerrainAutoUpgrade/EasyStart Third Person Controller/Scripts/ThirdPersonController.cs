@@ -40,7 +40,7 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField]
     private PlayerCharacter playerCharacter;
     [SerializeField]
-    //private DialogueManager dialogueManager;
+    //private DialogueManager dialogueManager 
 
     // --- FORÇA EXTERNA (vento/campo magnético) ---
     private Vector3 externalForce = Vector3.zero;
@@ -201,6 +201,7 @@ public class ThirdPersonController : MonoBehaviour
         }
         directionY -= gravity * Time.deltaTime;
 
+
         // Direção baseada na câmera
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
@@ -300,6 +301,9 @@ public class ThirdPersonController : MonoBehaviour
     // da play no sfx dentro da animação
     public void AnimationSfxPLAY(int soundInt)
     {
+        //vai retornar se não tiver o audio source (tive que fazer isso pra testar)
+        if (PlayerAudiosource == null || Sounds.Length <= soundInt)
+            return;
         PlayerAudiosource.resource = Sounds[soundInt];
         PlayerAudiosource.Play();
     }
