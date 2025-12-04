@@ -407,25 +407,6 @@ MonoBehaviour:
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
---- !u!114 &-5222335045120271078
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32b6af8f7ad32324cb6941c3290e5895, type: 3}
-  m_Name: MicroShadowing
-  m_EditorClassIdentifier: 
-  active: 1
-  enable:
-    m_OverrideState: 1
-    m_Value: 0
-  opacity:
-    m_OverrideState: 1
-    m_Value: 1
 --- !u!114 &-5060514099357998975
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -819,28 +800,6 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   m_ObsoleteShapeOffsetZ:
-    m_OverrideState: 1
-    m_Value: 0
---- !u!114 &-4004630175633318979
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0775cbb206825d541bf6c0297ee524ca, type: 3}
-  m_Name: SplitToning
-  m_EditorClassIdentifier: 
-  active: 1
-  shadows:
-    m_OverrideState: 1
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  highlights:
-    m_OverrideState: 1
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  balance:
     m_OverrideState: 1
     m_Value: 0
 --- !u!114 &-3392192112433236635
@@ -1255,34 +1214,6 @@ MonoBehaviour:
   m_MaxSamples:
     m_OverrideState: 1
     m_Value: 6
---- !u!114 &-207461426703362506
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b8bcdf71d7fafa419fca1ed162f5fc9, type: 3}
-  m_Name: ColorAdjustments
-  m_EditorClassIdentifier: 
-  active: 1
-  postExposure:
-    m_OverrideState: 1
-    m_Value: 0
-  contrast:
-    m_OverrideState: 1
-    m_Value: 0
-  colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  hueShift:
-    m_OverrideState: 1
-    m_Value: 0
-  saturation:
-    m_OverrideState: 1
-    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,11 +1245,8 @@ MonoBehaviour:
   - {fileID: 1656894850660147658}
   - {fileID: -3301171243924848934}
   - {fileID: 5993660217996798726}
-  - {fileID: -5222335045120271078}
-  - {fileID: -207461426703362506}
   - {fileID: 7908608796179063007}
   - {fileID: 6160261310842198088}
-  - {fileID: -4004630175633318979}
   - {fileID: 7693324305547802957}
   - {fileID: 389009155124791465}
   - {fileID: 2293310416534863311}
@@ -1415,7 +1343,7 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11.36
+    m_Value: 12.58
   multiplier:
     m_OverrideState: 1
     m_Value: 1
@@ -1561,7 +1489,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.14
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -2140,7 +2068,7 @@ MonoBehaviour:
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.121141255, g: 0.011636567, b: 0.26814768, a: 1}
+    m_Value: {r: 0.2339058, g: 0.23100744, b: 0.23773581, a: 1}
   maxFogDistance:
     m_OverrideState: 1
     m_Value: 414
@@ -2161,7 +2089,7 @@ MonoBehaviour:
     m_Value: 1999
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 85.5
+    m_Value: 188.2
   enableVolumetricFog:
     m_OverrideState: 0
     m_Value: 1
